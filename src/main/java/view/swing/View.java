@@ -25,8 +25,14 @@ public class View extends JFrame implements Observer {
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
         setVisible(true);
         setResizable(false);
+
+        drawRecruitmentPanel();
     }
 
+    private void drawRecruitmentPanel() {
+        RecruitmentView recruitmentView = new RecruitmentView(this);
+        add(recruitmentView);
+    }
     @Override
     public void update(Observable o, Object arg) {
 
