@@ -4,14 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class RecruitmentView extends JPanel {
+public class InitialView extends JPanel {
 
     private View view;
     private Dimension buttonSize = new Dimension(500, 100);
-    private Font buttonFont = new Font(Font.DIALOG, Font.PLAIN, 26);
     private ArrayList<JButton> buttons = new ArrayList<>();
 
-    public RecruitmentView(View view) {
+    public InitialView(View view) {
         this.view = view;
         setLayout();
         addButtons();
@@ -34,7 +33,7 @@ public class RecruitmentView extends JPanel {
 
         for (JButton button : buttons) {
             button.setPreferredSize(buttonSize);
-            button.setFont(buttonFont);
+            button.setFont(ViewConstants.BUTTON_FONT_LARGE);
             button.setAlignmentX(Component.CENTER_ALIGNMENT);
         }
 
@@ -47,6 +46,7 @@ public class RecruitmentView extends JPanel {
 
     private JButton createStartNewButton(){
         JButton startNew = new JButton("Start new recruitment process");
+        startNew.addActionListener(e -> {view.setCurrentPanel(new PresetsView(view));});
         buttons.add(startNew);
         return startNew;
     }

@@ -9,8 +9,9 @@ import java.util.Observer;
 
 public class View extends JFrame implements Observer {
 
-    Model model;
-    Controller controller;
+    private Model model;
+    private Controller controller;
+    private JPanel currentPanel;
 
     public View(Model model, Controller controller) {
         this.model = model;
@@ -26,12 +27,16 @@ public class View extends JFrame implements Observer {
         setVisible(true);
         setResizable(false);
 
-        drawRecruitmentPanel();
+        currentPanel = new InitialView(this);
+        setCurrentPanel(currentPanel);
     }
 
-    private void drawRecruitmentPanel() {
-        RecruitmentView recruitmentView = new RecruitmentView(this);
-        add(recruitmentView);
+    public void setCurrentPanel(JPanel newPanel) {
+        remove(currentPanel);
+        currentPanel = newPanel;
+        add(newPanel);
+        revalidate();
+        repaint();
     }
     @Override
     public void update(Observable o, Object arg) {
