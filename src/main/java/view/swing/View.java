@@ -13,7 +13,6 @@ public class View extends JFrame implements Observer {
     private Model model;
     private Controller controller;
     private JPanel currentPanel;
-    private JPanel previousPanel;
     private Stack<JPanel> previousPanels = new Stack<>();
 
     public View(Model model, Controller controller) {
@@ -51,12 +50,22 @@ public class View extends JFrame implements Observer {
         revalidate();
         repaint();
     }
+
+    public void startOver(){
+        remove(currentPanel);
+        currentPanel = new InitialView(this);
+        previousPanels.clear();
+        add(currentPanel);
+        revalidate();
+        repaint();
+    }
+
+    public JPanel getCurrentPanel() {
+        return currentPanel;
+    }
+
     @Override
     public void update(Observable o, Object arg) {
 
-    }
-
-    public JPanel getPreviousPanel() {
-        return previousPanel;
     }
 }

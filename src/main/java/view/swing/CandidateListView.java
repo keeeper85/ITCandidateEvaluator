@@ -1,8 +1,11 @@
 package view.swing;
 
+import view.swing.stages.CandidateView;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class CandidateListView extends JPanel {
 
@@ -67,11 +70,11 @@ public class CandidateListView extends JPanel {
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String warning = "This operation can not be undone!\nType 'delete' to remove the entire recruitment process.";
+                String warning = "This operation can not be undone!\nType 'delete' to remove the candidate.";
                 String userInput = (String) JOptionPane.showInputDialog(null, warning, "Confirm:", JOptionPane.WARNING_MESSAGE);
                 int selectedRecrutationIndex = candidatesList.getSelectedIndex();
                 if (userInput != null && userInput.equals("delete") && selectedRecrutationIndex >= 0) {
-                    JOptionPane.showMessageDialog(null, "Recruitment process deleted!");
+                    JOptionPane.showMessageDialog(null, "Candidate removed!");
                     listModel.remove(selectedRecrutationIndex);
                     candidatesList.repaint();
                 } else {
@@ -97,12 +100,7 @@ public class CandidateListView extends JPanel {
         addCandidateButton.setFont(ViewConstants.FONT_LARGE);
         int backButtonY = BUTTON_Y + SPACING;
         addCandidateButton.setBounds(BUTTON_X, backButtonY ,BUTTON_WIDTH ,BUTTON_HEIGHT);
-        addCandidateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-//                view.setCurrentPanel(view.getPreviousPanel());
-            }
-        });
+        addCandidateButton.addActionListener((e -> {view.setCurrentPanel(new CandidateView(view));}));
         return addCandidateButton;
     }
 
@@ -111,9 +109,23 @@ public class CandidateListView extends JPanel {
         addManyButton.setFont(ViewConstants.FONT_LARGE);
         int addManyButtonY = BUTTON_Y + SPACING + SPACING;
         addManyButton.setBounds(BUTTON_X, addManyButtonY, BUTTON_WIDTH, BUTTON_HEIGHT);
+        addManyButton.addActionListener((e -> {showDirectoryChooser();}));
 
         return addManyButton;
     }
 
+    private void showDirectoryChooser() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Select directory with resumes (.pdf files only):");
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        String resumesDirectoryPath;
 
+        int result = fileChooser.showOpenDialog(this);
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedDirectory = fileChooser.getSelectedFile();
+            resumesDirectoryPath = selectedDirectory.getAbsolutePath();
+            JOptionPane.showMessageDialog(this, "Selected directory: " + resumesDirectoryPath);
+        }
+    }
 }
