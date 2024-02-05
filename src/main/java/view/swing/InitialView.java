@@ -33,7 +33,7 @@ public class InitialView extends JPanel {
 
         for (JButton button : buttons) {
             button.setPreferredSize(buttonSize);
-            button.setFont(ViewConstants.BUTTON_FONT_LARGE);
+            button.setFont(ViewConstants.FONT_LARGE);
             button.setAlignmentX(Component.CENTER_ALIGNMENT);
         }
 
@@ -53,6 +53,7 @@ public class InitialView extends JPanel {
 
     private JButton createOpenButton(){
         JButton openRecruitment = new JButton("Open an existing recruitment process");
+        openRecruitment.addActionListener(e -> {view.setCurrentPanel(new RecruitmentsListView(view));});
         buttons.add(openRecruitment);
         return openRecruitment;
     }

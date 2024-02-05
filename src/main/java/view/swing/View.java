@@ -12,6 +12,7 @@ public class View extends JFrame implements Observer {
     private Model model;
     private Controller controller;
     private JPanel currentPanel;
+    private JPanel previousPanel;
 
     public View(Model model, Controller controller) {
         this.model = model;
@@ -32,6 +33,7 @@ public class View extends JFrame implements Observer {
     }
 
     public void setCurrentPanel(JPanel newPanel) {
+        previousPanel = currentPanel;
         remove(currentPanel);
         currentPanel = newPanel;
         add(newPanel);
@@ -41,5 +43,9 @@ public class View extends JFrame implements Observer {
     @Override
     public void update(Observable o, Object arg) {
 
+    }
+
+    public JPanel getPreviousPanel() {
+        return previousPanel;
     }
 }

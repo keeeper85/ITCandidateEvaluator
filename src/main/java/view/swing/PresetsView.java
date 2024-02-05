@@ -53,7 +53,7 @@ public class PresetsView extends JPanel {
         int buttonXposition = BOTTOM_ROW_X;
 
         for (JButton button : buttons) {
-            button.setFont(ViewConstants.BUTTON_FONT_LARGE);
+            button.setFont(ViewConstants.FONT_LARGE);
             button.setBounds(buttonXposition, BOTTOM_ROW_Y, SMALL_ITEM_WIDTH, SMALL_ITEM_HEIGHT);
             add(button);
             buttonXposition += SMALL_ITEM_WIDTH + MEDIUM_SPACING;
@@ -62,12 +62,12 @@ public class PresetsView extends JPanel {
 
     private void addChoosePreset() {
         JLabel choosePreset = new JLabel("Choose preset:");
-        choosePreset.setFont(ViewConstants.BUTTON_FONT_LARGE);
+        choosePreset.setFont(ViewConstants.FONT_LARGE);
         choosePreset.setBounds(TOP_ROW_X, TOP_ROW_Y, SMALL_ITEM_WIDTH, SMALL_ITEM_HEIGHT);
         add(choosePreset);
 
         JComboBox<String> choiceMenu = new JComboBox<>(choices);
-        choiceMenu.setFont(ViewConstants.BUTTON_FONT_LARGE);
+        choiceMenu.setFont(ViewConstants.FONT_LARGE);
         int choiceMenuX = TOP_ROW_X + SMALL_ITEM_WIDTH;
         choiceMenu.setBounds(choiceMenuX, TOP_ROW_Y, SMALL_ITEM_WIDTH, SMALL_ITEM_HEIGHT);
         choiceMenu.addActionListener(new ActionListener() {
@@ -82,7 +82,7 @@ public class PresetsView extends JPanel {
     }
     private void addPresetNameField(){
         presetName = new JTextField(chosenPreset);
-        presetName.setFont(ViewConstants.BUTTON_FONT_LARGE);
+        presetName.setFont(ViewConstants.FONT_LARGE);
         int presetNameX = TOP_ROW_X + (2 * SMALL_ITEM_WIDTH) + LARGE_SPACING;
         presetName.setBounds(presetNameX, TOP_ROW_Y, SMALL_ITEM_WIDTH, SMALL_ITEM_HEIGHT);
         add(presetName);
@@ -125,13 +125,13 @@ public class PresetsView extends JPanel {
     private JLabel createSliderLabel(String lableText, int sliderPositionY){
         JLabel label = new JLabel(lableText);
         label.setBounds(SLIDER_ROW_LABLE_X, sliderPositionY, SLIDER_LABLE_WIDTH, SMALL_ITEM_HEIGHT);
-        label.setFont(ViewConstants.BUTTON_FONT_LARGE);
+        label.setFont(ViewConstants.FONT_LARGE);
         return label;
     }
 
     private JButton createBackButton(){
         JButton backButton = new JButton("Back");
-        backButton.addActionListener((e -> {view.setCurrentPanel(new InitialView(view));}));
+        backButton.addActionListener((e -> {view.setCurrentPanel(view.getPreviousPanel());}));
         return backButton;
     }
 
@@ -191,7 +191,7 @@ public class PresetsView extends JPanel {
                 }
                 else{
                     dialog.dispose();
-                    view.setCurrentPanel(new CandidateView());
+                    view.setCurrentPanel(new CandidateListView());
                 }
             }
         });
