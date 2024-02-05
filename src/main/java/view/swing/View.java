@@ -6,6 +6,7 @@ import model.Model;
 import javax.swing.*;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Stack;
 
 public class View extends JFrame implements Observer {
 
@@ -13,6 +14,7 @@ public class View extends JFrame implements Observer {
     private Controller controller;
     private JPanel currentPanel;
     private JPanel previousPanel;
+    private Stack<JPanel> previousPanels = new Stack<>();
 
     public View(Model model, Controller controller) {
         this.model = model;
@@ -33,10 +35,19 @@ public class View extends JFrame implements Observer {
     }
 
     public void setCurrentPanel(JPanel newPanel) {
-        previousPanel = currentPanel;
+        previousPanels.add(currentPanel);
         remove(currentPanel);
         currentPanel = newPanel;
         add(newPanel);
+        revalidate();
+        repaint();
+    }
+
+    public void returnToPreviousPanel(){
+        remove(currentPanel);
+        JPanel previousPanel = previousPanels.pop();
+        currentPanel = previousPanel;
+        add(currentPanel);
         revalidate();
         repaint();
     }

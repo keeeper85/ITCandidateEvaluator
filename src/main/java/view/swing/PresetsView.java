@@ -131,7 +131,7 @@ public class PresetsView extends JPanel {
 
     private JButton createBackButton(){
         JButton backButton = new JButton("Back");
-        backButton.addActionListener((e -> {view.setCurrentPanel(view.getPreviousPanel());}));
+        backButton.addActionListener((e -> {view.returnToPreviousPanel();}));
         return backButton;
     }
 
@@ -191,7 +191,7 @@ public class PresetsView extends JPanel {
                 }
                 else{
                     dialog.dispose();
-                    view.setCurrentPanel(new CandidateListView());
+                    view.setCurrentPanel(new CandidateListView(view));
                 }
             }
         });

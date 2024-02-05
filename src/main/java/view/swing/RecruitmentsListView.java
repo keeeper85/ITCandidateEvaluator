@@ -31,6 +31,7 @@ public class RecruitmentsListView extends JPanel {
         recrutationsList.setFont(ViewConstants.FONT_LARGE);
         add(createScrollPane());
         add(createOpenButton());
+        add(createNewRecruitmentButton());
         add(createDeleteButton());
         add(createBackButton());
     }
@@ -38,7 +39,7 @@ public class RecruitmentsListView extends JPanel {
     private void addRecrutations(){
         listModel = new DefaultListModel<>();
         for (int i = 0; i < 30; i++) {
-            listModel.addElement("test " + i);
+            listModel.addElement("Recruitment " + i);
         }
     }
 
@@ -58,7 +59,7 @@ public class RecruitmentsListView extends JPanel {
     private JButton createDeleteButton(){
         JButton deleteButton = new JButton("Delete");
         deleteButton.setFont(ViewConstants.FONT_LARGE);
-        int deleteButtonY = BUTTON_Y + SPACING;
+        int deleteButtonY = BUTTON_Y + SPACING + SPACING;
         deleteButton.setBounds(BUTTON_X, deleteButtonY ,BUTTON_WIDTH ,BUTTON_HEIGHT);
 
         deleteButton.addActionListener(new ActionListener() {
@@ -83,15 +84,24 @@ public class RecruitmentsListView extends JPanel {
     private JButton createBackButton(){
         JButton backButton = new JButton("Back");
         backButton.setFont(ViewConstants.FONT_LARGE);
-        int backButtonY = BUTTON_Y + SPACING + SPACING;
+        int backButtonY = BUTTON_Y + SPACING + SPACING + SPACING;
         backButton.setBounds(BUTTON_X, backButtonY ,BUTTON_WIDTH ,BUTTON_HEIGHT);
-        backButton.addActionListener(new ActionListener() {
+        backButton.addActionListener((e -> {view.returnToPreviousPanel();}));
+        return backButton;
+    }
+
+    private JButton createNewRecruitmentButton(){
+        JButton newRecruitmentButton = new JButton("Create new");
+        newRecruitmentButton.setFont(ViewConstants.FONT_LARGE);
+        int newRecruitmentButtonY = BUTTON_Y + SPACING;
+        newRecruitmentButton.setBounds(BUTTON_X, newRecruitmentButtonY ,BUTTON_WIDTH ,BUTTON_HEIGHT);
+        newRecruitmentButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                view.setCurrentPanel(view.getPreviousPanel());
+//                view.setCurrentPanel(view.getPreviousPanel());
             }
         });
-        return backButton;
+        return newRecruitmentButton;
     }
 
 
