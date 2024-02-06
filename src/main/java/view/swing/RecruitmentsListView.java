@@ -9,8 +9,10 @@ public class RecruitmentsListView extends JPanel {
     private View view;
     private JList<String> recrutationsList;
     private DefaultListModel<String> listModel;
+    private String[] sortingOptions = {"Name-Ascending", "Name-Descending", "Date-Ascending", "Date-Descending"};
+    private final int TOP_ROW_Y = 20;
     private final int LIST_X = 30;
-    private final int LIST_Y = 30;
+    private final int LIST_Y = 60;
     private final int LIST_WIDTH = 900;
     private final int LIST_HEIGHT = 600;
     private final int SPACING = 60;
@@ -30,6 +32,9 @@ public class RecruitmentsListView extends JPanel {
         recrutationsList = new JList<>(listModel);
         recrutationsList.setFont(ViewConstants.FONT_LARGE);
         add(createScrollPane());
+        add(createSortingMenu());
+        add(createFinishedCheckBox());
+
         add(createOpenButton());
         add(createNewRecruitmentButton());
         add(createDeleteButton());
@@ -95,16 +100,26 @@ public class RecruitmentsListView extends JPanel {
         newRecruitmentButton.setFont(ViewConstants.FONT_LARGE);
         int newRecruitmentButtonY = BUTTON_Y + SPACING;
         newRecruitmentButton.setBounds(BUTTON_X, newRecruitmentButtonY ,BUTTON_WIDTH ,BUTTON_HEIGHT);
-        newRecruitmentButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-//                view.setCurrentPanel(view.getPreviousPanel());
-            }
-        });
+        newRecruitmentButton.addActionListener(e -> {view.setCurrentPanel(new PresetsView(view));});
         return newRecruitmentButton;
     }
 
+    private JComboBox<String> createSortingMenu(){
 
+        JComboBox<String> choiceMenu = new JComboBox<>(sortingOptions);
+        choiceMenu.setBounds(LIST_X, TOP_ROW_Y, BUTTON_WIDTH, 20);
+
+        return choiceMenu;
+    }
+
+    private JCheckBox createFinishedCheckBox(){
+        JCheckBox showOnlyUnfinishedCandidates = new JCheckBox();
+        showOnlyUnfinishedCandidates.setLabel("Show only unfinished processes");
+        int positionX = LIST_X + BUTTON_WIDTH + 10;
+        showOnlyUnfinishedCandidates.setBounds(positionX, TOP_ROW_Y, 250,20);
+
+        return showOnlyUnfinishedCandidates;
+    }
 
 
 }

@@ -6,13 +6,10 @@ import view.swing.ViewConstants;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Sidepanel extends JPanel {
-
+    private List<Collectable> stagesToComplete;
     private final int BUTTON_POSIOTION_X = 50;
     private final int BUTTON_POSIOTION_Y = 50;
     private final int SPACING = 90;

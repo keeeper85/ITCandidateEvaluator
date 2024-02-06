@@ -12,8 +12,10 @@ public class CandidateListView extends JPanel {
     private View view;
     private JList<String> candidatesList;
     private DefaultListModel<String> listModel;
+    private String[] sortingOptions = {"Name-Ascending", "Name-Descending", "Score-Ascending", "Score-Descending"};
+    private final int TOP_ROW_Y = 20;
     private final int LIST_X = 30;
-    private final int LIST_Y = 30;
+    private final int LIST_Y = 60;
     private final int LIST_WIDTH = 900;
     private final int LIST_HEIGHT = 600;
     private final int SPACING = 60;
@@ -33,6 +35,8 @@ public class CandidateListView extends JPanel {
         candidatesList = new JList<>(listModel);
         candidatesList.setFont(ViewConstants.FONT_LARGE);
         add(createScrollPane());
+        add(createSortingMenu());
+        add(createFinishedCheckBox());
 
         add(createOpenButton());
         add(createAddCandidateButton());
@@ -127,5 +131,22 @@ public class CandidateListView extends JPanel {
             resumesDirectoryPath = selectedDirectory.getAbsolutePath();
             JOptionPane.showMessageDialog(this, "Selected directory: " + resumesDirectoryPath);
         }
+    }
+
+    private JComboBox<String> createSortingMenu(){
+
+        JComboBox<String> choiceMenu = new JComboBox<>(sortingOptions);
+        choiceMenu.setBounds(LIST_X, TOP_ROW_Y, BUTTON_WIDTH, 20);
+
+        return choiceMenu;
+    }
+
+    private JCheckBox createFinishedCheckBox(){
+        JCheckBox showOnlyUnfinishedCandidates = new JCheckBox();
+        showOnlyUnfinishedCandidates.setLabel("Show only unfinished candidates");
+        int positionX = LIST_X + BUTTON_WIDTH + 10;
+        showOnlyUnfinishedCandidates.setBounds(positionX, TOP_ROW_Y, 250,20);
+
+        return showOnlyUnfinishedCandidates;
     }
 }

@@ -1,12 +1,11 @@
 package view.swing;
 
-import view.swing.stages.CandidateView;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class PresetsView extends JPanel {
@@ -16,6 +15,7 @@ public class PresetsView extends JPanel {
     private String chosenPreset = choices[0];
     private JTextField presetName;
     private List<JButton> buttons = new ArrayList<>();
+    private List<JSlider> sliders = new ArrayList<>();
     private final int TOP_ROW_Y = 30;
     private final int TOP_ROW_X = 250;
     private final int SMALL_ITEM_WIDTH = 200;
@@ -96,18 +96,20 @@ public class PresetsView extends JPanel {
 
         for (String label : labels) {
             add(createSliderLabel(label, sliderPositionY));
-            add(createSliderPanel(sliderPositionY));
+            add(createSlider(label, sliderPositionY));
             sliderPositionY += SLIDER_HEIGHT + SMALL_SPACING;
         }
     }
 
-    private JSlider createSliderPanel(int sliderPositionY) {
+    private JSlider createSlider(String name, int sliderPositionY) {
         JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 10, 5);
+        slider.setName(name);
         slider.setBounds(SLIDER_ROW_X, sliderPositionY, SLIDER_WIDTH, SLIDER_HEIGHT);
         slider.setMajorTickSpacing(2);
         slider.setMinorTickSpacing(1);
         slider.setPaintTicks(true);
         slider.setPaintLabels(true);
+        sliders.add(slider);
 
         // Add a ChangeListener to retrieve the slider value
 //        slider.addChangeListener(new ChangeListener() {
@@ -148,6 +150,12 @@ public class PresetsView extends JPanel {
 
     private JButton createSavePresetButton(){
         JButton saveButton = new JButton("Save Presets");
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(savePresets());
+            }
+        });
         return saveButton;
     }
 
@@ -205,6 +213,15 @@ public class PresetsView extends JPanel {
         dialog.setVisible(true);
     }
 
+    public HashMap<String, Integer> savePresets() {
+        HashMap<String, Integer> presets = new HashMap<>();
+
+        for (JSlider slider : sliders) {
+            presets.put(slider.getName(), slider.getValue());
+        }
+
+        return presets;
+    }
 
 
 
