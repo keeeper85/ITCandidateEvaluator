@@ -34,9 +34,11 @@ public class CandidateView extends JPanel implements Collectable {
     private void initCandidateView(){
         setLayout(null);
 
-        JPanel sidepanel = new Sidepanel(view);
+        Sidepanel sidepanel = new Sidepanel(view);
         sidepanel.setBounds(1000, 0, 280, 700);
+        sidepanel.setCurrentStage(this);
         add(sidepanel);
+
         setItemLabels();
         setTextInputFields();
         setNotesTextArea();

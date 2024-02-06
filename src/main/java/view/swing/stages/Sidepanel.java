@@ -10,6 +10,7 @@ import java.util.*;
 
 public class Sidepanel extends JPanel {
     private List<Collectable> stagesToComplete;
+    private Collectable currentStage;
     private final int BUTTON_POSIOTION_X = 50;
     private final int BUTTON_POSIOTION_Y = 50;
     private final int SPACING = 90;
@@ -35,6 +36,19 @@ public class Sidepanel extends JPanel {
         add(createNextQuestionButton());
         add(createFinishButton());
         placeButtons();
+
+        addAllStagesForTesting();
+    }
+
+    private void addAllStagesForTesting(){
+        addStages(new ResumeView(view));
+        addStages(new LanguageView(view));
+        addStages(new ExperienceView(view));
+        addStages(new ProjectsView(view));
+        addStages(new LiveCodingView(view));
+        addStages(new QuestionsView(view));
+        addStages(new SalaryView(view));
+        addStages(new SoftSkillsView(view));
     }
 
     private void placeButtons(){
@@ -131,5 +145,14 @@ public class Sidepanel extends JPanel {
 
     public void setQuestionStage(boolean questionStage) {
         isQuestionStage = questionStage;
+    }
+
+    public void setCurrentStage(Collectable currentStage) {
+        this.currentStage = currentStage;
+        stagesToComplete.add(currentStage);
+    }
+
+    public void addStages(Collectable collectable){
+        stagesToComplete.add(collectable);
     }
 }
