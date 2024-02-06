@@ -13,13 +13,13 @@ public class ViewConstants {
             "You can choose one of default presets or create your own - adjust sliders and press 'Save Presets' button.\n" +
             "Press 'Start' button when you're ready, set the name for the process and start the evaluation.\n";
 
-    public static final String RESUME_STAGE_INFO = "";
-    public static final String LANGUAGE_STAGE_INFO = "";
-    public static final String EXPERIENCE_STAGE_INFO = "";
-    public static final String PROJECTS_STAGE_INFO = "";
-    public static final String LIVE_CODING_STAGE_INFO = "";
-    public static final String QUESTIONS_STAGE_INFO = "";
-    public static final String SALARY_STAGE_INFO = "";
-    public static final String SOFT_SKILLS_STAGE_INFO = "";
+    public static final String RESUME_STAGE_INFO = "resume stage";
+    public static final String LANGUAGE_STAGE_INFO = "language stage";
+    public static final String EXPERIENCE_STAGE_INFO = "experience stage";
+    public static final String PROJECTS_STAGE_INFO = "projects stage";
+    public static final String LIVE_CODING_STAGE_INFO = "live coding stage";
+    public static final String QUESTIONS_STAGE_INFO = "questions stage";
+    public static final String SALARY_STAGE_INFO = "salary stage";
+    public static final String SOFT_SKILLS_STAGE_INFO = "soft skills stage";
 
 }

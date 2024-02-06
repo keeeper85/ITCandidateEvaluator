@@ -2,6 +2,7 @@ package view.swing;
 
 import controller.Controller;
 import model.Model;
+import view.swing.stages.Sidepanel;
 
 import javax.swing.*;
 import java.util.Observable;
@@ -63,7 +64,6 @@ public class View extends JFrame implements Observer {
     public JPanel getCurrentPanel() {
         return currentPanel;
     }
-
     @Override
     public void update(Observable o, Object arg) {
 

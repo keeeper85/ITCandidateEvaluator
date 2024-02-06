@@ -9,20 +9,23 @@ import java.awt.event.ActionListener;
 import java.util.*;
 
 public class Sidepanel extends JPanel {
-    private List<Collectable> stagesToComplete;
-    private Collectable currentStage;
-    private final int BUTTON_POSIOTION_X = 50;
-    private final int BUTTON_POSIOTION_Y = 50;
+    private List<Collectable> stagesToComplete = new ArrayList<>();
+    private Collectable currentStage = null;
+    private JButton nextQuestionButton;
+    private JButton finishButton;
+    private final int BUTTON_POSITION_X = 50;
+    private final int BUTTON_POSITION_Y = 50;
     private final int SPACING = 90;
     private final int BUTTON_WIDTH = 200;
     private final int BUTTON_HEIGHT = 40;
     private boolean isTheLastStep = false;
     private boolean isQuestionStage = false;
-    private View view;
+    private boolean areStagesPrepared = false;
+    private StageView stageView;
     private List<JButton> buttons = new ArrayList<>();
 
-    public Sidepanel(View view) {
-        this.view = view;
+    public Sidepanel(StageView stageView) {
+        this.stageView = stageView;
         initSidepanel();
     }
 
@@ -36,26 +39,13 @@ public class Sidepanel extends JPanel {
         add(createNextQuestionButton());
         add(createFinishButton());
         placeButtons();
-
-        addAllStagesForTesting();
-    }
-
-    private void addAllStagesForTesting(){
-        addStages(new ResumeView(view));
-        addStages(new LanguageView(view));
-        addStages(new ExperienceView(view));
-        addStages(new ProjectsView(view));
-        addStages(new LiveCodingView(view));
-        addStages(new QuestionsView(view));
-        addStages(new SalaryView(view));
-        addStages(new SoftSkillsView(view));
     }
 
     private void placeButtons(){
-        int dynamicPositionY = BUTTON_POSIOTION_Y;
+        int dynamicPositionY = BUTTON_POSITION_Y;
 
         for (JButton button : buttons) {
-            button.setBounds(BUTTON_POSIOTION_X, dynamicPositionY, BUTTON_WIDTH, BUTTON_HEIGHT);
+            button.setBounds(BUTTON_POSITION_X, dynamicPositionY, BUTTON_WIDTH, BUTTON_HEIGHT);
             button.setFont(ViewConstants.FONT_LARGE);
             dynamicPositionY += SPACING;
         }
@@ -65,20 +55,77 @@ public class Sidepanel extends JPanel {
 
     private JButton createContinueButton(){
         JButton continueButton = new JButton("Continue");
-        continueButton.addActionListener((e -> {view.setCurrentPanel(new ResumeView(view));}));
-
-
+        continueButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JPanel nextStage = getNextStage();
+                if (nextStage != null) {
+                    currentStage = (Collectable) nextStage;
+                    stageView.setCurrentStagePanel(nextStage);
+                }
+                updateButtons();
+            }
+        });
 
         buttons.add(continueButton);
         return continueButton;
     }
 
+    private JPanel getNextStage(){
+        List<JPanel> stages = stageView.getChosenStages();
+        JPanel currentStage = stageView.getCurrentStagePanel();
+        int currentStageIndex = stages.indexOf(currentStage);
+        int nextStageIndex = currentStageIndex + 1;
+
+        if (nextStageIndex >= stages.size()) {
+            isTheLastStep = true;
+            return null;
+        }
+        isTheLastStep = false;
+        JPanel nextStage = stages.get(nextStageIndex);
+        if (nextStage instanceof QuestionsStagePanel) {
+            isQuestionStage = true;
+        }
+        else isQuestionStage = false;
+
+        return stages.get(currentStageIndex + 1);
+    }
     private JButton createBackButton(){
         JButton backButton = new JButton("Back");
-        backButton.addActionListener((e -> {view.returnToPreviousPanel();}));
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JPanel previousStage = getPreviousStage();
+                if (previousStage != null) {
+                    currentStage = (Collectable) previousStage;
+                    stageView.setCurrentStagePanel(previousStage);
+                }
+                updateButtons();
+            }
+        });
 
         buttons.add(backButton);
         return backButton;
+    }
+    private JPanel getPreviousStage(){
+        List<JPanel> stages = stageView.getChosenStages();
+        JPanel currentStage = stageView.getCurrentStagePanel();
+
+        int currentStageIndex = stages.indexOf(currentStage);
+        int previousStageIndex = currentStageIndex - 1;
+
+        if (previousStageIndex < 0) {
+            return null;
+        }
+        isTheLastStep = false;
+
+        JPanel previousStage = stages.get(previousStageIndex);
+        if (previousStage instanceof QuestionsStagePanel) {
+            isQuestionStage = true;
+        }
+        else isQuestionStage = false;
+
+        return previousStage;
     }
 
     private JButton createSaveExitButton(){
@@ -86,17 +133,12 @@ public class Sidepanel extends JPanel {
         saveExitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                System.exit(0);
-                JPanel collectable = view.getCurrentPanel();
-                Collectable stage = null;
-                if (collectable instanceof Collectable){
-                    stage = (Collectable) collectable;
-                }
-                HashMap<String, String> collectedData = stage.collectData();
+                HashMap<String, String> collectedData = currentStage.collectData();
 
                 for (Map.Entry<String, String> stringStringEntry : collectedData.entrySet()) {
                     System.out.println(stringStringEntry);
                 }
+                System.exit(0);
             }
         });
 
@@ -112,6 +154,7 @@ public class Sidepanel extends JPanel {
                 String warning = "Do you want to cancel this evaluation?\nThis operation can not be undone!\nType 'discard' to undo all the changes you've made.";
                 String userInput = (String) JOptionPane.showInputDialog(null, warning, "Confirm:", JOptionPane.WARNING_MESSAGE);
                 if (userInput.equals("discard")) {
+                    View view = stageView.getView();
                     view.startOver();
                 } else {
                     JOptionPane.showMessageDialog(null, "Deletion canceled or invalid input.");
@@ -124,19 +167,29 @@ public class Sidepanel extends JPanel {
     }
 
     private JButton createNextQuestionButton(){
-        JButton nextQuestionButton = new JButton("Next Question");
-        nextQuestionButton.setVisible(isQuestionStage);
+        nextQuestionButton = new JButton("Next Question");
+        nextQuestionButton.setVisible(false);
 
         buttons.add(nextQuestionButton);
         return nextQuestionButton;
     }
 
     private JButton createFinishButton(){
-        JButton finishButton = new JButton("Finish");
-        finishButton.setVisible(isTheLastStep);
+        finishButton = new JButton("Finish");
+        finishButton.setVisible(false);
 
         buttons.add(finishButton);
         return finishButton;
+    }
+
+    private void updateButtons(){
+        if (isQuestionStage) nextQuestionButton.setVisible(true);
+        else nextQuestionButton.setVisible(false);
+        if (isTheLastStep) finishButton.setVisible(true);
+        else finishButton.setVisible(false);
+
+        repaint();
+        revalidate();
     }
 
     public void setTheLastStep(boolean theLastStep) {
@@ -147,9 +200,9 @@ public class Sidepanel extends JPanel {
         isQuestionStage = questionStage;
     }
 
-    public void setCurrentStage(Collectable currentStage) {
-        this.currentStage = currentStage;
-        stagesToComplete.add(currentStage);
+    public void setFirstStage(Collectable firstStage) {
+        this.currentStage = firstStage;
+        stagesToComplete.add(0,firstStage);
     }
 
     public void addStages(Collectable collectable){

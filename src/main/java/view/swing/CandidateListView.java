@@ -1,6 +1,8 @@
 package view.swing;
 
 import view.swing.stages.CandidateView;
+import view.swing.stages.Sidepanel;
+import view.swing.stages.StageView;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -104,7 +106,12 @@ public class CandidateListView extends JPanel {
         addCandidateButton.setFont(ViewConstants.FONT_LARGE);
         int backButtonY = BUTTON_Y + SPACING;
         addCandidateButton.setBounds(BUTTON_X, backButtonY ,BUTTON_WIDTH ,BUTTON_HEIGHT);
-        addCandidateButton.addActionListener((e -> {view.setCurrentPanel(new CandidateView(view));}));
+        addCandidateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                view.setCurrentPanel(new StageView(view));
+            }
+        });
         return addCandidateButton;
     }
 
