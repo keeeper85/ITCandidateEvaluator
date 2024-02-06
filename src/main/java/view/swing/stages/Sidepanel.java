@@ -13,8 +13,10 @@ public class Sidepanel extends JPanel {
     private Collectable currentStage = null;
     private JButton nextQuestionButton;
     private JButton finishButton;
+    private JButton continueButton;
+    private TimerPanel timerPanel;
     private final int BUTTON_POSITION_X = 50;
-    private final int BUTTON_POSITION_Y = 50;
+    private final int BUTTON_POSITION_Y = 150;
     private final int SPACING = 90;
     private final int BUTTON_WIDTH = 200;
     private final int BUTTON_HEIGHT = 40;
@@ -39,6 +41,7 @@ public class Sidepanel extends JPanel {
         add(createNextQuestionButton());
         add(createFinishButton());
         placeButtons();
+        addTimer();
     }
 
     private void placeButtons(){
@@ -54,7 +57,7 @@ public class Sidepanel extends JPanel {
     }
 
     private JButton createContinueButton(){
-        JButton continueButton = new JButton("Continue");
+        continueButton = new JButton("Continue");
         continueButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -64,6 +67,7 @@ public class Sidepanel extends JPanel {
                     stageView.setCurrentStagePanel(nextStage);
                 }
                 updateButtons();
+                System.out.println(timerPanel.getSecondsElapsed());
             }
         });
 
@@ -185,11 +189,27 @@ public class Sidepanel extends JPanel {
     private void updateButtons(){
         if (isQuestionStage) nextQuestionButton.setVisible(true);
         else nextQuestionButton.setVisible(false);
-        if (isTheLastStep) finishButton.setVisible(true);
-        else finishButton.setVisible(false);
+        if (isTheLastStep) {
+            finishButton.setVisible(true);
+            continueButton.setVisible(false);
+        }
+        else {
+            finishButton.setVisible(false);
+            continueButton.setVisible(true);
+        }
 
         repaint();
         revalidate();
+    }
+
+    private void addTimer(){
+        JLabel evaluationTime = new JLabel("Total evaluation time:");
+        evaluationTime.setBounds(85, 5, BUTTON_WIDTH, 20);
+        add(evaluationTime);
+
+        timerPanel = new TimerPanel();
+        timerPanel.setBounds(BUTTON_POSITION_X, 25, BUTTON_WIDTH, BUTTON_HEIGHT);
+        add(timerPanel);
     }
 
     public void setTheLastStep(boolean theLastStep) {
