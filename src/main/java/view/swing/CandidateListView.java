@@ -44,6 +44,7 @@ public class CandidateListView extends JPanel {
         add(createAddCandidateButton());
         add(createAddManyButton());
         add(createDeleteButton());
+        add(createShowFeedbackButton());
         add(createBackButton());
     }
 
@@ -91,11 +92,19 @@ public class CandidateListView extends JPanel {
 
         return deleteButton;
     }
+    private JButton createShowFeedbackButton(){
+        JButton feedbackButton = new JButton("Feedback");
+        feedbackButton.setFont(ViewConstants.FONT_LARGE);
+        int backButtonY = BUTTON_Y + SPACING + SPACING + SPACING + SPACING;
+        feedbackButton.setBounds(BUTTON_X, backButtonY ,BUTTON_WIDTH ,BUTTON_HEIGHT);
+        feedbackButton.addActionListener((e -> {view.returnToPreviousPanel();}));
+        return feedbackButton;
+    }
 
     private JButton createBackButton(){
         JButton backButton = new JButton("Back");
         backButton.setFont(ViewConstants.FONT_LARGE);
-        int backButtonY = BUTTON_Y + SPACING + SPACING + SPACING + SPACING;
+        int backButtonY = BUTTON_Y + SPACING + SPACING + SPACING + SPACING + SPACING;
         backButton.setBounds(BUTTON_X, backButtonY ,BUTTON_WIDTH ,BUTTON_HEIGHT);
         backButton.addActionListener((e -> {view.returnToPreviousPanel();}));
         return backButton;
