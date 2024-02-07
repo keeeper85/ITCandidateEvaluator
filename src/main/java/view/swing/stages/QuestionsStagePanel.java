@@ -5,24 +5,16 @@ import view.swing.ViewConstants;
 import javax.swing.*;
 import java.util.HashMap;
 
-public class QuestionsStagePanel extends JPanel implements Collectable {
+public class QuestionsStagePanel extends AbstractStage {
 
-    private StageView stageView;
-
-    public QuestionsStagePanel(StageView view) {
-        this.stageView = view;
-        init();
+    public QuestionsStagePanel(StageView stageView) {
+        super(stageView);
     }
 
-    private void init(){
-        setLayout(null);
-
-        JLabel info = new JLabel(ViewConstants.QUESTIONS_STAGE_INFO);
-        info.setBounds(100,100,100,100);
-        add(info);
-    }
     @Override
-    public HashMap<String, String> collectData() {
-        return null;
+    protected void init() {
+        add(createTitleLabel("Technical Questions Evaluation Stage"));
+        add(createInfoLabel(ViewConstants.QUESTIONS_STAGE_INFO));
+        add(createScoreSlider("questions"));
     }
 }

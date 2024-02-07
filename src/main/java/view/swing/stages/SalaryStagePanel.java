@@ -5,24 +5,18 @@ import view.swing.ViewConstants;
 import javax.swing.*;
 import java.util.HashMap;
 
-public class SalaryStagePanel extends JPanel implements Collectable {
+public class SalaryStagePanel extends AbstractStage {
 
-    private StageView stageView;
-
-    public SalaryStagePanel(StageView view) {
-        this.stageView = view;
-        init();
+    public SalaryStagePanel(StageView stageView) {
+        super(stageView);
     }
 
-    private void init(){
-        setLayout(null);
-
-        JLabel info = new JLabel(ViewConstants.SALARY_STAGE_INFO);
-        info.setBounds(100,100,100,100);
-        add(info);
-    }
     @Override
-    public HashMap<String, String> collectData() {
-        return null;
+    protected void init() {
+        add(createTitleLabel("Salary Expectations Evaluation Stage"));
+        add(createInfoLabel(ViewConstants.SALARY_STAGE_INFO));
+        add(createScoreSlider("salary"));
     }
+
+    //override slider with label: Less is Better
 }

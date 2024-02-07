@@ -5,24 +5,16 @@ import view.swing.ViewConstants;
 import javax.swing.*;
 import java.util.HashMap;
 
-public class SoftSkillsStagePanel extends JPanel implements Collectable {
+public class SoftSkillsStagePanel extends AbstractStage {
 
-    private StageView stageView;
-
-    public SoftSkillsStagePanel(StageView view) {
-        this.stageView = view;
-        init();
+    public SoftSkillsStagePanel(StageView stageView) {
+        super(stageView);
     }
 
-    private void init(){
-        setLayout(null);
-
-        JLabel info = new JLabel(ViewConstants.SOFT_SKILLS_STAGE_INFO);
-        info.setBounds(100,100,100,100);
-        add(info);
-    }
     @Override
-    public HashMap<String, String> collectData() {
-        return null;
+    protected void init() {
+        add(createTitleLabel("Soft Skills Evaluation Stage"));
+        add(createInfoLabel(ViewConstants.SOFT_SKILLS_STAGE_INFO));
+        add(createScoreSlider("soft"));
     }
 }

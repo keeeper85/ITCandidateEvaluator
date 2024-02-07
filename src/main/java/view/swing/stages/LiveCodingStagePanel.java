@@ -5,24 +5,16 @@ import view.swing.ViewConstants;
 import javax.swing.*;
 import java.util.HashMap;
 
-public class LiveCodingStagePanel extends JPanel implements Collectable {
+public class LiveCodingStagePanel extends AbstractStage {
 
-    private StageView stageView;
-
-    public LiveCodingStagePanel(StageView view) {
-        this.stageView = view;
-        init();
+    public LiveCodingStagePanel(StageView stageView) {
+        super(stageView);
     }
 
-    private void init(){
-        setLayout(null);
-
-        JLabel info = new JLabel(ViewConstants.LIVE_CODING_STAGE_INFO);
-        info.setBounds(100,100,100,100);
-        add(info);
-    }
     @Override
-    public HashMap<String, String> collectData() {
-        return null;
+    protected void init() {
+        add(createTitleLabel("Live Coding Evaluation Stage"));
+        add(createInfoLabel(ViewConstants.LIVE_CODING_STAGE_INFO));
+        add(createScoreSlider("coding"));
     }
 }

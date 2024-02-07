@@ -2,29 +2,16 @@ package view.swing.stages;
 
 import view.swing.ViewConstants;
 
-import javax.swing.*;
 import java.util.HashMap;
 
-public class LanguageStagePanel extends JPanel implements Collectable{
-
-    private StageView stageView;
-
+public class LanguageStagePanel extends AbstractStage{
     public LanguageStagePanel(StageView stageView) {
-        this.stageView = stageView;
-        init();
+        super(stageView);
     }
-
-    private void init(){
-        setLayout(null);
-
-        JLabel info = new JLabel(ViewConstants.LANGUAGE_STAGE_INFO);
-        info.setBounds(100,100,100,100);
-        add(info);
-    }
-
-
     @Override
-    public HashMap<String, String> collectData() {
-        return null;
+    protected void init() {
+        add(createTitleLabel("English Language Fluency Evaluation Stage"));
+        add(createInfoLabel(ViewConstants.LANGUAGE_STAGE_INFO));
+        add(createScoreSlider("language"));
     }
 }

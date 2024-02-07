@@ -20,7 +20,7 @@ public class ViewConstants {
             "( It should be performed before the actual interview. )<br>" +
             "<br>" +
             "<br>" +
-            "At first check the candidate's resume (and application letter if attached). Consider the following:<br>" +
+            "At first go through the candidate's resume (and application letter if attached). Consider the following:<br>" +
             "- does it look neat and well prepared?<br>" +
             "- are there spelling or grammar errors?<br>" +
             "- does it contain all the necessary information?<br>" +
