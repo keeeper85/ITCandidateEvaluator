@@ -20,6 +20,8 @@ public class Sidepanel extends JPanel {
     private final int SPACING = 90;
     private final int BUTTON_WIDTH = 200;
     private final int BUTTON_HEIGHT = 40;
+    private final int TEXT_FIELD_CHAR_LIMIT = 20;
+    private final int NOTES_FIELD_CHAR_LIMIT = 200;
     private boolean isTheLastStep = false;
     private boolean isQuestionStage = false;
     private boolean areStagesPrepared = false;
@@ -61,18 +63,57 @@ public class Sidepanel extends JPanel {
         continueButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JPanel nextStage = getNextStage();
-                if (nextStage != null) {
-                    currentStage = (Collectable) nextStage;
-                    stageView.setCurrentStagePanel(nextStage);
+                if (areFieldInputsCorrect()){
+                    JPanel nextStage = getNextStage();
+                    if (nextStage != null) {
+                        currentStage = (Collectable) nextStage;
+                        stageView.setCurrentStagePanel(nextStage);
+                    }
+                    updateButtons();
+                    System.out.println(timerPanel.getSecondsElapsed());
                 }
-                updateButtons();
-                System.out.println(timerPanel.getSecondsElapsed());
+                else{
+                    JOptionPane.showMessageDialog(null, ViewConstants.INPUT_ERROR_MESSAGE, "Text input error", JOptionPane.WARNING_MESSAGE);
+                }
+
             }
         });
-
         buttons.add(continueButton);
         return continueButton;
+    }
+
+    private boolean areFieldInputsCorrect() {
+        currentStage = (Collectable) stageView.getCurrentStagePanel();
+        if (currentStage instanceof CandidateView){
+            System.out.println("test");
+            CandidateView candidateView = (CandidateView) currentStage;
+            HashMap<String, String> candidateData = candidateView.collectData();
+            for (Map.Entry<String, String> entry : candidateData.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                if (key.contains("Name")) {
+                    if (value == null || value.length() == 0 || value.length() > TEXT_FIELD_CHAR_LIMIT) return false;
+                }
+                else if (key.contains("nationality")){
+                    if (value.length() > TEXT_FIELD_CHAR_LIMIT) return false;
+                }
+                else if (key.contains("notes")){
+                    if (value.length() > NOTES_FIELD_CHAR_LIMIT) return false;
+                }
+                else if (key.contains("year")){
+                    if (value.length() == 0) return true;
+                    try{
+                        int yearOfBirth = Integer.parseInt(value);
+                        int tooOld = 1900;
+                        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+                        if (yearOfBirth < tooOld || yearOfBirth >= currentYear) return false;
+                    } catch (NumberFormatException e){
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     private JPanel getNextStage(){

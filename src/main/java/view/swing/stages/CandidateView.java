@@ -15,7 +15,7 @@ public class CandidateView extends JPanel implements Collectable {
     private List<JLabel> labels = new ArrayList<>();
     private List<JTextField> textFields = new ArrayList<>();
     private JTextArea notes;
-    private JTextField name;
+    private JTextField firstName;
     private JTextField lastName;
     private final int PANEL_X = 50;
     private final int PANEL_Y = 50;
@@ -67,8 +67,8 @@ public class CandidateView extends JPanel implements Collectable {
     }
 
     private void setTextInputFields(){
-        name = new JTextField();
-        name.setName("name");
+        firstName = new JTextField();
+        firstName.setName("name");
         lastName = new JTextField();
         lastName.setName("lastName");
         JTextField yearOfBirth = new JTextField();
@@ -76,7 +76,7 @@ public class CandidateView extends JPanel implements Collectable {
         JTextField nationality = new JTextField();
         nationality.setName("nationality");
 
-        textFields.add(name);
+        textFields.add(firstName);
         textFields.add(lastName);
         textFields.add(yearOfBirth);
         textFields.add(nationality);
@@ -114,10 +114,10 @@ public class CandidateView extends JPanel implements Collectable {
     }
 
     private void swapTextFields() {
-        String lastNameInsteadOfName = name.getText();
+        String lastNameInsteadOfName = firstName.getText();
         String nameInsteadOfLastName = lastName.getText();
 
-        name.setText(nameInsteadOfLastName);
+        firstName.setText(nameInsteadOfLastName);
         lastName.setText(lastNameInsteadOfName);
 
         revalidate();
@@ -133,5 +133,12 @@ public class CandidateView extends JPanel implements Collectable {
         }
         candidateData.put(notes.getName(), notes.getText());
         return candidateData;
+    }
+    public String getFirstName() {
+        return firstName.getText();
+    }
+
+    public String getLastName() {
+        return lastName.getText();
     }
 }

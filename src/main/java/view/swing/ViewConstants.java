@@ -14,7 +14,10 @@ public class ViewConstants {
             "If a slider is set to '0' - its item will not occur during the process.\n" +
             "You can choose one of default presets or create your own - adjust sliders and press 'Save Presets' button.\n" +
             "Press 'Start' button when you're ready, set the name for the process and start the evaluation.\n";
-
+    public static final String INPUT_ERROR_MESSAGE = "Check your input. First and last name can not be empty.\n" +
+            "First name, last name and nationality fields are limited to 20 characters.\n" +
+            "Year of birth field must be a 4-digit number. (1900 < year < current year) \n" +
+            "Notes field is limited to 200 characters";
     public static final String RESUME_STAGE_INFO =
             "<html><b>This stage's purpose is to evaluate candidate's background - whether it's beneficial for the applied position.</b><br>" +
             "( It should be performed before the actual interview. )<br>" +
@@ -132,7 +135,7 @@ public class ViewConstants {
             "The candidate can be very skilled but if salary expectations exceed the company limits, all this won't matter.<br>" +
             "Sometimes it might be more efficient to hire someone less experienced and use some of the budget to train them.<br>" +
             "<br>" +
-            "Input the minimal and maximal salary you can offer for this position in the text fields below. Ask the candidate how much would they<br>" +
+            "Input the minimal and maximal salary you can offer for this position in the text fields below. Ask the candidate how much they<br>" +
             "would like to earn and move the slider to match that amount.<br>" +
             "<br>" +
             "'Total score' and 'Total score including salary' will be two different results, presented separately. <br></html>";
@@ -148,10 +151,10 @@ public class ViewConstants {
             "- 'GOOD ENERGY'<br>" +
             "<br>" +
             "Remember: <u>you don't necessarily want to hire the best candidate.</u><br>" +
-            "<b>You want to get someone who does their work done, doesn't make a mess and is a team player.</b><br>" +
+            "<b>You want to find someone who gets their work done, doesn't make a mess and is a team player.</b><br>" +
             "<br>" +
             "If you have difficulty setting the slider, ask yourself the question:<br>" +
-            "<i>'How much would I like if I had to sit desk by desk with this person for the next year?'</i><br>" +
+            "<i>'How much would I like it, if I had to sit desk by desk with this person for the next year?'</i><br>" +
             "<br>" +
             "The score from this stage is a multiplier which will affect the entire candidate's result.<br></html>";
 
