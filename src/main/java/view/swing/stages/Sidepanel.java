@@ -10,6 +10,7 @@ import java.util.*;
 
 public class Sidepanel extends JPanel {
     private List<Collectable> stagesToComplete = new ArrayList<>();
+    private HashMap<String, String> allStagesScore = new HashMap<>();
     private Collectable currentStage = null;
     private JButton nextQuestionButton;
     private JButton finishButton;
@@ -64,13 +65,20 @@ public class Sidepanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (areFieldInputsCorrect()){
+
+                    currentStage = (Collectable) stageView.getCurrentStagePanel();
+                    HashMap<String, String> collectedData = currentStage.collectData();
+                    allStagesScore.putAll(collectedData);
+                    for (Map.Entry<String, String> stringStringEntry : collectedData.entrySet()) {
+                        System.out.println(stringStringEntry);
+                    }
+
                     JPanel nextStage = getNextStage();
                     if (nextStage != null) {
                         currentStage = (Collectable) nextStage;
                         stageView.setCurrentStagePanel(nextStage);
                     }
                     updateButtons();
-                    System.out.println(timerPanel.getSecondsElapsed());
                 }
                 else{
                     JOptionPane.showMessageDialog(null, ViewConstants.INPUT_ERROR_MESSAGE, "Text input error", JOptionPane.WARNING_MESSAGE);
@@ -237,6 +245,16 @@ public class Sidepanel extends JPanel {
     private JButton createFinishButton(){
         finishButton = new JButton("Finish");
         finishButton.setVisible(false);
+        finishButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("-----------------------");
+                for (Map.Entry<String, String> stringStringEntry : allStagesScore.entrySet()) {
+                    System.out.println(stringStringEntry.getKey() + " = " + stringStringEntry.getValue());
+                }
+                System.exit(0);
+            }
+        });
 
         buttons.add(finishButton);
         return finishButton;

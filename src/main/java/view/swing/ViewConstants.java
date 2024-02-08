@@ -18,6 +18,9 @@ public class ViewConstants {
             "First name, last name and nationality fields are limited to 20 characters.\n" +
             "Year of birth field must be a 4-digit number. (1900 < year < current year) \n" +
             "Notes field is limited to 200 characters";
+
+    public static final String SALARY_INPUT_ERROR_MESSAGE = "Check your input. Both fields must contain positive numbers.\n" +
+            "Left field value (FROM) must be smaller than the right field value (TO).";
     public static final String RESUME_STAGE_INFO =
             "<html><b>This stage's purpose is to evaluate candidate's background - whether it's beneficial for the applied position.</b><br>" +
             "( It should be performed before the actual interview. )<br>" +

@@ -56,7 +56,7 @@ public class QuestionsStagePanel extends AbstractStage {
         for (Map.Entry<String, List<String>> entry : filesWithQuestionsForTesting.entrySet()) {
             List<String> list = entry.getValue();
             for (int i = 0; i < 5; i++) {
-                String question = entry.getKey() + " Question_" + i;
+                String question = entry.getKey() + " [q]Question_" + i;
                 list.add(question);
             }
         }
@@ -95,7 +95,7 @@ public class QuestionsStagePanel extends AbstractStage {
         questionChooser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                selectedQuestion = questionChooser.getSelectedItem().toString();
+                selectedQuestion = "[question]" + questionChooser.getSelectedItem().toString();
                 updateTextFields(selectedQuestion);
             }
         });
@@ -155,7 +155,8 @@ public class QuestionsStagePanel extends AbstractStage {
     public HashMap<String, String> collectData() {
         selectedQuestion = questionNameField.getText();
         if (!questionsEvaluated.containsKey(selectedQuestion)){
-            questionsEvaluated.put(selectedQuestion, String.valueOf(scoreSlider.getValue()));
+            String taggedKey = "[q]" + selectedQuestion;
+            questionsEvaluated.put(taggedKey, String.valueOf(scoreSlider.getValue()));
         }
         return questionsEvaluated;
     }

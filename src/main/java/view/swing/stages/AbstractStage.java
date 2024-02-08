@@ -11,19 +11,19 @@ public abstract class AbstractStage extends JPanel implements Collectable {
 
     private StageView stageView;
     protected JLabel infoLabel;
-    private JLabel scoreLabel;
+    protected JLabel scoreLabel;
     protected JSlider scoreSlider;
     protected final int SLIDER_DEFAULT_VALUE = 50;
-    private final int POSITION_X = 50;
+    protected final int POSITION_X = 50;
     private final int INITIAL_POSITION_Y = 0;
-    private final int SLIDER_POSITION_Y = 600;
+    protected final int SLIDER_POSITION_Y = 600;
     private final int SCORE_LABEL_POSITION_Y = 520;
     private final int TITLE_WIDTH = 900;
     private final int TITLE_HEIGHT = 50;
     private final int INFO_WIDTH = 900;
     private final int INFO_HEIGHT = 500;
-    private final int SLIDER_WIDTH = 800;
-    private final int SLIDER_HEIGHT = 40;
+    protected final int SLIDER_WIDTH = 800;
+    protected final int SLIDER_HEIGHT = 40;
 
     public AbstractStage(StageView stageView) {
         this.stageView = stageView;
@@ -66,7 +66,7 @@ public abstract class AbstractStage extends JPanel implements Collectable {
         return scoreSlider;
     }
 
-    private JLabel createScoreLabel(){
+    protected JLabel createScoreLabel(){
         scoreLabel = new JLabel("Move the slider to evaluate candidate's performance at this stage:");
         scoreLabel.setBounds(POSITION_X, SLIDER_POSITION_Y - SLIDER_HEIGHT, INFO_WIDTH, SLIDER_HEIGHT);
 
