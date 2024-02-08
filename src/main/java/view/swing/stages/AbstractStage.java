@@ -10,8 +10,10 @@ import java.util.HashMap;
 public abstract class AbstractStage extends JPanel implements Collectable {
 
     private StageView stageView;
+    protected JLabel infoLabel;
     private JLabel scoreLabel;
     protected JSlider scoreSlider;
+    protected final int SLIDER_DEFAULT_VALUE = 50;
     private final int POSITION_X = 50;
     private final int INITIAL_POSITION_Y = 0;
     private final int SLIDER_POSITION_Y = 600;
@@ -39,12 +41,12 @@ public abstract class AbstractStage extends JPanel implements Collectable {
     }
 
     protected JLabel createInfoLabel(String stageInfo){
-        JLabel info = new JLabel(stageInfo);
-        info.setFont(ViewConstants.FONT_STAGE_INFO);
+        infoLabel = new JLabel(stageInfo);
+        infoLabel.setFont(ViewConstants.FONT_STAGE_INFO);
 
         int positionY = INITIAL_POSITION_Y + TITLE_HEIGHT;
-        info.setBounds(POSITION_X,positionY,INFO_WIDTH,INFO_HEIGHT);
-        return info;
+        infoLabel.setBounds(POSITION_X,positionY,INFO_WIDTH,INFO_HEIGHT);
+        return infoLabel;
     }
 
     protected JSlider createScoreSlider(String sliderName){

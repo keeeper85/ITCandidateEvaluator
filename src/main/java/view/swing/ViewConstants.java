@@ -109,7 +109,7 @@ public class ViewConstants {
             "That's why I'd advise to reduce this stage to the minimum - instead of wasting time looking how the candidate is building<br>" +
             "their code, just ask them how would they do this particular task. Step by step.<br>" +
             "<br>" +
-            "If you do want to perform a typical live coding phase anyways - use the menu below to look for some interesting tasks.<br>" +
+            "If you do want to perform a typical live coding phase anyways - use the menu above to look for some interesting tasks.<br>" +
             "These example tasks are stored in the 'livecodingtasks.txt' file - you may update it if you like.<br>" +
             "<br>" +
             "<b>During this step evaluate candidate's way of thinking rather than their ability to memorize stuff.</b><br></html>";

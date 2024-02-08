@@ -83,36 +83,37 @@ public class Sidepanel extends JPanel {
     }
 
     private boolean areFieldInputsCorrect() {
-        currentStage = (Collectable) stageView.getCurrentStagePanel();
-        if (currentStage instanceof CandidateView){
-            System.out.println("test");
-            CandidateView candidateView = (CandidateView) currentStage;
-            HashMap<String, String> candidateData = candidateView.collectData();
-            for (Map.Entry<String, String> entry : candidateData.entrySet()) {
-                String key = entry.getKey();
-                String value = entry.getValue();
-                if (key.contains("Name")) {
-                    if (value == null || value.length() == 0 || value.length() > TEXT_FIELD_CHAR_LIMIT) return false;
-                }
-                else if (key.contains("nationality")){
-                    if (value.length() > TEXT_FIELD_CHAR_LIMIT) return false;
-                }
-                else if (key.contains("notes")){
-                    if (value.length() > NOTES_FIELD_CHAR_LIMIT) return false;
-                }
-                else if (key.contains("year")){
-                    if (value.length() == 0) return true;
-                    try{
-                        int yearOfBirth = Integer.parseInt(value);
-                        int tooOld = 1900;
-                        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-                        if (yearOfBirth < tooOld || yearOfBirth >= currentYear) return false;
-                    } catch (NumberFormatException e){
-                        return false;
-                    }
-                }
-            }
-        }
+        //todo conditions commented for testing
+//        currentStage = (Collectable) stageView.getCurrentStagePanel();
+//        if (currentStage instanceof CandidateView){
+//            System.out.println("test");
+//            CandidateView candidateView = (CandidateView) currentStage;
+//            HashMap<String, String> candidateData = candidateView.collectData();
+//            for (Map.Entry<String, String> entry : candidateData.entrySet()) {
+//                String key = entry.getKey();
+//                String value = entry.getValue();
+//                if (key.contains("Name")) {
+//                    if (value == null || value.length() == 0 || value.length() > TEXT_FIELD_CHAR_LIMIT) return false;
+//                }
+//                else if (key.contains("nationality")){
+//                    if (value.length() > TEXT_FIELD_CHAR_LIMIT) return false;
+//                }
+//                else if (key.contains("notes")){
+//                    if (value.length() > NOTES_FIELD_CHAR_LIMIT) return false;
+//                }
+//                else if (key.contains("year")){
+//                    if (value.length() == 0) return true;
+//                    try{
+//                        int yearOfBirth = Integer.parseInt(value);
+//                        int tooOld = 1900;
+//                        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+//                        if (yearOfBirth < tooOld || yearOfBirth >= currentYear) return false;
+//                    } catch (NumberFormatException e){
+//                        return false;
+//                    }
+//                }
+//            }
+//        }
         return true;
     }
 
@@ -214,6 +215,20 @@ public class Sidepanel extends JPanel {
     private JButton createNextQuestionButton(){
         nextQuestionButton = new JButton("Next Question");
         nextQuestionButton.setVisible(false);
+        nextQuestionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                currentStage = (Collectable) stageView.getCurrentStagePanel();
+                if (currentStage instanceof QuestionsStagePanel){
+                    QuestionsStagePanel questionStage = ((QuestionsStagePanel) currentStage);
+                    String title = "You've asked " + questionStage.getNumberOfQuestionsEvaluated() + " questions so far.";
+                    int choice = JOptionPane.showConfirmDialog(null, "Do you want to ask next question?", title, JOptionPane.YES_NO_OPTION);
+                    if (choice == 0) questionStage.updateQuestionsEvaluated();
+
+
+                }
+            }
+        });
 
         buttons.add(nextQuestionButton);
         return nextQuestionButton;
