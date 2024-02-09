@@ -9,6 +9,9 @@ public class TimerPanel extends JPanel {
     private Timer timer;
     private JLabel timerLabel;
     private JButton pauseButton;
+    private final int TIMER_DELAY = 1000;
+    private final int SECONDS_IN_HOUR = 3600;
+    private final int MINUTES_IN_HOUR = 60;
 
     private int secondsElapsed;
 
@@ -32,7 +35,7 @@ public class TimerPanel extends JPanel {
             }
         });
         add(pauseButton);
-        timer = new Timer(1000, new ActionListener() {
+        timer = new Timer(TIMER_DELAY, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 secondsElapsed++;
@@ -43,14 +46,18 @@ public class TimerPanel extends JPanel {
     }
 
     private void updateTimerLabel() {
-        int hours = secondsElapsed / 3600;
-        int minutes = (secondsElapsed % 3600) / 60;
-        int seconds = secondsElapsed % 60;
+        int hours = secondsElapsed / SECONDS_IN_HOUR;
+        int minutes = (secondsElapsed % SECONDS_IN_HOUR) / MINUTES_IN_HOUR;
+        int seconds = secondsElapsed % MINUTES_IN_HOUR;
 
         timerLabel.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
     }
 
     public int getSecondsElapsed() {
         return secondsElapsed;
+    }
+
+    public void setSecondsElapsed(int secondsElapsed) {
+        this.secondsElapsed = secondsElapsed;
     }
 }

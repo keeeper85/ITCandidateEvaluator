@@ -1,7 +1,5 @@
 package view.swing;
 
-import view.swing.stages.CandidateView;
-import view.swing.stages.Sidepanel;
 import view.swing.stages.StageView;
 
 import javax.swing.*;
@@ -14,17 +12,19 @@ public class CandidateListView extends JPanel {
     private View view;
     private JList<String> candidatesList;
     private DefaultListModel<String> listModel;
-    private String[] sortingOptions = {"Name-Ascending", "Name-Descending", "Score-Ascending", "Score-Descending"};
     private final int TOP_ROW_Y = 20;
     private final int LIST_X = 30;
     private final int LIST_Y = 60;
     private final int LIST_WIDTH = 900;
     private final int LIST_HEIGHT = 600;
     private final int SPACING = 60;
+    private final int SMALL_SPACING = 10;
     private final int BUTTON_X = LIST_X + LIST_WIDTH + SPACING;
     private final int BUTTON_Y = LIST_Y + SPACING;
     private final int BUTTON_WIDTH = 200;
     private final int BUTTON_HEIGHT = 40;
+    private final int SORTING_MENU_LABEL_WIDTH = 250;
+    private final int SORTING_MENU_HEIGHT = 20;
 
     public CandidateListView(View view) {
         this.view = view;
@@ -33,7 +33,7 @@ public class CandidateListView extends JPanel {
 
     private void initCandidatesListView(){
         setLayout(null);
-        addCandidates();
+        addCandidatesForTestingOnly();
         candidatesList = new JList<>(listModel);
         candidatesList.setFont(ViewConstants.FONT_LARGE);
         add(createScrollPane());
@@ -48,7 +48,7 @@ public class CandidateListView extends JPanel {
         add(createBackButton());
     }
 
-    private void addCandidates(){
+    private void addCandidatesForTestingOnly(){
         listModel = new DefaultListModel<>();
         for (int i = 0; i < 30; i++) {
             listModel.addElement("Candidate " + i);
@@ -97,7 +97,7 @@ public class CandidateListView extends JPanel {
         feedbackButton.setFont(ViewConstants.FONT_LARGE);
         int backButtonY = BUTTON_Y + SPACING + SPACING + SPACING + SPACING;
         feedbackButton.setBounds(BUTTON_X, backButtonY ,BUTTON_WIDTH ,BUTTON_HEIGHT);
-        feedbackButton.addActionListener((e -> {view.returnToPreviousPanel();}));
+        feedbackButton.addActionListener((e -> {view.returnToPreviousPanel();})); //todo
         return feedbackButton;
     }
 
@@ -151,8 +151,8 @@ public class CandidateListView extends JPanel {
 
     private JComboBox<String> createSortingMenu(){
 
-        JComboBox<String> choiceMenu = new JComboBox<>(sortingOptions);
-        choiceMenu.setBounds(LIST_X, TOP_ROW_Y, BUTTON_WIDTH, 20);
+        JComboBox<String> choiceMenu = new JComboBox<>(ViewConstants.CANDIDATES_SORTING_OPTIONS);
+        choiceMenu.setBounds(LIST_X, TOP_ROW_Y, BUTTON_WIDTH, SORTING_MENU_HEIGHT);
 
         return choiceMenu;
     }
@@ -160,8 +160,8 @@ public class CandidateListView extends JPanel {
     private JCheckBox createFinishedCheckBox(){
         JCheckBox showOnlyUnfinishedCandidates = new JCheckBox();
         showOnlyUnfinishedCandidates.setLabel("Show only unfinished candidates");
-        int positionX = LIST_X + BUTTON_WIDTH + 10;
-        showOnlyUnfinishedCandidates.setBounds(positionX, TOP_ROW_Y, 250,20);
+        int positionX = LIST_X + BUTTON_WIDTH + SMALL_SPACING;
+        showOnlyUnfinishedCandidates.setBounds(positionX, TOP_ROW_Y, SORTING_MENU_LABEL_WIDTH,SORTING_MENU_HEIGHT);
 
         return showOnlyUnfinishedCandidates;
     }

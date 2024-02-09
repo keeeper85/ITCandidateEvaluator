@@ -13,6 +13,14 @@ public class StageView extends JPanel {
     private JPanel previousStagePanel;
     private List<JPanel> chosenStages = new ArrayList<>();
     private Sidepanel sidepanel;
+    private final int MAIN_PANEL_POSITION_X = 0;
+    private final int MAIN_PANEL_POSITION_Y = 0;
+    private final int MAIN_PANEL_WIDTH = 1000;
+    private final int MAIN_PANEL_HEIGHT = 700;
+    private final int SIDEPANEL_POSITION_X = 1000;
+    private final int SIDEPANEL_POSITION_Y = 0;
+    private final int SIDEPANEL_WIDTH = 280;
+    private final int SIDEPANEL_HEIGHT = 700;
 
     public StageView(View view) {
         this.view = view;
@@ -24,10 +32,10 @@ public class StageView extends JPanel {
 
     private void initStageView(){
         setLayout(null);
-        currentStagePanel.setBounds(0, 0, 1000, 700);
+        currentStagePanel.setBounds(MAIN_PANEL_POSITION_X, MAIN_PANEL_POSITION_Y, MAIN_PANEL_WIDTH, MAIN_PANEL_HEIGHT);
         add(currentStagePanel);
 
-        sidepanel.setBounds(1000, 0, 280, 700);
+        sidepanel.setBounds(SIDEPANEL_POSITION_X, SIDEPANEL_POSITION_Y, SIDEPANEL_WIDTH, SIDEPANEL_HEIGHT);
         add(sidepanel);
         setChosenPanelsForTesting();
 
@@ -50,7 +58,7 @@ public class StageView extends JPanel {
         previousStagePanel = currentStagePanel;
         remove(currentStagePanel);
         currentStagePanel = newPanel;
-        currentStagePanel.setBounds(0, 0, 1000, 700);
+        currentStagePanel.setBounds(MAIN_PANEL_POSITION_X, MAIN_PANEL_POSITION_Y, MAIN_PANEL_WIDTH, MAIN_PANEL_HEIGHT);
         add(currentStagePanel);
 
         revalidate();

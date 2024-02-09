@@ -17,6 +17,7 @@ public class QuestionsStagePanel extends AbstractStage {
     private final int ITEM_WIDTH = 250;
     private final int ITEM_HEIGHT = 20;
     private final int SPACING = 5;
+    private boolean isQuestionAsked = false;
     private TreeMap<String, List<String>> filesWithQuestionsForTesting;
     private HashMap<String, String> questionsEvaluated = new HashMap<>();
     private String selectedFile;
@@ -142,6 +143,7 @@ public class QuestionsStagePanel extends AbstractStage {
     }
 
     public void updateQuestionsEvaluated(){
+        isQuestionAsked = true;
         String stringFromScoreSliderValue = String.valueOf(scoreSlider.getValue());
         questionsEvaluated.put(questionNameField.getText(), stringFromScoreSliderValue);
         scoreSlider.setValue(SLIDER_DEFAULT_VALUE);
@@ -151,13 +153,13 @@ public class QuestionsStagePanel extends AbstractStage {
         return questionsEvaluated.size();
     }
 
+    public boolean isQuestionAsked() {
+        return isQuestionAsked;
+    }
+
     @Override
     public HashMap<String, String> collectData() {
         selectedQuestion = questionNameField.getText();
-        if (!questionsEvaluated.containsKey(selectedQuestion)){
-            String taggedKey = "[q]" + selectedQuestion;
-            questionsEvaluated.put(taggedKey, String.valueOf(scoreSlider.getValue()));
-        }
         return questionsEvaluated;
     }
 }

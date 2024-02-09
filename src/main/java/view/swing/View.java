@@ -60,10 +60,6 @@ public class View extends JFrame implements Observer {
         revalidate();
         repaint();
     }
-
-    public JPanel getCurrentPanel() {
-        return currentPanel;
-    }
     @Override
     public void update(Observable o, Object arg) {
 

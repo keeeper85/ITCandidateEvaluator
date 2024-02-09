@@ -11,8 +11,8 @@ import java.util.List;
 public class PresetsView extends JPanel {
 
     private View view;
-    private String[] choices = {"Junior", "Regular", "Senior", "Custom"};
-    private String chosenPreset = choices[0];
+    private String[] choicesForTestingOnly = {"Junior", "Regular", "Senior", "Custom"};
+    private String chosenPreset = choicesForTestingOnly[0];
     private JTextField presetName;
     private List<JButton> buttons = new ArrayList<>();
     private List<JSlider> sliders = new ArrayList<>();
@@ -66,14 +66,13 @@ public class PresetsView extends JPanel {
         choosePreset.setBounds(TOP_ROW_X, TOP_ROW_Y, SMALL_ITEM_WIDTH, SMALL_ITEM_HEIGHT);
         add(choosePreset);
 
-        JComboBox<String> choiceMenu = new JComboBox<>(choices);
+        JComboBox<String> choiceMenu = new JComboBox<>(choicesForTestingOnly);
         choiceMenu.setFont(ViewConstants.FONT_LARGE);
         int choiceMenuX = TOP_ROW_X + SMALL_ITEM_WIDTH;
         choiceMenu.setBounds(choiceMenuX, TOP_ROW_Y, SMALL_ITEM_WIDTH, SMALL_ITEM_HEIGHT);
         choiceMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Update text field with the selected item
                 presetName.setText((String) choiceMenu.getSelectedItem());
                 repaint();
             }
@@ -89,12 +88,9 @@ public class PresetsView extends JPanel {
     }
 
     private void addSliders(){
-        String[] labels = {"Resume and social media evaluation", "English language assessment", "Previous work experience",
-        "Own projects", "Live coding", "Technical questions", "Salary expectations", "Soft skills"};
-
         int sliderPositionY = SLIDER_ROW_Y;
 
-        for (String label : labels) {
+        for (String label : ViewConstants.PRESETS_ITEMS_LABELS) {
             add(createSliderLabel(label, sliderPositionY));
             add(createSlider(label, sliderPositionY));
             sliderPositionY += SLIDER_HEIGHT + SMALL_SPACING;
@@ -124,8 +120,8 @@ public class PresetsView extends JPanel {
         return slider;
     }
 
-    private JLabel createSliderLabel(String lableText, int sliderPositionY){
-        JLabel label = new JLabel(lableText);
+    private JLabel createSliderLabel(String labelText, int sliderPositionY){
+        JLabel label = new JLabel(labelText);
         label.setBounds(SLIDER_ROW_LABLE_X, sliderPositionY, SLIDER_LABLE_WIDTH, SMALL_ITEM_HEIGHT);
         label.setFont(ViewConstants.FONT_LARGE);
         return label;
@@ -142,7 +138,7 @@ public class PresetsView extends JPanel {
         infoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(infoButton.getParent(), ViewConstants.PRESETS_HOWTO);
+                JOptionPane.showMessageDialog(null, ViewConstants.PRESETS_HOWTO);
             }
         });
         return infoButton;

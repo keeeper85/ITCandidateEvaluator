@@ -23,8 +23,14 @@ public class CandidateView extends JPanel implements Collectable {
     private final int TEXT_INPUT_WIDTH = 600;
     private final int SMALL_ITEM_HEIGHT = 60;
     private final int SPACING = 30;
-    private final Dimension SMALL_ITEM_SIZE = new Dimension(300, 50);
-    private final Dimension NOTES_SIZE = new Dimension(200, 400);
+    private final int NOTES_POSITION_X = PANEL_X + LABEL_WIDTH;
+    private final int NOTES_POSITION_Y = 420;
+    private final int NOTES_WIDTH = TEXT_INPUT_WIDTH;
+    private final int NOTES_HEIGHT = 250;
+    private final int SWAP_BUTTON_POSITION_X = 615;
+    private final int SWAP_BUTTON_POSITION_Y = 112;
+    private final int SWAP_BUTTON_WIDTH = 80;
+    private final int SWAP_BUTTON_HEIGHT = 25;
 
     public CandidateView(View view) {
         this.view = view;
@@ -100,15 +106,15 @@ public class CandidateView extends JPanel implements Collectable {
         notes.setWrapStyleWord(true);
 
         JScrollPane notesWithScroll = new JScrollPane(notes);
-        notesWithScroll.setBounds(PANEL_X + LABEL_WIDTH, 420, TEXT_INPUT_WIDTH, 250);
+        notesWithScroll.setBounds(NOTES_POSITION_X, NOTES_POSITION_Y, NOTES_WIDTH, NOTES_HEIGHT);
         add(notesWithScroll);
     }
 
     private void setSwapButton(){
         JButton swapButton = new JButton();
         swapButton.setText("SWAP");
-        swapButton.setFont(new Font(Font.DIALOG, Font.PLAIN, 10));
-        swapButton.setBounds(615,112,80,25);
+        swapButton.setFont(ViewConstants.FONT_SMALL);
+        swapButton.setBounds(SWAP_BUTTON_POSITION_X,SWAP_BUTTON_POSITION_Y,SWAP_BUTTON_WIDTH,SWAP_BUTTON_HEIGHT);
         swapButton.addActionListener((e -> {swapTextFields();}));
         add(swapButton);
     }
@@ -133,12 +139,5 @@ public class CandidateView extends JPanel implements Collectable {
         }
         candidateData.put(notes.getName(), notes.getText());
         return candidateData;
-    }
-    public String getFirstName() {
-        return firstName.getText();
-    }
-
-    public String getLastName() {
-        return lastName.getText();
     }
 }

@@ -17,7 +17,6 @@ public abstract class AbstractStage extends JPanel implements Collectable {
     protected final int POSITION_X = 50;
     private final int INITIAL_POSITION_Y = 0;
     protected final int SLIDER_POSITION_Y = 600;
-    private final int SCORE_LABEL_POSITION_Y = 520;
     private final int TITLE_WIDTH = 900;
     private final int TITLE_HEIGHT = 50;
     private final int INFO_WIDTH = 900;
@@ -75,6 +74,8 @@ public abstract class AbstractStage extends JPanel implements Collectable {
 
     private void updateScoreLabel(int sliderValue){
         String description = "";
+        //The 'magic numbers' below are self-explanatory considering scoreSlider minimum value = 0 and maximum = 100
+        //These values are only for descriptive purposes and won't matter in calculating final result
 
         if (sliderValue < 15) description = ViewConstants.SLIDER_VALUE_DESCRIPTION[0];
         else if (sliderValue >= 15 && sliderValue < 30) description = ViewConstants.SLIDER_VALUE_DESCRIPTION[1];

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class InitialView extends JPanel {
 
     private View view;
-    private Dimension buttonSize = new Dimension(500, 100);
+    private final Dimension BUTTON_SIZE = new Dimension(500, 100);
     private ArrayList<JButton> buttons = new ArrayList<>();
 
     public InitialView(View view) {
@@ -32,7 +32,7 @@ public class InitialView extends JPanel {
         buttonPanel3.add(createExitButton());
 
         for (JButton button : buttons) {
-            button.setPreferredSize(buttonSize);
+            button.setPreferredSize(BUTTON_SIZE);
             button.setFont(ViewConstants.FONT_LARGE);
             button.setAlignmentX(Component.CENTER_ALIGNMENT);
         }

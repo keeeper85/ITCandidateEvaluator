@@ -14,6 +14,10 @@ public class SalaryStagePanel extends AbstractStage {
     private final int TO_FIELD_X = 815;
     private final int FIELD_WIDTH = 80;
     private final int FIELD_HEIGHT = 30;
+    private final int AVERAGE_FACTOR = 2;
+    private final int PERCENT = 100;
+    private final String EXAMPLE_MIN_SALARY = "5000";
+    private final String EXAMPLE_MAX_SALARY = "9000";
     private JTextField fromField;
     private JTextField toField;
     private int from = 0;
@@ -28,7 +32,7 @@ public class SalaryStagePanel extends AbstractStage {
         add(createTitleLabel("Salary Expectations Evaluation Stage"));
         add(createInfoLabel(ViewConstants.SALARY_STAGE_INFO));
         add(createScoreLabel());
-        scoreLabel.setText("Move the slider to match the candidate's salary expectations:");
+        scoreLabel.setText("Move the slider to match (roughly) the candidate's salary expectations:");
 
         add(createFromField());
         add(createToField());
@@ -37,20 +41,16 @@ public class SalaryStagePanel extends AbstractStage {
 
     private JTextField createFromField(){
         fromField = new JTextField();
-        fromField.setText("5000");
+        fromField.setText(EXAMPLE_MIN_SALARY);
         fromField.setBounds(FROM_FIELD_X, TEXT_FIELDS_Y, FIELD_WIDTH, FIELD_HEIGHT);
         return fromField;
     }
 
     @Override
     protected JSlider createScoreSlider(String sliderName) {
-//        return super.createScoreSlider(sliderName);
         scoreSlider = new JSlider();
         scoreSlider.setName(sliderName);
-        scoreSlider.setMajorTickSpacing(1000);
-        scoreSlider.setMinorTickSpacing(500);
-//        scoreSlider.setPaintTicks(true);
-//        scoreSlider.setPaintLabels(true);
+
         int positionX = POSITION_X + POSITION_X;
         scoreSlider.setBounds(positionX,SLIDER_POSITION_Y,SLIDER_WIDTH,SLIDER_HEIGHT);
 
@@ -81,7 +81,7 @@ public class SalaryStagePanel extends AbstractStage {
 
     private JTextField createToField(){
         toField = new JTextField();
-        toField.setText("9000");
+        toField.setText(EXAMPLE_MAX_SALARY);
         toField.setBounds(TO_FIELD_X, TEXT_FIELDS_Y, FIELD_WIDTH, FIELD_HEIGHT);
         return toField;
     }
@@ -106,8 +106,8 @@ public class SalaryStagePanel extends AbstractStage {
         updateScoreSlider();
         HashMap<String, String> score = new HashMap<>();
         double expectedSalary = scoreSlider.getValue();
-        double average = (to + from) / 2;
-        int ratio = (int) (expectedSalary / average * 100);
+        double average = (to + from) / AVERAGE_FACTOR;
+        int ratio = (int) (expectedSalary / average * PERCENT);
         score.put(scoreSlider.getName(), String.valueOf(ratio));
 
         return score;

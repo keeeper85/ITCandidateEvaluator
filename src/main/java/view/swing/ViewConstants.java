@@ -7,7 +7,12 @@ public class ViewConstants {
     public static final int WINDOW_WIDTH_PIXELS = 1280;
     public static final int WINDOW_HEIGHT_PIXELS = 720;
     public static final Font FONT_LARGE = new Font(Font.DIALOG, Font.PLAIN, 26);
+    public static final Font FONT_SMALL = new Font(Font.DIALOG, Font.PLAIN, 10);
     public static final Font FONT_STAGE_INFO = new Font(Font.DIALOG, Font.PLAIN, 16);
+    public static final String[] RECRUTATIONS_SORTING_OPTIONS = {"Name-Ascending", "Name-Descending", "Date-Ascending", "Date-Descending"};
+    public static final String[] CANDIDATES_SORTING_OPTIONS = {"Name-Ascending", "Name-Descending", "Score-Ascending", "Score-Descending","Score/Salary-Ascending", "Score/Salary-Descending"};
+    public static final String[] PRESETS_ITEMS_LABELS = {"Resume and social media evaluation", "English language assessment", "Previous work experience",
+            "Own projects", "Live coding", "Technical questions", "Salary expectations", "Soft skills"};
     public static final String[] SLIDER_VALUE_DESCRIPTION = {"Unacceptable", "Poor", "Not too good", "Average", "Quite good", "Impressive", "Amazing!"};
     public static final String PRESETS_HOWTO = "Adjust sliders accordingly to their importance.\n" +
             "Higher slider value represents higher multiplier for its item score.\n" +
@@ -18,7 +23,8 @@ public class ViewConstants {
             "First name, last name and nationality fields are limited to 20 characters.\n" +
             "Year of birth field must be a 4-digit number. (1900 < year < current year) \n" +
             "Notes field is limited to 200 characters";
-
+    public static final String QUESTION_INPUT_ERROR_MESSAGE = "You need to evaluate at least one question before you can move on to the next stage.\n" +
+            "Press 'Save score' button and confirm to proceed.";
     public static final String SALARY_INPUT_ERROR_MESSAGE = "Check your input. Both fields must contain positive numbers.\n" +
             "Left field value (FROM) must be smaller than the right field value (TO).";
     public static final String RESUME_STAGE_INFO =

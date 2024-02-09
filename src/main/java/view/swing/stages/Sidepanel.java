@@ -12,10 +12,15 @@ public class Sidepanel extends JPanel {
     private List<Collectable> stagesToComplete = new ArrayList<>();
     private HashMap<String, String> allStagesScore = new HashMap<>();
     private Collectable currentStage = null;
-    private JButton nextQuestionButton;
+    private JButton saveScoreButton;
     private JButton finishButton;
     private JButton continueButton;
     private TimerPanel timerPanel;
+    private final int TIMER_LABEL_POSITION_X = 85;
+    private final int TIMER_LABEL_POSITION_Y = 5;
+    private final int TIMER_PANEL_POSITION_Y = 25;
+    private final int TIMER_LABEL_WIDTH = 200;
+    private final int TIMER_LABEL_HEIGHT = 20;
     private final int BUTTON_POSITION_X = 50;
     private final int BUTTON_POSITION_Y = 150;
     private final int SPACING = 90;
@@ -41,7 +46,7 @@ public class Sidepanel extends JPanel {
         add(createBackButton());
         add(createSaveExitButton());
         add(createDiscardButton());
-        add(createNextQuestionButton());
+        add(createSaveScoreButton());
         add(createFinishButton());
         placeButtons();
         addTimer();
@@ -64,9 +69,8 @@ public class Sidepanel extends JPanel {
         continueButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                currentStage = (Collectable) stageView.getCurrentStagePanel();
                 if (areFieldInputsCorrect()){
-
-                    currentStage = (Collectable) stageView.getCurrentStagePanel();
                     HashMap<String, String> collectedData = currentStage.collectData();
                     allStagesScore.putAll(collectedData);
                     for (Map.Entry<String, String> stringStringEntry : collectedData.entrySet()) {
@@ -81,7 +85,8 @@ public class Sidepanel extends JPanel {
                     updateButtons();
                 }
                 else{
-                    JOptionPane.showMessageDialog(null, ViewConstants.INPUT_ERROR_MESSAGE, "Text input error", JOptionPane.WARNING_MESSAGE);
+                    if (currentStage instanceof QuestionsStagePanel) JOptionPane.showMessageDialog(null, ViewConstants.QUESTION_INPUT_ERROR_MESSAGE, "No questions asked error", JOptionPane.WARNING_MESSAGE);
+                    else JOptionPane.showMessageDialog(null, ViewConstants.INPUT_ERROR_MESSAGE, "Text input error", JOptionPane.WARNING_MESSAGE);
                 }
 
             }
@@ -91,37 +96,42 @@ public class Sidepanel extends JPanel {
     }
 
     private boolean areFieldInputsCorrect() {
-        //todo conditions commented for testing
-//        currentStage = (Collectable) stageView.getCurrentStagePanel();
-//        if (currentStage instanceof CandidateView){
-//            System.out.println("test");
-//            CandidateView candidateView = (CandidateView) currentStage;
-//            HashMap<String, String> candidateData = candidateView.collectData();
-//            for (Map.Entry<String, String> entry : candidateData.entrySet()) {
-//                String key = entry.getKey();
-//                String value = entry.getValue();
-//                if (key.contains("Name")) {
-//                    if (value == null || value.length() == 0 || value.length() > TEXT_FIELD_CHAR_LIMIT) return false;
-//                }
-//                else if (key.contains("nationality")){
-//                    if (value.length() > TEXT_FIELD_CHAR_LIMIT) return false;
-//                }
-//                else if (key.contains("notes")){
-//                    if (value.length() > NOTES_FIELD_CHAR_LIMIT) return false;
-//                }
-//                else if (key.contains("year")){
-//                    if (value.length() == 0) return true;
-//                    try{
-//                        int yearOfBirth = Integer.parseInt(value);
-//                        int tooOld = 1900;
-//                        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-//                        if (yearOfBirth < tooOld || yearOfBirth >= currentYear) return false;
-//                    } catch (NumberFormatException e){
-//                        return false;
-//                    }
-//                }
-//            }
-//        }
+        //comment for testing
+        currentStage = (Collectable) stageView.getCurrentStagePanel();
+        if (currentStage instanceof CandidateView){
+            System.out.println("test");
+            CandidateView candidateView = (CandidateView) currentStage;
+            HashMap<String, String> candidateData = candidateView.collectData();
+            for (Map.Entry<String, String> entry : candidateData.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                if (key.contains("Name")) {
+                    if (value == null || value.length() == 0 || value.length() > TEXT_FIELD_CHAR_LIMIT) return false;
+                }
+                else if (key.contains("nationality")){
+                    if (value.length() > TEXT_FIELD_CHAR_LIMIT) return false;
+                }
+                else if (key.contains("notes")){
+                    if (value.length() > NOTES_FIELD_CHAR_LIMIT) return false;
+                }
+                else if (key.contains("year")){
+                    if (value.length() == 0) return true;
+                    try{
+                        int yearOfBirth = Integer.parseInt(value);
+                        int tooOld = 1900;
+                        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+                        if (yearOfBirth < tooOld || yearOfBirth >= currentYear) return false;
+                    } catch (NumberFormatException e){
+                        return false;
+                    }
+                }
+            }
+        }
+        if (currentStage instanceof QuestionsStagePanel){
+            QuestionsStagePanel questionsStage = (QuestionsStagePanel) currentStage;
+            return questionsStage.isQuestionAsked();
+        }
+
         return true;
     }
 
@@ -142,7 +152,7 @@ public class Sidepanel extends JPanel {
         }
         else isQuestionStage = false;
 
-        return stages.get(currentStageIndex + 1);
+        return stages.get(nextStageIndex);
     }
     private JButton createBackButton(){
         JButton backButton = new JButton("Back");
@@ -188,6 +198,8 @@ public class Sidepanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 HashMap<String, String> collectedData = currentStage.collectData();
+                String timePassed = String.valueOf(timerPanel.getSecondsElapsed());
+                collectedData.put("evaluationTimeSeconds", timePassed);
 
                 for (Map.Entry<String, String> stringStringEntry : collectedData.entrySet()) {
                     System.out.println(stringStringEntry);
@@ -220,26 +232,24 @@ public class Sidepanel extends JPanel {
         return discardButton;
     }
 
-    private JButton createNextQuestionButton(){
-        nextQuestionButton = new JButton("Next Question");
-        nextQuestionButton.setVisible(false);
-        nextQuestionButton.addActionListener(new ActionListener() {
+    private JButton createSaveScoreButton(){
+        saveScoreButton = new JButton("Save Score");
+        saveScoreButton.setVisible(false);
+        saveScoreButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 currentStage = (Collectable) stageView.getCurrentStagePanel();
                 if (currentStage instanceof QuestionsStagePanel){
                     QuestionsStagePanel questionStage = ((QuestionsStagePanel) currentStage);
                     String title = "You've asked " + questionStage.getNumberOfQuestionsEvaluated() + " questions so far.";
-                    int choice = JOptionPane.showConfirmDialog(null, "Do you want to ask next question?", title, JOptionPane.YES_NO_OPTION);
+                    int choice = JOptionPane.showConfirmDialog(null, "Do you want to save this score? (this operation can not be undone)", title, JOptionPane.YES_NO_OPTION);
                     if (choice == 0) questionStage.updateQuestionsEvaluated();
-
-
                 }
             }
         });
 
-        buttons.add(nextQuestionButton);
-        return nextQuestionButton;
+        buttons.add(saveScoreButton);
+        return saveScoreButton;
     }
 
     private JButton createFinishButton(){
@@ -249,6 +259,8 @@ public class Sidepanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("-----------------------");
+                String timePassed = String.valueOf(timerPanel.getSecondsElapsed());
+                allStagesScore.put("evaluationTimeSeconds", timePassed);
                 for (Map.Entry<String, String> stringStringEntry : allStagesScore.entrySet()) {
                     System.out.println(stringStringEntry.getKey() + " = " + stringStringEntry.getValue());
                 }
@@ -261,8 +273,8 @@ public class Sidepanel extends JPanel {
     }
 
     private void updateButtons(){
-        if (isQuestionStage) nextQuestionButton.setVisible(true);
-        else nextQuestionButton.setVisible(false);
+        if (isQuestionStage) saveScoreButton.setVisible(true);
+        else saveScoreButton.setVisible(false);
         if (isTheLastStep) {
             finishButton.setVisible(true);
             continueButton.setVisible(false);
@@ -278,25 +290,12 @@ public class Sidepanel extends JPanel {
 
     private void addTimer(){
         JLabel evaluationTime = new JLabel("Total evaluation time:");
-        evaluationTime.setBounds(85, 5, BUTTON_WIDTH, 20);
+        evaluationTime.setBounds(TIMER_LABEL_POSITION_X, TIMER_LABEL_POSITION_Y, TIMER_LABEL_WIDTH, TIMER_LABEL_HEIGHT);
         add(evaluationTime);
 
         timerPanel = new TimerPanel();
-        timerPanel.setBounds(BUTTON_POSITION_X, 25, BUTTON_WIDTH, BUTTON_HEIGHT);
+        timerPanel.setBounds(BUTTON_POSITION_X, TIMER_PANEL_POSITION_Y, BUTTON_WIDTH, BUTTON_HEIGHT);
         add(timerPanel);
-    }
-
-    public void setTheLastStep(boolean theLastStep) {
-        isTheLastStep = theLastStep;
-    }
-
-    public void setQuestionStage(boolean questionStage) {
-        isQuestionStage = questionStage;
-    }
-
-    public void setFirstStage(Collectable firstStage) {
-        this.currentStage = firstStage;
-        stagesToComplete.add(0,firstStage);
     }
 
     public void addStages(Collectable collectable){
