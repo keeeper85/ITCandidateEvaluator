@@ -4,7 +4,9 @@ import view.swing.View;
 import view.swing.ViewConstants;
 
 import javax.swing.*;
-import java.awt.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,11 +19,12 @@ public class CandidateView extends JPanel implements Collectable {
     private JTextArea notes;
     private JTextField firstName;
     private JTextField lastName;
+    private JTextField resumePath;
     private final int PANEL_X = 50;
     private final int PANEL_Y = 50;
     private final int LABEL_WIDTH = 300;
     private final int TEXT_INPUT_WIDTH = 600;
-    private final int SMALL_ITEM_HEIGHT = 60;
+    private final int SMALL_ITEM_SIZE = 60;
     private final int SPACING = 30;
     private final int NOTES_POSITION_X = PANEL_X + LABEL_WIDTH;
     private final int NOTES_POSITION_Y = 420;
@@ -31,6 +34,8 @@ public class CandidateView extends JPanel implements Collectable {
     private final int SWAP_BUTTON_POSITION_Y = 112;
     private final int SWAP_BUTTON_WIDTH = 80;
     private final int SWAP_BUTTON_HEIGHT = 25;
+    private final int PICK_BUTTON_POSITION_X = 890;
+    private final int PICK_BUTTON_POSITION_Y = 320;
 
     public CandidateView(View view) {
         this.view = view;
@@ -44,6 +49,7 @@ public class CandidateView extends JPanel implements Collectable {
         setTextInputFields();
         setNotesTextArea();
         setSwapButton();
+        setPickResumeFileButton();
 
         revalidate();
         repaint();
@@ -53,22 +59,22 @@ public class CandidateView extends JPanel implements Collectable {
         JLabel name = new JLabel("First name:");
         JLabel lastName = new JLabel("Last name:");
         JLabel yearOfBirth = new JLabel("(Optional) Year of birth:");
-        JLabel nationality = new JLabel("(Optional) Nationality:");
+        JLabel resume = new JLabel("(Optional) Resume file:");
         JLabel notes = new JLabel("(Optional) Notes:");
 
         labels.add(name);
         labels.add(lastName);
         labels.add(yearOfBirth);
-        labels.add(nationality);
+        labels.add(resume);
         labels.add(notes);
 
         int initialPositionY = PANEL_Y;
 
         for (JLabel label : labels) {
             label.setFont(ViewConstants.FONT_LARGE);
-            label.setBounds(PANEL_X, initialPositionY, LABEL_WIDTH, SMALL_ITEM_HEIGHT);
+            label.setBounds(PANEL_X, initialPositionY, LABEL_WIDTH, SMALL_ITEM_SIZE);
             add(label);
-            initialPositionY += SMALL_ITEM_HEIGHT + SPACING;
+            initialPositionY += SMALL_ITEM_SIZE + SPACING;
         }
     }
 
@@ -79,22 +85,22 @@ public class CandidateView extends JPanel implements Collectable {
         lastName.setName("lastName");
         JTextField yearOfBirth = new JTextField();
         yearOfBirth.setName("year");
-        JTextField nationality = new JTextField();
-        nationality.setName("nationality");
+        resumePath = new JTextField();
+        resumePath.setName("resumePath");
 
         textFields.add(firstName);
         textFields.add(lastName);
         textFields.add(yearOfBirth);
-        textFields.add(nationality);
+        textFields.add(resumePath);
 
         int initialPositionY = PANEL_Y;
         int initialPositionX = PANEL_X + LABEL_WIDTH;
 
         for (JTextField textField : textFields) {
-            textField.setBounds(initialPositionX, initialPositionY, TEXT_INPUT_WIDTH, SMALL_ITEM_HEIGHT);
+            textField.setBounds(initialPositionX, initialPositionY, TEXT_INPUT_WIDTH, SMALL_ITEM_SIZE);
             textField.setFont(ViewConstants.FONT_LARGE);
             add(textField);
-            initialPositionY += SMALL_ITEM_HEIGHT + SPACING;
+            initialPositionY += SMALL_ITEM_SIZE + SPACING;
         }
     }
 
@@ -128,6 +134,31 @@ public class CandidateView extends JPanel implements Collectable {
 
         revalidate();
         repaint();
+    }
+
+    private void setPickResumeFileButton(){
+        JButton pickResumeFileButton = new JButton();
+        pickResumeFileButton.setText("PICK");
+        pickResumeFileButton.setFont(ViewConstants.FONT_SMALL);
+        pickResumeFileButton.setBounds(PICK_BUTTON_POSITION_X, PICK_BUTTON_POSITION_Y, SMALL_ITEM_SIZE, SMALL_ITEM_SIZE);
+        resumePath.setBounds(PANEL_X + LABEL_WIDTH, PICK_BUTTON_POSITION_Y, TEXT_INPUT_WIDTH - SMALL_ITEM_SIZE, SMALL_ITEM_SIZE);
+
+        pickResumeFileButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setDialogTitle("Select resume file (.pdf files only):");
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("PDF files (*.pdf)", "pdf");
+                fileChooser.setFileFilter(filter);
+
+                int result = fileChooser.showOpenDialog(null);
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    resumePath.setText(fileChooser.getSelectedFile().toString());
+                }
+            }
+        });
+
+        add(pickResumeFileButton);
     }
 
 
