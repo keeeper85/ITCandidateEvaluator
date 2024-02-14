@@ -2,6 +2,7 @@ package model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -41,6 +42,17 @@ public class Presets {
         }
 
         return defaultPresets;
+    }
+
+    public static void saveNewPresetsToFile(String fileName, HashMap<String, Integer> newDefaultPresets){
+        String filePath = presetsFilesDirectory.toString() + "\\" + fileName + "_presets.json";
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            mapper.writeValue(new File(filePath), newDefaultPresets);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setPresets(HashMap<String, Integer> modifiersValues){

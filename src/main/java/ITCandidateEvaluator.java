@@ -6,6 +6,8 @@ import view.swing.View;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class ITCandidateEvaluator {
@@ -48,13 +50,15 @@ public class ITCandidateEvaluator {
 //        int ratio = recruitment.calculateCostValueRatio(candidate);
 //        System.out.println(ratio + "% salary");
 
-//        HashMap<String, Integer> seniorDefaultPresets = new HashMap<>();
-//        seniorDefaultPresets.put("Resume and social media evaluation", 5);
-//        seniorDefaultPresets.put("Previous work experience", 10);
-//        seniorDefaultPresets.put("Own projects", 10);
-//        seniorDefaultPresets.put("Technical questions", 7);
-//        seniorDefaultPresets.put("Salary expectations", 10);
-//        seniorDefaultPresets.put("Soft skills", 5);
+        HashMap<String, Integer> test = new HashMap<>();
+        test.put("Resume and social media evaluation", 5);
+        test.put("English language assessment", 0);
+        test.put("Previous work experience", 10);
+        test.put("Own projects", 10);
+        test.put("Live coding", 0);
+        test.put("Technical questions", 7);
+        test.put("Salary expectations", 10);
+        test.put("Soft skills", 5);
 //
 //        String filePath = "src/main/resources/presets/senior_presets.json";
 //
@@ -67,11 +71,7 @@ public class ITCandidateEvaluator {
 //            e.printStackTrace();
 //        }
 
-        HashSet<Presets> list = Presets.loadPresetsFromDirectory();
-        for (Presets presets : list) {
-            System.out.println(presets);
-        }
-
+        Presets.saveNewPresetsToFile("test", test);
 
     }
 }
