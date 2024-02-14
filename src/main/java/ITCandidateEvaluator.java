@@ -1,5 +1,8 @@
+import controller.Controller;
 import model.*;
+import view.swing.View;
 
+import javax.swing.*;
 import java.util.HashMap;
 
 public class ITCandidateEvaluator {
@@ -14,11 +17,11 @@ public class ITCandidateEvaluator {
         testMap.put("Resume and social media evaluation", 1);
         testMap.put("English language assessment", 8);
         testMap.put("Previous work experience", 10);
-        testMap.put("Own projects", 8);
+        testMap.put("Own projects", 10);
         testMap.put("Live coding", 7);
         testMap.put("Technical questions", 10);
         testMap.put("Salary expectations", 7);
-        testMap.put("Soft skills", 9);
+        testMap.put("Soft skills", 10);
 
         Presets presets = new Presets("testowe", testMap);
         Recruitment recruitment = model.createNewRecruitment("testowa", presets);
@@ -27,21 +30,21 @@ public class ITCandidateEvaluator {
 
 
         HashMap<Stages, Integer> scores = new HashMap<>();
-        scores.put(Stages.RESUME, 100);
-        scores.put(Stages.LANGUAGE, 100);
-        scores.put(Stages.EXPERIENCE, 100);
-        scores.put(Stages.PROJECTS, 100);
-        scores.put(Stages.LIVE_CODING, 100);
-        scores.put(Stages.QUESTIONS, 100);
-        scores.put(Stages.SALARY, 50);
-        scores.put(Stages.SOFT_SKILLS, 50);
+        scores.put(Stages.RESUME, 10);
+        scores.put(Stages.LANGUAGE, 85);
+        scores.put(Stages.EXPERIENCE, 99);
+        scores.put(Stages.PROJECTS, 90);
+        scores.put(Stages.LIVE_CODING, 88);
+        scores.put(Stages.QUESTIONS, 77);
+        scores.put(Stages.SALARY, 111);
+        scores.put(Stages.SOFT_SKILLS, 1);
 
         Candidate candidate = new Candidate(recruitment, "John", "Smith");
         candidate.setScores(scores);
-        int finalScore = recruitment.calculateFinalScore(candidate);
-        int stageBonus = recruitment.calculatePresetStageModifiedScore(Stages.RESUME, 50);
-        System.out.println(stageBonus);
-        System.out.println(maxScore);
-        System.out.println(finalScore);
+        int finalScore = recruitment.calculateFinalCandidateScorePercent(candidate);
+        System.out.println("max score: " + maxScore);
+        System.out.println(finalScore + "%");
+        int ratio = recruitment.calculateCostValueRatio(candidate);
+        System.out.println(ratio + "% salary");
     }
 }

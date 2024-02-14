@@ -9,13 +9,9 @@ import java.util.Map;
 public class Recruitment {
 
     private final int STAGE_MAX_SCORE = 100;
-    private final int PRESETS_DEFAULT_VALUE = 5;
-    private final int SCORE_SLIDER_DEFAULT_VALUE = 50;
-    private final int PRESETS_MAX_VALUE = 10;
-    private final int PRESETS_SINGLE_POINT_MODIFIER = 10;
-    private final int PRESETS_MAX_MODIFIER = (PRESETS_MAX_VALUE - PRESETS_DEFAULT_VALUE) * PRESETS_SINGLE_POINT_MODIFIER;
-    private final int SOFT_SKILLS_MAX_MODIFIER = 30;
-    private final int PERCENTAGE = 100;
+    private final double PERCENTAGE = 100.0;
+    private final double DECIMAL = 10.0;
+    private final double SOFT_SKILLS_FACTOR = 3.0; //at 0 soft skills can multiply total score by 0.1-1, at 5 it's 5.1-6 so the total impact is lowered to max 20%
     private Model model;
     private String name;
     private Presets presets;
@@ -36,60 +32,117 @@ public class Recruitment {
     }
 
     public int calculateMaxPossibleScore(){
+        HashMap<Stages, Integer> stagesModifiers = presets.getPresets();
         int maxPossibleScore = 0;
-        HashMap<Stages, Integer> modifiers = presets.getPresets();
 
-        for (Map.Entry<Stages, Integer> entry : modifiers.entrySet()) {
-            int stageOrdinal = entry.getKey().getStageOrdinal();
-            if (stageOrdinal <= 5){
-                maxPossibleScore += STAGE_MAX_SCORE;
+        for (Stages stage : stagesModifiers.keySet()) {
+            if (!stage.equals(Stages.SALARY) && !stage.equals(Stages.SOFT_SKILLS)){
+                maxPossibleScore += STAGE_MAX_SCORE * getStageModifier(stage);
             }
-            if (stageOrdinal == 7) areSoftSkillsIncluded = true;
+            if (stage.equals(Stages.SOFT_SKILLS)) areSoftSkillsIncluded = true;
         }
 
-        maxPossibleScore = maxPossibleScore + (maxPossibleScore * PRESETS_MAX_MODIFIER / PERCENTAGE);
-        if (areSoftSkillsIncluded) maxPossibleScore = maxPossibleScore + (maxPossibleScore * SOFT_SKILLS_MAX_MODIFIER / PERCENTAGE);
-
+        if (areSoftSkillsIncluded) {
+            double multiplier = SOFT_SKILLS_FACTOR + getStageModifier(Stages.SOFT_SKILLS);
+            maxPossibleScore = (int) (maxPossibleScore * multiplier);
+        }
         return maxPossibleScore;
     }
 
-    public int calculatePresetStageModifiedScore(Stages stage, int thisStageScore){
-        Integer presetSliderValue = presets.getPresets().entrySet().stream()
-                .filter(stagesIntegerEntry -> stagesIntegerEntry.getKey() == stage)
+    public double getStageModifier(Stages stage){
+        HashMap<Stages, Integer> stagesModifiers = presets.getPresets();
+        Integer presetsModifier = stagesModifiers.entrySet().stream()
+                .filter(entry -> entry.getKey() == stage)
                 .map(Map.Entry::getValue)
                 .findFirst()
                 .orElse(0);
 
-        int modifier = (presetSliderValue - PRESETS_DEFAULT_VALUE) * PRESETS_SINGLE_POINT_MODIFIER;
-        int modifiedScore = thisStageScore + (thisStageScore * modifier / PERCENTAGE);
-
-        return modifiedScore;
+        return presetsModifier / DECIMAL;
     }
 
-    public int calculateFinalScore(Candidate candidate){
-        HashMap<Stages, Integer> scores = candidate.getScores();
+    public int calculateCandidateScore(Candidate candidate){
+        HashMap<Stages, Integer> stagesModifiers = presets.getPresets();
+        HashMap<Stages, Integer> candidateResults = candidate.getScores();
         int finalScore = 0;
-        int softSkillsModifier = 0;
 
-        for (Map.Entry<Stages, Integer> entry : scores.entrySet()) {
+        HashMap<Stages, Double> modifiedScores = calculateModifiedScore(stagesModifiers, candidateResults);
+        for (Map.Entry<Stages, Double> entry : modifiedScores.entrySet()) {
             Stages stage = entry.getKey();
-            int stageOrdinal = stage.getStageOrdinal();
-            int thisStageScore = entry.getValue();
-            int stageModifierBonus = calculatePresetStageModifiedScore(stage, thisStageScore);
-            if (stageOrdinal <= 5){
-                finalScore += thisStageScore + stageModifierBonus;
+            if (!stage.equals(Stages.SALARY) && !stage.equals(Stages.SOFT_SKILLS)){
+                double stageScore = entry.getValue();
+                finalScore += stageScore;
             }
-            if (stageOrdinal == 7) softSkillsModifier = (thisStageScore - SCORE_SLIDER_DEFAULT_VALUE);
         }
+
         if (areSoftSkillsIncluded) {
-            finalScore = finalScore + (finalScore * softSkillsModifier / PERCENTAGE);
+            double multiplier = SOFT_SKILLS_FACTOR + getSoftSkillsModifier(candidate);
+            finalScore = (int) (finalScore * multiplier);
         }
+        System.out.println(finalScore + " points");
 
         return finalScore;
     }
 
+    public HashMap<Stages, Double> calculateModifiedScore(HashMap<Stages, Integer> stagesModifiers, HashMap<Stages, Integer> candidateResults){
+        HashMap<Stages, Double> modifiedScores = new HashMap<>();
+
+        for (Map.Entry<Stages, Integer> stageModifier : stagesModifiers.entrySet()) {
+            Stages stage = stageModifier.getKey();
+            double value = stageModifier.getValue();
+            double modifier = value / DECIMAL;
+            for (Map.Entry<Stages, Integer> candidateResult : candidateResults.entrySet()) {
+                Stages candidateStage = candidateResult.getKey();
+                if (stage == candidateStage){
+                    double score = candidateResult.getValue();
+                    double modifiedScore = score * modifier;
+                    modifiedScores.put(candidateStage, modifiedScore);
+                }
+            }
+        }
+
+        return modifiedScores;
+    }
+
+    public double getSoftSkillsModifier(Candidate candidate){
+        HashMap<Stages, Integer> stagesModifiers = presets.getPresets();
+        Integer presetsModifier = stagesModifiers.entrySet().stream()
+                .filter(entry -> entry.getKey() == Stages.SOFT_SKILLS)
+                .map(Map.Entry::getValue)
+                .findFirst()
+                .orElse(0);
+
+        HashMap<Stages, Integer> candidateResults = candidate.getScores();
+        Integer softSkillsSliderValue = candidateResults.entrySet().stream()
+                .filter(entry -> entry.getKey() == Stages.SOFT_SKILLS)
+                .map(Map.Entry::getValue)
+                .findFirst()
+                .orElse(0);
+
+        double softSkillsModifier = (presetsModifier / DECIMAL) * (softSkillsSliderValue / PERCENTAGE);
+
+        return softSkillsModifier;
+    }
+
+    public int calculateFinalCandidateScorePercent(Candidate candidate){
+        int percentScore = (int) (calculateCandidateScore(candidate) / (double) maxPossibleScore * PERCENTAGE);
+
+        return percentScore;
+    }
     public int calculateCostValueRatio(Candidate candidate){
-        return 0;
+        HashMap<Stages, Integer> candidateResults = candidate.getScores();
+        Integer salarySliderValue = candidateResults.entrySet().stream()
+                .filter(entry -> entry.getKey() == Stages.SALARY)
+                .map(Map.Entry::getValue)
+                .findFirst()
+                .orElse(0);
+
+        double scorePercent = calculateFinalCandidateScorePercent(candidate);
+        double salaryModifier = salarySliderValue / PERCENTAGE;
+
+        int costValueRatio = (int) (scorePercent / salaryModifier);
+
+
+        return costValueRatio;
     }
 
     public List<Candidate> getCandidateList() {
