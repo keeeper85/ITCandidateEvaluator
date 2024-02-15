@@ -70,10 +70,10 @@ public class ITCandidateEvaluator {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-        HashSet<Presets> test = Presets.loadPresetsFromDirectory();
-        for (Presets presets1 : test) {
-            System.out.println(presets1);
-        }
+        String test = "How then do we inherit two identical default methods?";
+        Question question = new Question("test", test);
+
+        System.out.println(question.getSnippet());
 
 
 
