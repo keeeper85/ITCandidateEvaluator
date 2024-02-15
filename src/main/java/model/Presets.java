@@ -1,5 +1,6 @@
 package model;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
@@ -14,6 +15,7 @@ public class Presets {
     private HashMap<Stages, Integer> presets;
     private static HashSet<Presets> defaultPresets;
     private static Path presetsFilesDirectory = Paths.get("src/main/resources/presets");
+    private static final String[] stagesNames = {"Resume and social media evaluation","Own projects","English language assessment","Live coding","Salary expectations","Technical questions","Soft skills","Previous work experience"};
 
     public Presets(String name, HashMap<String, Integer> modifiersValues) {
         this.name = name;
@@ -32,7 +34,10 @@ public class Presets {
                         try {
                             fileName[0] = file.getFileName().toString().replaceAll(".json", "");
                             HashMap<String, Integer> map = mapper.readValue(file.toFile(), HashMap.class);
-                            defaultPresets.add(new Presets(fileName[0], map));
+                            if (isMapValid(map)) defaultPresets.add(new Presets(fileName[0], map));
+                            else System.out.println("invalid file"); //todo LOGGER
+                        } catch (JsonParseException e) {
+                            System.out.println("invalid file"); //todo LOGGER
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -42,6 +47,18 @@ public class Presets {
         }
 
         return defaultPresets;
+    }
+
+    private static boolean isMapValid(HashMap<String, Integer> map) {
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+            String stageName = entry.getKey();
+            boolean isMatch = Arrays.asList(stagesNames).contains(stageName);
+            if (!isMatch) return false;
+
+            int value = entry.getValue();
+            if (value < 0 || value > 10) return false;
+        }
+        return true;
     }
 
     public static void saveNewPresetsToFile(String fileName, HashMap<String, Integer> newDefaultPresets){

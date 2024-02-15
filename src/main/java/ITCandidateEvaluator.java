@@ -70,10 +70,12 @@ public class ITCandidateEvaluator {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-        List<Candidate> names = CandidateFactory.getCandidatesFromResumes("src/main/resources/resumeTest", recruitment);
-        for (Candidate name : names) {
-            System.out.println(name);
+        HashSet<Presets> test = Presets.loadPresetsFromDirectory();
+        for (Presets presets1 : test) {
+            System.out.println(presets1);
         }
+
+
 
     }
 }
