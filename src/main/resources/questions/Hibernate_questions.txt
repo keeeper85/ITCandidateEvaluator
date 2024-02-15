@@ -1,0 +1,49 @@
+What is Hibernate?
+
+What is ORM?
+
+What are the ORM levels?
+
+Why do you need ORM tools like Hibernate?
+
+What is the main difference between Entity Beans and Hibernate?
+
+What are the Core interfaces and classes of Hibernate framework?
+
+What is the general flow of Hibernate communication with RDBMS?
+
+What are the important tags of hibernate.cfg.xml?
+
+What role does the Session interface play in Hibernate?
+
+What role does the SessionFactory interface play in Hibernate?
+
+What are the most common ways to specify the Hibernate configuration properties?
+
+How do you map Java Objects with Database tables?
+
+How do you define sequence generated primary key algorithm in Hibernate?
+
+What is component mapping in Hibernate?
+
+What are the types of Hibernate instance states?
+
+What are the types of inheritance models in Hibernate?
+
+What is Named SQL Query?
+
+What are the benefits of Named SQL Query?
+
+How do you switch between relational databases without code changes?
+
+How to see the Hibernate generated SQL statements on console?
+
+What are derived properties?
+
+Define cascade and inverse option in one-many mapping.
+
+What is a transaction file?
+
+What do you mean by Named ñ SQL query?
+
+How do you invoke Stored Procedures?

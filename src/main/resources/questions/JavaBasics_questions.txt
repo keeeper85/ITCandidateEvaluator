@@ -1,0 +1,85 @@
+What are the characteristics of Java?
+
+What is inheritance?
+
+What is encapsulation?
+
+What is polymorphism?
+
+What is a constructor in Java?
+
+Which two classes do not inherit Object?
+
+What's a local variable?
+
+What's an instance variable?
+
+What are access modifiers?
+
+What is method overriding?
+
+What are method signatures?
+
+What is method overloading?
+
+What's an interface?
+
+What is a default method in an interface?
+
+How do we inherit two identical default methods?
+
+What are abstract methods and classes?
+
+What's the difference between String, StringBuilder and StringBuffer?
+
+What's the difference between an abstract class and an interface?
+
+Why is accessing an element in an array O(1)?
+
+What's autoboxing and unboxing?
+
+What is the final keyword and where is it used?
+
+What are mutable and immutable types?
+
+“Disassemble” public static void main(String args[]).
+
+What is the difference between equals() and == ?
+
+Can we execute a program without main() method?
+
+How many objects are created in the following code?
+String s1="Hello";
+String s2="Hello";
+String s3="Hello";
+
+How many objects are created in the following code?
+String s = new String("Hello");
+
+What is Difference Between String, StringBuilder And StringBuffer Classes in Java ?
+
+Is there any difference in String that was created using literal and with new() operator?
+
+Can you override private or static method in Java?
+
+What's the difference between Abstract Class and Interface?
+
+Can we declare static variables and methods in an abstract class?
+
+What types of memory areas are allocated by JVM?
+
+Why is multiple inheritance isn’t allowed in java?
+
+Can we overload the main() method?
+
+Can we declare a constructor as final?
+
+Can we declare an interface as final?
+
+What is the difference between static binding and dynamic binding?
+
+How to create a read-only class in Java?
+
+Each try block must be followed by a catch block, mustn’t it?
+
+What is the difference between throw and throws keywords?

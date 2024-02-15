@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -14,7 +13,7 @@ public class Presets {
     private String name;
     private HashMap<Stages, Integer> presets;
     private static HashSet<Presets> defaultPresets;
-    private static Path presetsFilesDirectory = Paths.get("src/main/resources/presets");
+    private static final Path PRESETS_FILES_DIRECTORY = Paths.get("src/main/resources/presets");
     private static final String[] stagesNames = {"Resume and social media evaluation","Own projects","English language assessment","Live coding","Salary expectations","Technical questions","Soft skills","Previous work experience"};
 
     public Presets(String name, HashMap<String, Integer> modifiersValues) {
@@ -27,7 +26,7 @@ public class Presets {
         final String[] fileName = new String[1];
         defaultPresets = new HashSet<>();
 
-        try (Stream<Path> paths = Files.list(presetsFilesDirectory)) {
+        try (Stream<Path> paths = Files.list(PRESETS_FILES_DIRECTORY)) {
             paths.filter(file -> file.getFileName().toString().contains("presets") && file.toString().endsWith(".json"))
                     .forEach(file -> {
                         ObjectMapper mapper = new ObjectMapper();
@@ -62,7 +61,7 @@ public class Presets {
     }
 
     public static void saveNewPresetsToFile(String fileName, HashMap<String, Integer> newDefaultPresets){
-        String filePath = presetsFilesDirectory.toString() + "\\" + fileName + "_presets.json";
+        String filePath = PRESETS_FILES_DIRECTORY.toString() + "\\" + fileName + "_presets.json";
 
         ObjectMapper mapper = new ObjectMapper();
         try {

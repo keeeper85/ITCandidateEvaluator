@@ -1,0 +1,25 @@
+How do I create a new thread in Java?
+
+What's the difference between a process and a thread?
+
+What are the benefits of multithreading?
+
+What are the states in a thread's life cycle?
+
+Is it possible to run a thread twice?
+
+What if you call run() directly without calling start()?
+
+What is a daemon thread?
+
+Is it possible to make a thread a daemon after it has been created?
+
+What is a shutdown hook?
+
+What is synchronization?
+
+What is a volatile variable?
+
+What is deadlock? How do you avoid it?
+
+What is a race condition?

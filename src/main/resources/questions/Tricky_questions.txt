@@ -1,0 +1,14 @@
+What happens if I put a return statement or System.exit() in a try/catch block?
+
+Does Java support multiple inheritance? 
+
+If a method in a parent class throws NullPointerExceptions, can it be overridden by a method that throws RuntimeExceptions?
+
+How do you guarantee that N threads can access N resources without a deadlock?
+
+What's the difference between the StringBuffer and StringBuilder classes in Java?
+
+What is the result of evaluating the expression 1.0/0.0? Will it produce an exception or a compilation error?
+
+What happens if you try to insert a key into a HashMap that already contains that key?
+

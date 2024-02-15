@@ -70,12 +70,19 @@ public class ITCandidateEvaluator {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-        String test = "How then do we inherit two identical default methods?";
-        Question question = new Question("test", test);
+        List<Question> list = QuestionFactory.getQuestionsFromFiles();
+        int count = 0;
+        for (Question question : list) {
+            System.out.println(question);
+            count++;
+        }
+        System.out.println("------------");
+        System.out.println(count);
 
-        System.out.println(question.getSnippet());
+    }
 
-
-
+    public static void alterString(String string){
+        String altered = string.replace("\n","\n\n");
+        System.out.println(altered);
     }
 }

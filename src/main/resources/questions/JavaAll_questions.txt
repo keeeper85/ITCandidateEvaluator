@@ -1,0 +1,249 @@
+What is an object in Java?
+
+What is the difference between С++ and Java?
+
+What is bytecode in Java?
+
+What is the difference between method overloading and method overriding in Java?
+
+What is the difference between abstract class and interface?
+
+Why is Java platform independent?
+
+What is the most important feature of Java?
+
+What do you mean by platform independence?
+
+What is JVM?
+
+Are JVMs platform independent?
+
+What is the difference between a JDK and a JVM?
+
+What is a pointer and does Java support pointers?
+
+What is the base class of all classes?
+
+Does Java support multiple inheritance?
+
+How are Runtime exceptions different from Checked exceptions?
+
+What are the most important features introduced in Java 5, 7 and 8 respectively?
+
+Is Java a pure object oriented language?
+
+Is Java a statically or dynamically typed language?
+
+Do arguments in Java get passed by reference or by value?
+
+What is the difference between an abstract class and an interface and when would you use one over the other?
+
+What is bytecode in Java?
+
+What is the difference between method overloading and method overriding in Java?
+
+What is the difference between abstract class and interface?
+
+What is the difference between this() and super() in Java?
+
+What is Unicode?
+
+What is thread in Java?
+
+What is the difference between process and thread?
+
+What is Multitasking?
+
+What is the difference between process-based and thread-based multitasking?
+
+What is Multithreading, and what are its application areas?
+
+What is the advantage of Multithreading?
+
+List Java APIs that support threads.
+
+In how many ways we can create threads in Java?
+
+Explain creating threads by implementing Runnable class.
+
+Explain creating threads by extending Thread class.
+
+What is the best approach for creating thread?
+
+Explain the importance of thread scheduler in Java.
+
+Explain the life cycle of thread.
+
+Can we restart a dead thread in Java?
+
+Can one thread block the other thread?
+
+Can we restart a thread already started in Java?
+
+What is a lock or purpose of locks in Java?
+
+In how many ways we can do synchronization in Java?
+
+What are synchronized methods?
+
+When do we use synchronized methods in Java?
+
+What are synchronized blocks in Java?
+
+When do we use synchronized blocks and what are the advantages of using synchronized blocks?
+
+What is class level lock?
+
+Can we synchronize static methods in Java?
+
+Can we use synchronized block for primitives?
+
+Explain object oriented programming and its features.
+
+What is Abstraction?
+
+What is Encapsulation?
+
+What is the difference between abstraction and encapsulation?
+
+List out benefits of object oriented programming language.
+
+What are the differences between traditional programming language and object oriented programming language?
+
+What is Inheritance?
+
+What is Polymorphism?
+
+How does Java implement polymorphism?
+
+Explain the different forms of Polymorphism.
+
+What is runtime polymorphism or dynamic method dispatch?
+
+What is Dynamic Binding?
+
+What is method overloading?
+
+What is method overriding?
+
+What are the differences between method overloading and method overriding?
+
+Is it possible to override the main method?
+
+How to invoke a superclass version of an Overridden method?
+
+How do you prevent a method from being overridden?
+
+What is an Interface?
+
+Can we create an object for an interface?
+
+Do interfaces have member variables?
+
+What modifiers are allowed for methods in an Interface?
+
+What is a marker interface?
+
+What is an abstract class?
+
+Can we instantiate an abstract class?
+
+What is an Exception in Java?
+
+What is the purpose of Exception Handling?
+
+What is the meaning of Exception Handling?
+
+Explain Default Exception Handling Mechanism in Java.
+
+What is the purpose of ‘try’?
+
+What is the purpose of catch block?
+
+What are various methods to print Exception information? and differentiate them.
+
+Is it possible to take try-catch inside try block?
+
+Is it possible to take try-catch inside catch block?
+
+Is it possible to take try without catch?
+
+What is the purpose of finally block?
+
+Will finally block be executed always?
+
+In which situation finally block will not be executed?
+
+What is the difference between final, finally and finalize()?
+
+Is it possible to write any statement between try-catch and finally?
+
+Is it possible to take two finally blocks for the same try?
+
+What is the purpose of throw?
+
+Is it possible to throw an Error?
+
+Is it possible to throw any Java object?
+
+What is the difference between throw and throws?
+
+What is the difference between throw and thrown?
+
+Is it possible to use throws keyword for any Java class?
+
+What is the difference between Error and Exception?
+
+What is the difference between checked exception and unchecked exception?
+
+What is difference between partially checked and fully checked Exception?
+
+What are the limitations of object arrays?
+
+What are the differences between arrays and collections?
+
+What are the differences between arrays and ArrayList?
+
+What are the differences between arrays and Vector?
+
+What is Collection API?
+
+What is Collection framework?
+
+What is the difference between Collections and Collection?
+
+Explain about Collection interface.
+
+Explain about List interface.
+
+Explain about Set interface.
+
+Explain about SortedSet interface.
+
+Explain about Vector class.
+
+What is the difference between ArrayList and Vector?
+
+How can we get a synchronized version of ArrayList?
+
+What is the difference between size and capacity of a Collection Object?
+
+What is the difference between ArrayList and Linked List?
+
+What are legacy classes and interfaces present in Collections framework?
+
+What is the difference Enumeration and Iterator?
+
+What are limitations of Enumeration?
+
+What is the difference between enum and Enumeration?
+
+What is the difference between Iterator and ListIterator?
+
+What is Comparable interface?
+
+What is Comparator interface?
+
+What are the differences between Comparable and Comparator?
+
+What is the difference between HashSet and TreeSet?
