@@ -10,10 +10,11 @@ public class Candidate {
     private String lastName;
     private int id;
     private HashMap<Stages, Integer> scores;
+    private HashMap<Question, Integer> evaluatedQuestions = new HashMap<>();
     private String pathToResumeFile;
     private String additionalNotes;
-    private String feedback;
     private int evaluationTimeSeconds;
+    private int evaluationScore;
     private int yearOfBirth;
     private boolean isFinished;
     private LocalDateTime dateOfJoining;
@@ -48,6 +49,36 @@ public class Candidate {
 
     public void setYearOfBirth(int yearOfBirth) {
         this.yearOfBirth = yearOfBirth;
+    }
+
+    public HashMap<Question, Integer> getEvaluatedQuestions() {
+        return evaluatedQuestions;
+    }
+
+    public void setEvaluatedQuestions(HashMap<Question, Integer> evaluatedQuestions) {
+        this.evaluatedQuestions = evaluatedQuestions;
+    }
+
+    public Recruitment getRecruitment() {
+        return recruitment;
+    }
+
+    public int getEvaluationScore() {
+        return evaluationScore;
+    }
+
+    public void setEvaluationScore(int evaluationScore) {
+        this.evaluationScore = evaluationScore;
+    }
+
+    public boolean isFinished() {
+        return isFinished;
+    }
+
+    public String generateFeedback(){
+        isFinished = true;
+        evaluationScore = recruitment.calculateFinalCandidateScorePercent(this);
+        return Feedback.generateFeedback(this);
     }
 
     @Override

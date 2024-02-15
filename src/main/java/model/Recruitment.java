@@ -32,7 +32,7 @@ public class Recruitment {
     }
 
     public int calculateMaxPossibleScore(){
-        HashMap<Stages, Integer> stagesModifiers = presets.getPresets();
+        HashMap<Stages, Integer> stagesModifiers = presets.getPresetsValues();
         int maxPossibleScore = 0;
 
         for (Stages stage : stagesModifiers.keySet()) {
@@ -50,7 +50,7 @@ public class Recruitment {
     }
 
     public double getStageModifier(Stages stage){
-        HashMap<Stages, Integer> stagesModifiers = presets.getPresets();
+        HashMap<Stages, Integer> stagesModifiers = presets.getPresetsValues();
         Integer presetsModifier = stagesModifiers.entrySet().stream()
                 .filter(entry -> entry.getKey() == stage)
                 .map(Map.Entry::getValue)
@@ -61,7 +61,7 @@ public class Recruitment {
     }
 
     public int calculateCandidateScore(Candidate candidate){
-        HashMap<Stages, Integer> stagesModifiers = presets.getPresets();
+        HashMap<Stages, Integer> stagesModifiers = presets.getPresetsValues();
         HashMap<Stages, Integer> candidateResults = candidate.getScores();
         int finalScore = 0;
 
@@ -104,7 +104,7 @@ public class Recruitment {
     }
 
     public double getSoftSkillsModifier(Candidate candidate){
-        HashMap<Stages, Integer> stagesModifiers = presets.getPresets();
+        HashMap<Stages, Integer> stagesModifiers = presets.getPresetsValues();
         Integer presetsModifier = stagesModifiers.entrySet().stream()
                 .filter(entry -> entry.getKey() == Stages.SOFT_SKILLS)
                 .map(Map.Entry::getValue)
@@ -125,6 +125,7 @@ public class Recruitment {
 
     public int calculateFinalCandidateScorePercent(Candidate candidate){
         int percentScore = (int) (calculateCandidateScore(candidate) / (double) maxPossibleScore * PERCENTAGE);
+        candidate.setEvaluationScore(percentScore);
 
         return percentScore;
     }
@@ -143,6 +144,14 @@ public class Recruitment {
 
 
         return costValueRatio;
+    }
+
+    public void addCandidates(List<Candidate> newCandidates){
+        candidateList.addAll(newCandidates);
+    }
+
+    public Presets getPresets() {
+        return presets;
     }
 
     public List<Candidate> getCandidateList() {

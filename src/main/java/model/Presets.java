@@ -11,15 +11,15 @@ import java.util.stream.Stream;
 
 public class Presets {
     private String name;
-    private HashMap<Stages, Integer> presets;
+    private HashMap<Stages, Integer> presetsValues;
     private static HashSet<Presets> defaultPresets;
     private static final Path PRESETS_FILES_DIRECTORY = Paths.get("src/main/resources/presets");
     private static final String[] stagesNames = {"Resume and social media evaluation","Own projects","English language assessment","Live coding","Salary expectations","Technical questions","Soft skills","Previous work experience"};
 
     public Presets(String name, HashMap<String, Integer> modifiersValues) {
         this.name = name;
-        presets = new HashMap<>();
-        setPresets(modifiersValues);
+        presetsValues = new HashMap<>();
+        setPresetsValues(modifiersValues);
     }
 
     public static HashSet<Presets> loadPresetsFromDirectory() {
@@ -71,21 +71,21 @@ public class Presets {
         }
     }
 
-    public void setPresets(HashMap<String, Integer> modifiersValues){
+    public void setPresetsValues(HashMap<String, Integer> modifiersValues){
         for (Map.Entry<String, Integer> entry : modifiersValues.entrySet()) {
             String modifierName = entry.getKey().toLowerCase();
             Integer modifierValue = entry.getValue();
             for (Stages value : Stages.values()) {
                 String stageName = value.getStageName();
                 if (modifierName.contains(stageName)){
-                    presets.put(value, modifierValue);
+                    presetsValues.put(value, modifierValue);
                 }
             }
         }
     }
 
-    public HashMap<Stages, Integer> getPresets() {
-        return presets;
+    public HashMap<Stages, Integer> getPresetsValues() {
+        return presetsValues;
     }
 
     @Override
