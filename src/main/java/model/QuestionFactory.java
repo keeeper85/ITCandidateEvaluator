@@ -9,17 +9,17 @@ import java.util.stream.Stream;
 
 public class QuestionFactory implements Runnable{
 
+    private List<Question> preparedList = new ArrayList<>();
+
     private static final Path QUESTION_FILES_DIRECTORY = Paths.get("src/main/resources/questions");
 
-    public static List<Question> getQuestionsFromFiles(){
+    private void prepareQuestionList(){
         HashSet<Path> questionFiles = findQuestionFiles(QUESTION_FILES_DIRECTORY);
         HashMap<String, HashSet<String>> questionsFromFiles = readQuestionFiles(questionFiles);
-        List<Question> preparedQuestions = createQuestions(questionsFromFiles);
-
-        return preparedQuestions;
+        preparedList = createQuestions(questionsFromFiles);
     }
 
-    private static HashSet<Path> findQuestionFiles(Path questionFilesDirectory) {
+    private HashSet<Path> findQuestionFiles(Path questionFilesDirectory) {
         HashSet<Path> files = new HashSet<>();
 
         try (Stream<Path> paths = Files.list(questionFilesDirectory)) {
@@ -34,7 +34,7 @@ public class QuestionFactory implements Runnable{
         return files;
     }
 
-    private static HashMap<String, HashSet<String>> readQuestionFiles(HashSet<Path> questionFiles) {
+    private HashMap<String, HashSet<String>> readQuestionFiles(HashSet<Path> questionFiles) {
         HashMap<String, HashSet<String>> filedQuestions = new HashMap<>();
 
         for (Path questionFile : questionFiles) {
@@ -46,7 +46,7 @@ public class QuestionFactory implements Runnable{
         return filedQuestions;
     }
 
-    private static HashSet<String> readFile(Path path){
+    private HashSet<String> readFile(Path path){
         HashSet<String> questions;
         try {
             questions = formatQuestions(Files.readAllLines(path));
@@ -56,7 +56,7 @@ public class QuestionFactory implements Runnable{
         return questions;
     }
 
-    private static HashSet<String> formatQuestions(List<String> allLines){
+    private HashSet<String> formatQuestions(List<String> allLines){
         HashSet<String> formattedQuestions = new HashSet<>();
         StringBuilder questionsBuilder = new StringBuilder();
 
@@ -70,7 +70,7 @@ public class QuestionFactory implements Runnable{
         return formattedQuestions;
     }
 
-    private static List<Question> createQuestions(HashMap<String, HashSet<String>> questionsFromFiles) {
+    private List<Question> createQuestions(HashMap<String, HashSet<String>> questionsFromFiles) {
         List<Question> preparedQuestions = new ArrayList<>();
 
         for (Map.Entry<String, HashSet<String>> entry : questionsFromFiles.entrySet()) {
@@ -85,8 +85,16 @@ public class QuestionFactory implements Runnable{
         return preparedQuestions;
     }
 
+    public List<Question> getPreparedList() {
+        return preparedList;
+    }
+
     @Override
     public void run() {
-        //todo
+        System.out.println("Thread started");
+        long dateStart = new Date().getTime();
+        prepareQuestionList();
+        long dateEnd = new Date().getTime();
+        System.out.println("List prepared. Thread finished. Time elapsed: " + (dateEnd - dateStart));
     }
 }

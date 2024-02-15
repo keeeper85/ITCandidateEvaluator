@@ -70,15 +70,11 @@ public class ITCandidateEvaluator {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-        List<Question> list = QuestionFactory.getQuestionsFromFiles();
-        int count = 0;
-        for (Question question : list) {
-            System.out.println(question);
-            count++;
-        }
-        System.out.println("------------");
-        System.out.println(count);
-
+        QuestionFactory factory = new QuestionFactory();
+        System.out.println(factory.getPreparedList().size());
+        Thread thread = new Thread(factory);
+        thread.start();
+        System.out.println(factory.getPreparedList().size());
     }
 
     public static void alterString(String string){
