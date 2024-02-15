@@ -18,18 +18,18 @@ public class ITCandidateEvaluator {
 //
 //        SwingUtilities.invokeLater(() ->{view.initView();});
 
-//        HashMap<String, Integer> testMap = new HashMap<>();
-//        testMap.put("Resume and social media evaluation", 1);
-//        testMap.put("English language assessment", 8);
-//        testMap.put("Previous work experience", 10);
-//        testMap.put("Own projects", 10);
-//        testMap.put("Live coding", 7);
-//        testMap.put("Technical questions", 10);
-//        testMap.put("Salary expectations", 7);
-//        testMap.put("Soft skills", 10);
-//
-//        Presets presets = new Presets("testowe", testMap);
-//        Recruitment recruitment = model.createNewRecruitment("testowa", presets);
+        HashMap<String, Integer> testMap = new HashMap<>();
+        testMap.put("Resume and social media evaluation", 1);
+        testMap.put("English language assessment", 8);
+        testMap.put("Previous work experience", 10);
+        testMap.put("Own projects", 10);
+        testMap.put("Live coding", 7);
+        testMap.put("Technical questions", 10);
+        testMap.put("Salary expectations", 7);
+        testMap.put("Soft skills", 10);
+
+        Presets presets = new Presets("testowe", testMap);
+        Recruitment recruitment = model.createNewRecruitment("testowa", presets);
 //        int maxScore = recruitment.calculateMaxPossibleScore();
 //
 //        HashMap<Stages, Integer> scores = new HashMap<>();
@@ -50,15 +50,15 @@ public class ITCandidateEvaluator {
 //        int ratio = recruitment.calculateCostValueRatio(candidate);
 //        System.out.println(ratio + "% salary");
 
-        HashMap<String, Integer> test = new HashMap<>();
-        test.put("Resume and social media evaluation", 5);
-        test.put("English language assessment", 0);
-        test.put("Previous work experience", 10);
-        test.put("Own projects", 10);
-        test.put("Live coding", 0);
-        test.put("Technical questions", 7);
-        test.put("Salary expectations", 10);
-        test.put("Soft skills", 5);
+//        HashMap<String, Integer> test = new HashMap<>();
+//        test.put("Resume and social media evaluation", 0);
+//        test.put("English language assessment", 0);
+//        test.put("Previous work experience", 10);
+//        test.put("Own projects", 5);
+//        test.put("Live coding", 0);
+//        test.put("Technical questions", 8);
+//        test.put("Salary expectations", 10);
+//        test.put("Soft skills", 5);
 //
 //        String filePath = "src/main/resources/presets/senior_presets.json";
 //
@@ -70,8 +70,10 @@ public class ITCandidateEvaluator {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-
-        Presets.saveNewPresetsToFile("test", test);
+        List<Candidate> names = CandidateFactory.getCandidatesFromResumes("src/main/resources/resumeTest", recruitment);
+        for (Candidate name : names) {
+            System.out.println(name);
+        }
 
     }
 }

@@ -50,5 +50,12 @@ public class Candidate {
         this.yearOfBirth = yearOfBirth;
     }
 
-
+    @Override
+    public String toString() {
+        return "Candidate{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", id=" + id +
+                '}';
+    }
 }
