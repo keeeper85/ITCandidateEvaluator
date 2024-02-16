@@ -6,9 +6,11 @@ import view.swing.View;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Stream;
 
 public class ITCandidateEvaluator {
     public static void main(String[] args) {
@@ -17,6 +19,7 @@ public class ITCandidateEvaluator {
         View view = controller.getView();
 
         SwingUtilities.invokeLater(() ->{view.initView();});
+
 
 //        HashMap<String, Integer> testMap = new HashMap<>();
 //        testMap.put("Resume and social media evaluation", 1);

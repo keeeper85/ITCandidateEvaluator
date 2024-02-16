@@ -1,14 +1,17 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Candidate extends AbstractCandidate{
     private String age;
 
     public Candidate(Recruitment recruitment, String firstName, String lastName) {
         super(recruitment, firstName, lastName);
-        age = calculateAge();
+//        age = calculateAge();
+        age = String.valueOf(ThreadLocalRandom.current().nextInt(20,40));
     }
 
     public HashMap<Stages, Integer> getScores() {
@@ -56,12 +59,15 @@ public class Candidate extends AbstractCandidate{
         return additionalNotes;
     }
 
+    public String getResumePath(){
+        return pathToResumeFile;
+    }
+
     @Override
     public String toString() {
-        return "Candidate{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", id=" + id +
-                '}';
+        String joinDate = dateOfJoiningEvaluation.format(DateTimeFormatter.ISO_DATE);
+        String score = isFinished ? String.valueOf(recruitment.calculateFinalCandidateScorePercent(this)) : "unfinished";
+        String description = String.format("%s %s (%s)   JOINED: %s   STATUS: %s", firstName, lastName, age, joinDate, score);
+        return description;
     }
 }

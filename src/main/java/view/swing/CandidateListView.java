@@ -5,17 +5,22 @@ import model.Recruitment;
 import view.swing.stages.StageView;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class CandidateListView extends JPanel {
 
     private View view;
     private Recruitment recruitment;
-    private JList<String> candidatesList;
-    private DefaultListModel<String> listModel;
+    private JList<Candidate> candidatesList;
+    private DefaultListModel<Candidate> listModel;
+    private Candidate candidateSelected;
     private final int TOP_ROW_Y = 20;
     private final int LIST_X = 30;
     private final int LIST_Y = 60;
@@ -45,8 +50,6 @@ public class CandidateListView extends JPanel {
 
     private void initCandidatesListView(){
         setLayout(null);
-        candidatesList = new JList<>(listModel);
-        candidatesList.setFont(ViewConstants.FONT_LARGE);
         add(createScrollPane());
         add(createSortingMenu());
         add(createFinishedCheckBox());
@@ -56,6 +59,7 @@ public class CandidateListView extends JPanel {
         add(createAddManyButton());
         add(createDeleteButton());
         add(createShowFeedbackButton());
+        add(createCVButton());
         add(createBackButton());
     }
 
@@ -63,11 +67,15 @@ public class CandidateListView extends JPanel {
         listModel = new DefaultListModel<>();
         List<Candidate> candidates = recruitment.getCandidateList();
         for (Candidate candidate : candidates) {
-            listModel.addElement(candidate.toString());
+            listModel.addElement(candidate);
         }
     }
 
     private JScrollPane createScrollPane(){
+        candidatesList = new JList<>(listModel);
+        candidatesList.setFont(ViewConstants.FONT_LARGE);
+        candidatesList.addListSelectionListener(e -> {candidateSelected = candidatesList.getSelectedValue();});
+
         JScrollPane scrollPane = new JScrollPane(candidatesList);
         scrollPane.setBounds(LIST_X,LIST_Y,LIST_WIDTH,LIST_HEIGHT);
         return scrollPane;
@@ -109,14 +117,52 @@ public class CandidateListView extends JPanel {
         feedbackButton.setFont(ViewConstants.FONT_LARGE);
         int backButtonY = BUTTON_Y + SPACING + SPACING + SPACING + SPACING;
         feedbackButton.setBounds(BUTTON_X, backButtonY ,BUTTON_WIDTH ,BUTTON_HEIGHT);
-        feedbackButton.addActionListener((e -> {view.returnToPreviousPanel();})); //todo
+        feedbackButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                {if (candidateSelected != null){
+                    if (candidateSelected.isFinished()){
+                        String feedback = candidateSelected.generateFeedback();
+                        int choice = JOptionPane.showOptionDialog(null, feedback, "Copy to Clipboard",
+                                JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
+                                new String[]{"Back", "Copy"}, "Back");
+
+                        if (choice == 1) {
+                            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                            StringSelection selection = new StringSelection(feedback);
+                            clipboard.setContents(selection, null);
+                        }
+                    }
+                    else JOptionPane.showMessageDialog(null, "Only fully evaluated candidates have feedback", "Evaluation hasn't finished yet.", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+            }
+        });
         return feedbackButton;
+    }
+
+    private JButton createCVButton(){
+        JButton cvButton = new JButton("Open CV");
+        cvButton.setFont(ViewConstants.FONT_LARGE);
+        int backButtonY = BUTTON_Y + SPACING + SPACING + SPACING + SPACING + SPACING;
+        cvButton.setBounds(BUTTON_X, backButtonY ,BUTTON_WIDTH ,BUTTON_HEIGHT);
+        cvButton.addActionListener((e -> {
+            try {
+                if (candidateSelected != null){
+                    if (candidateSelected.getResumePath() != null)
+                        Desktop.getDesktop().open(new File(candidateSelected.getResumePath()));
+                }
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }));
+        return cvButton;
     }
 
     private JButton createBackButton(){
         JButton backButton = new JButton("Back");
         backButton.setFont(ViewConstants.FONT_LARGE);
-        int backButtonY = BUTTON_Y + SPACING + SPACING + SPACING + SPACING + SPACING;
+        int backButtonY = BUTTON_Y + SPACING + SPACING + SPACING + SPACING + SPACING + SPACING;
         backButton.setBounds(BUTTON_X, backButtonY ,BUTTON_WIDTH ,BUTTON_HEIGHT);
         backButton.addActionListener((e -> {view.returnToPreviousPanel();}));
         return backButton;

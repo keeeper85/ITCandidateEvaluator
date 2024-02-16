@@ -5,7 +5,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -16,42 +18,43 @@ public class CandidateFactory {
     private final static Pattern removeCvTags = Pattern.compile("resume|CV", Pattern.CASE_INSENSITIVE);
 
     public static List<Candidate> getCandidatesFromResumes(String directoryWithResumesInPdf, Recruitment recruitment){
-        List<String> fileNames = getFileNames(directoryWithResumesInPdf);
-        iterateOverListElementsAndReplace(fileNames, removePdfExtension);
-        iterateOverListElementsAndReplace(fileNames, removeNonLetterCharacters);
-        iterateOverListElementsAndReplace(fileNames, removeCvTags);
+        HashMap<String,String> fileNames = getFileNames(directoryWithResumesInPdf);
+        iterateOverMapElementsAndReplace(fileNames, removePdfExtension);
+        iterateOverMapElementsAndReplace(fileNames, removeNonLetterCharacters);
+        iterateOverMapElementsAndReplace(fileNames, removeCvTags);
         separateFirstAndLastNames(fileNames);
         List<Candidate> candidates = createCandidates(recruitment, fileNames);
         return candidates;
     }
 
-    public static List<String> getFileNames(String directoryWithResumesInPdf){
-        List<String> fileNames = new ArrayList<>();
+    public static HashMap<String,String> getFileNames(String directoryWithResumesInPdf){
+        HashMap<String,String> filesAndTheirNames = new HashMap<>();
 
         try (Stream<Path> paths = Files.list(Paths.get(directoryWithResumesInPdf))) {
             paths.filter(file -> file.toString().endsWith(".pdf"))
                     .forEach(file -> {
-                        fileNames.add(file.getFileName().toString());
+//                        fileNames.add(file.getFileName().toString());
+                        filesAndTheirNames.put(file.toString(), file.getFileName().toString());
                     });
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return fileNames;
+        return filesAndTheirNames;
     }
 
-    private static void iterateOverListElementsAndReplace(List<String> fileNames, Pattern pattern){
-        for (int i = 0; i < fileNames.size(); i++) {
-            String fileName = fileNames.get(i);
-            fileName = pattern.matcher(fileName).replaceAll("");
-            fileNames.set(i, fileName);
+    private static void iterateOverMapElementsAndReplace(HashMap<String,String> fileNames, Pattern pattern){
+        for (Map.Entry<String, String> entry : fileNames.entrySet()) {
+            String oldValue = entry.getValue();
+            String newValue = pattern.matcher(oldValue).replaceAll("");
+            entry.setValue(newValue);
         }
     }
 
-    private static void separateFirstAndLastNames(List<String> fileNames) {
-        for (int i = 0; i < fileNames.size(); i++) {
-            String fileName = fileNames.get(i);
-            fileName = separateValuesWithSpace(fileName);
-            fileNames.set(i, fileName);
+    private static void separateFirstAndLastNames(HashMap<String,String> fileNames) {
+        for (Map.Entry<String, String> entry : fileNames.entrySet()) {
+            String oldValue = entry.getValue();
+            String newValue = separateValuesWithSpace(oldValue);
+            entry.setValue(newValue);
         }
     }
 
@@ -82,13 +85,13 @@ public class CandidateFactory {
         return separatedValues;
     }
 
-    private static List<Candidate> createCandidates(Recruitment recruitment, List<String> fileNames) {
+    private static List<Candidate> createCandidates(Recruitment recruitment, HashMap<String,String> fileNames) {
         List<Candidate> candidates = new ArrayList<>();
         String firstName = "???";
         String lastName = "???";
 
-        for (String fileName : fileNames) {
-            String[] firstAndLastName = fileName.split(" ");
+        for (Map.Entry<String, String> entry : fileNames.entrySet()) {
+            String[] firstAndLastName = entry.getValue().split(" ");
 
             if (firstAndLastName[0] != null && firstAndLastName[0].length() > 0) firstName = firstAndLastName[0];
             else firstName = "???";
@@ -99,7 +102,9 @@ public class CandidateFactory {
                 lastName = "???";
             }
 
-            candidates.add(new Candidate(recruitment, firstName, lastName));
+            Candidate candidate = new Candidate(recruitment, firstName, lastName);
+            candidate.setPathToResumeFile(entry.getKey());
+            candidates.add(candidate);
         }
         return candidates;
     }

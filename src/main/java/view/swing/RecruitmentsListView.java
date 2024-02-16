@@ -118,9 +118,12 @@ public class RecruitmentsListView extends JPanel {
         openButton.setFont(ViewConstants.FONT_LARGE);
         openButton.setBounds(BUTTON_X, BUTTON_Y ,BUTTON_WIDTH ,BUTTON_HEIGHT);
 
-        openButton.addActionListener(e -> {CandidateListView candidateListView = new CandidateListView(view);
-            view.setCurrentPanel(candidateListView);
-            candidateListView.setRecruitment(selectedRecruitment);
+        openButton.addActionListener(e -> {
+            if (selectedRecruitment != null) {
+                CandidateListView candidateListView = new CandidateListView(view);
+                view.setCurrentPanel(candidateListView);
+                candidateListView.setRecruitment(selectedRecruitment);
+            }
         });
 
         return openButton;
