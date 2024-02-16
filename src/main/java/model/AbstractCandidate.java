@@ -11,10 +11,11 @@ public class AbstractCandidate {
     protected HashMap<Stages, Integer> scores;
     protected HashMap<Question, Integer> evaluatedQuestions = new HashMap<>();
     protected String pathToResumeFile;
-    protected String additionalNotes;
+    protected String additionalNotes = "";
     protected int evaluationTimeSeconds;
     protected int evaluationScore;
     protected int yearOfBirth;
+    protected int expectedSalary;
     protected boolean isFinished;
     protected LocalDateTime dateOfJoiningEvaluation;
     protected LocalDateTime dateOfFinishingEvaluation;

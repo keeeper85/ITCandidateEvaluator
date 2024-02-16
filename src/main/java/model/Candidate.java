@@ -49,6 +49,14 @@ public class Candidate extends AbstractCandidate{
         return Feedback.generateFeedback(this);
     }
 
+    public int getExpectedSalary(){
+        return expectedSalary;
+    }
+
+    public String getAdditionalNotes(){
+        return additionalNotes;
+    }
+
     @Override
     public String toString() {
         return "Candidate{" +

@@ -3,8 +3,12 @@ package controller;
 import model.AbstractCandidate;
 import model.Candidate;
 import model.Recruitment;
+import model.Stages;
+
+import java.util.HashMap;
 
 public class CandidateDTO extends AbstractCandidate {
+    private HashMap<String, String> rawScores = new HashMap<>();
     public CandidateDTO(Recruitment recruitment, String firstName, String lastName) {
         super(recruitment, firstName, lastName);
     }
@@ -26,6 +30,7 @@ public class CandidateDTO extends AbstractCandidate {
 
     private void transferDataToRealCandidate(Candidate candidate) {
 
+
     }
 
     private boolean isCandidateAlreadyCreated(){
@@ -33,5 +38,7 @@ public class CandidateDTO extends AbstractCandidate {
         return false;
     }
 
-
+    public void setRawScores(HashMap<String, String> rawScores) {
+        this.rawScores = rawScores;
+    }
 }
