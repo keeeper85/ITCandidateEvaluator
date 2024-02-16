@@ -1,15 +1,19 @@
 package view.swing;
 
+import model.Candidate;
+import model.Recruitment;
 import view.swing.stages.StageView;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.List;
 
 public class CandidateListView extends JPanel {
 
     private View view;
+    private Recruitment recruitment;
     private JList<String> candidatesList;
     private DefaultListModel<String> listModel;
     private final int TOP_ROW_Y = 20;
@@ -28,12 +32,19 @@ public class CandidateListView extends JPanel {
 
     public CandidateListView(View view) {
         this.view = view;
+    }
+
+    public void setRecruitment(Recruitment recruitment) {
+        this.recruitment = recruitment;
+        populateCandidateList();
         initCandidatesListView();
+
+        repaint();
+        revalidate();
     }
 
     private void initCandidatesListView(){
         setLayout(null);
-        addCandidatesForTestingOnly();
         candidatesList = new JList<>(listModel);
         candidatesList.setFont(ViewConstants.FONT_LARGE);
         add(createScrollPane());
@@ -48,10 +59,11 @@ public class CandidateListView extends JPanel {
         add(createBackButton());
     }
 
-    private void addCandidatesForTestingOnly(){
+    private void populateCandidateList(){
         listModel = new DefaultListModel<>();
-        for (int i = 0; i < 30; i++) {
-            listModel.addElement("Candidate " + i);
+        List<Candidate> candidates = recruitment.getCandidateList();
+        for (Candidate candidate : candidates) {
+            listModel.addElement(candidate.toString());
         }
     }
 

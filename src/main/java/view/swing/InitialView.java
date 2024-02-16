@@ -1,5 +1,7 @@
 package view.swing;
 
+import model.Model;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;

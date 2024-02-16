@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
 public class Presets {
@@ -20,6 +21,24 @@ public class Presets {
         this.name = name;
         presetsValues = new HashMap<>();
         setPresetsValues(modifiersValues);
+    }
+
+    public static Presets createRandomPresetsForTesting(){
+        HashMap<String, Integer> testMap = new HashMap<>();
+        testMap.put("Resume and social media evaluation", getRandomValueForTesting());
+        testMap.put("English language assessment", getRandomValueForTesting());
+        testMap.put("Previous work experience", getRandomValueForTesting());
+        testMap.put("Own projects", getRandomValueForTesting());
+        testMap.put("Live coding", getRandomValueForTesting());
+        testMap.put("Technical questions", getRandomValueForTesting());
+        testMap.put("Salary expectations", getRandomValueForTesting());
+        testMap.put("Soft skills", getRandomValueForTesting());
+
+        return new Presets("testPresets", testMap);
+    }
+
+    private static int getRandomValueForTesting(){
+        return ThreadLocalRandom.current().nextInt(1,10);
     }
 
     public static HashSet<Presets> loadPresetsFromDirectory() {
@@ -88,10 +107,18 @@ public class Presets {
         return presetsValues;
     }
 
+    private String preparePresetsDescription(Presets presets){
+        StringBuilder descriptionBuilder = new StringBuilder();
+        for (Map.Entry<Stages, Integer> entry : presetsValues.entrySet()) {
+            String stageName = entry.getKey().getStageName();
+            int stagePresetValue = entry.getValue();
+            descriptionBuilder.append(stageName).append(":").append(stagePresetValue).append(" ");
+        }
+        return descriptionBuilder.toString().trim();
+    }
+
     @Override
     public String toString() {
-        return "Presets{" +
-                "name='" + name + '\'' +
-                '}';
+        return preparePresetsDescription(this);
     }
 }

@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +12,7 @@ public class Recruitment {
     private final int STAGE_MAX_SCORE = 100;
     private final double PERCENTAGE = 100.0;
     private final double DECIMAL = 10.0;
-    private final double SOFT_SKILLS_FACTOR = 3.0; //at 0 soft skills can multiply total score by 0.1-1, at 5 it's 5.1-6 so the total impact is lowered to max 20%
+    private final double SOFT_SKILLS_FACTOR = 3.0; //higher value = less impact soft skills have on the other scores
     private Model model;
     private String name;
     private Presets presets;
@@ -154,11 +155,28 @@ public class Recruitment {
         return presets;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public boolean isFinished() {
+        return isFinished;
+    }
+
     public List<Candidate> getCandidateList() {
         return candidateList;
     }
 
     public LocalDateTime getDateOfCreation() {
         return dateOfCreation;
+    }
+
+
+    @Override
+    public String toString() {
+        String startDate = dateOfCreation.format(DateTimeFormatter.ISO_DATE);
+        String status = isFinished() ? "finished" : "unfinished";
+
+        return String.format("%s   (%d candidates)   STARTED: %s   STATUS: %s   PRESETS: %s", name, candidateList.size(), startDate, status, presets.toString());
     }
 }

@@ -60,6 +60,11 @@ public class View extends JFrame implements Observer {
         revalidate();
         repaint();
     }
+
+    public Model getModel() {
+        return model;
+    }
+
     @Override
     public void update(Observable o, Object arg) {
 

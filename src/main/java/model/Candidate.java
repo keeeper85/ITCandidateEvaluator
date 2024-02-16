@@ -9,7 +9,6 @@ public class Candidate extends AbstractCandidate{
     public Candidate(Recruitment recruitment, String firstName, String lastName) {
         super(recruitment, firstName, lastName);
         age = calculateAge();
-        recruitment.getCandidateList().add(this);
     }
 
     public HashMap<Stages, Integer> getScores() {
