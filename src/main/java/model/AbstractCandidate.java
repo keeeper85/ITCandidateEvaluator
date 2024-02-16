@@ -65,4 +65,24 @@ public class AbstractCandidate {
     public void setDateOfFinishingEvaluation(LocalDateTime dateOfFinishingEvaluation) {
         this.dateOfFinishingEvaluation = dateOfFinishingEvaluation;
     }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getPathToResumeFile() {
+        return pathToResumeFile;
+    }
+
+    public String getAdditionalNotes() {
+        return additionalNotes;
+    }
+
+    public int getYearOfBirth() {
+        return yearOfBirth;
+    }
 }

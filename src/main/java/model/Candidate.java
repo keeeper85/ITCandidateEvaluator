@@ -62,6 +62,15 @@ public class Candidate extends AbstractCandidate{
     public String getResumePath(){
         return pathToResumeFile;
     }
+    public String getFirstName(){
+        return firstName;
+    }
+    public String getLastName(){
+        return lastName;
+    }
+    public int getYearOfBirth(){
+        return yearOfBirth;
+    }
 
     @Override
     public String toString() {

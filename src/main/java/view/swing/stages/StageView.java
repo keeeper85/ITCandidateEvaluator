@@ -1,5 +1,7 @@
 package view.swing.stages;
 
+import model.AbstractCandidate;
+import model.Candidate;
 import view.swing.View;
 
 import javax.swing.*;
@@ -13,6 +15,7 @@ public class StageView extends JPanel {
     private JPanel previousStagePanel;
     private List<JPanel> chosenStages = new ArrayList<>();
     private Sidepanel sidepanel;
+    private AbstractCandidate candidate;
     private final int MAIN_PANEL_POSITION_X = 0;
     private final int MAIN_PANEL_POSITION_Y = 0;
     private final int MAIN_PANEL_WIDTH = 1000;
@@ -22,10 +25,11 @@ public class StageView extends JPanel {
     private final int SIDEPANEL_WIDTH = 280;
     private final int SIDEPANEL_HEIGHT = 700;
 
-    public StageView(View view) {
+    public StageView(View view, AbstractCandidate abstractCandidate) {
         this.view = view;
+        this.candidate = abstractCandidate;
         sidepanel = new Sidepanel(this);
-        initialPanel = new CandidateView(view);
+        initialPanel = new CandidateView(this, candidate);
         currentStagePanel = initialPanel;
         initStageView();
     }
@@ -75,5 +79,13 @@ public class StageView extends JPanel {
 
     public View getView() {
         return view;
+    }
+
+    public void setCandidate(Candidate candidate) {
+        this.candidate = candidate;
+    }
+
+    public AbstractCandidate getCandidate() {
+        return candidate;
     }
 }

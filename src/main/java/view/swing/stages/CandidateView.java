@@ -1,5 +1,7 @@
 package view.swing.stages;
 
+import model.AbstractCandidate;
+import model.Candidate;
 import view.swing.View;
 import view.swing.ViewConstants;
 
@@ -13,13 +15,15 @@ import java.util.List;
 
 public class CandidateView extends JPanel implements Collectable {
 
-    private View view;
+    private StageView stageView;
+    private AbstractCandidate candidate;
     private List<JLabel> labels = new ArrayList<>();
     private List<JTextField> textFields = new ArrayList<>();
     private JTextArea notes;
     private JTextField firstName;
     private JTextField lastName;
     private JTextField resumePath;
+    private JTextField yearOfBirth;
     private final int PANEL_X = 50;
     private final int PANEL_Y = 50;
     private final int LABEL_WIDTH = 300;
@@ -37,9 +41,12 @@ public class CandidateView extends JPanel implements Collectable {
     private final int PICK_BUTTON_POSITION_X = 890;
     private final int PICK_BUTTON_POSITION_Y = 320;
 
-    public CandidateView(View view) {
-        this.view = view;
+    public CandidateView(StageView stageView, AbstractCandidate candidate) {
+        this.stageView = stageView;
+        this.candidate = candidate;
+        candidate = stageView.getCandidate();
         initCandidateView();
+        if (candidate != null) copyCandidateData();
     }
 
     private void initCandidateView(){
@@ -53,6 +60,18 @@ public class CandidateView extends JPanel implements Collectable {
 
         revalidate();
         repaint();
+    }
+
+    private void copyCandidateData(){
+        System.out.println("copied");
+        firstName.setText(candidate.getFirstName());
+        lastName.setText(candidate.getLastName());
+        yearOfBirth.setText(String.valueOf(candidate.getYearOfBirth()));
+        resumePath.setText(candidate.getPathToResumeFile());
+        notes.setText(candidate.getAdditionalNotes());
+
+        repaint();
+        revalidate();
     }
 
     private void setItemLabels(){
@@ -83,7 +102,7 @@ public class CandidateView extends JPanel implements Collectable {
         firstName.setName("name");
         lastName = new JTextField();
         lastName.setName("lastName");
-        JTextField yearOfBirth = new JTextField();
+        yearOfBirth = new JTextField();
         yearOfBirth.setName("year");
         resumePath = new JTextField();
         resumePath.setName("resumePath");
@@ -161,6 +180,9 @@ public class CandidateView extends JPanel implements Collectable {
         add(pickResumeFileButton);
     }
 
+    public void setCandidate(Candidate candidate) {
+        this.candidate = candidate;
+    }
 
     @Override
     public HashMap<String, String> collectData() {

@@ -85,6 +85,16 @@ public class CandidateListView extends JPanel {
         JButton openButton = new JButton("Open");
         openButton.setFont(ViewConstants.FONT_LARGE);
         openButton.setBounds(BUTTON_X, BUTTON_Y ,BUTTON_WIDTH ,BUTTON_HEIGHT);
+        openButton.addActionListener(e -> {
+            if (candidateSelected != null) {
+                CandidateListView candidateListView = new CandidateListView(view);
+                StageView stageView = new StageView(view, candidateSelected);
+                stageView.setCandidate(candidateSelected);
+                view.setCurrentPanel(stageView);
+            }
+        });
+
+
         return openButton;
     }
 
@@ -176,7 +186,7 @@ public class CandidateListView extends JPanel {
         addCandidateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                view.setCurrentPanel(new StageView(view));
+                view.setCurrentPanel(new StageView(view, candidateSelected));
             }
         });
         return addCandidateButton;
