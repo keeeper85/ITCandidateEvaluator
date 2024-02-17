@@ -79,15 +79,18 @@ public class Presets {
         return true;
     }
 
-    public static void saveNewPresetsToFile(String fileName, HashMap<String, Integer> newDefaultPresets){
-        String filePath = PRESETS_FILES_DIRECTORY.toString() + "\\" + fileName + "_presets.json";
+    public static boolean saveNewPresetsToFile(String fileName, HashMap<String, Integer> newDefaultPresets){
+        String filePath;
+        if (fileName.contains("presets")) filePath = PRESETS_FILES_DIRECTORY.toString() + "\\" + fileName + ".json";
+        else filePath = PRESETS_FILES_DIRECTORY.toString() + "\\" + fileName + "_presets.json";
 
         ObjectMapper mapper = new ObjectMapper();
         try {
             mapper.writeValue(new File(filePath), newDefaultPresets);
         } catch (IOException e) {
-            e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     public void setPresetsValues(HashMap<String, Integer> modifiersValues){

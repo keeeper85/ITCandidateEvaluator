@@ -158,7 +158,7 @@ public class CandidateListView extends JPanel {
         openButton.addActionListener(e -> {
             if (selectedCandidate != null) {
                 CandidateListView candidateListView = new CandidateListView(view);
-                StageView stageView = new StageView(view, selectedCandidate);
+                StageView stageView = new StageView(view, selectedCandidate, recruitment);
                 stageView.setCandidate(selectedCandidate);
                 view.setCurrentPanel(stageView);
             }
@@ -257,7 +257,7 @@ public class CandidateListView extends JPanel {
         addCandidateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                view.setCurrentPanel(new StageView(view, selectedCandidate));
+                view.setCurrentPanel(new StageView(view, selectedCandidate, recruitment));
             }
         });
         return addCandidateButton;

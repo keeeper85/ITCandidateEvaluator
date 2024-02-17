@@ -1,8 +1,12 @@
 package view.swing;
 
 import model.Model;
+import model.Recruitment;
+import view.swing.stages.CandidateView;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,9 +17,10 @@ public class PresetsView extends JPanel {
 
     private View view;
     private Model model;
-    private String[] presetChoices = {"Junior", "Regular", "Senior", "Custom"};
+    private String[] presetChoices;
     private HashMap<String,HashMap<String, Integer>> presets;
-    private String chosenPreset = presetChoices[0];
+    private HashMap<String, Integer> currentSliderSettings = new HashMap<>();
+    private String chosenPreset;
     private JTextField presetName;
     private List<JButton> buttons = new ArrayList<>();
     private List<JSlider> sliders = new ArrayList<>();
@@ -71,6 +76,7 @@ public class PresetsView extends JPanel {
         List<String> presetNames = new ArrayList<>(presets.keySet());
         Collections.sort(presetNames);
         presetChoices = presetNames.toArray(new String[0]);
+        chosenPreset = presetChoices[0];
     }
 
     private void applyLoadedPresets(){
@@ -148,17 +154,15 @@ public class PresetsView extends JPanel {
         slider.setMinorTickSpacing(1);
         slider.setPaintTicks(true);
         slider.setPaintLabels(true);
+        currentSliderSettings.put(slider.getName(), slider.getValue());
         sliders.add(slider);
-
-        // Add a ChangeListener to retrieve the slider value
-//        slider.addChangeListener(new ChangeListener() {
-//            @Override
-//            public void stateChanged(ChangeEvent e) {
-//                int sliderValue = ((JSlider) e.getSource()).getValue();
-//                // You can use the sliderValue as needed
-//                System.out.println(label + ": " + sliderValue);
-//            }
-//        });
+        slider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                int sliderValue = ((JSlider) e.getSource()).getValue();
+                currentSliderSettings.put(slider.getName(), sliderValue);
+            }
+        });
 
         return slider;
     }
@@ -192,7 +196,7 @@ public class PresetsView extends JPanel {
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(savePresets());
+                savePresets();
             }
         });
         return saveButton;
@@ -233,12 +237,14 @@ public class PresetsView extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String name = nameField.getText();
-                if (name.equals("") || name == null || name.length() > 20){
-
-                }
+                if (name.equals("") || name == null || name.length() > 20){}
                 else{
+                    CandidateListView candidateListView = new CandidateListView(view);
+                    Recruitment recruitment = model.startNewRecruitment(name, presetName.getText(), currentSliderSettings);
+                    candidateListView.setRecruitment(recruitment);
+
                     dialog.dispose();
-                    view.setCurrentPanel(new CandidateListView(view));
+                    view.setCurrentPanel(candidateListView);
                 }
             }
         });
@@ -252,14 +258,21 @@ public class PresetsView extends JPanel {
         dialog.setVisible(true);
     }
 
-    public HashMap<String, Integer> savePresets() {
+    public void savePresets() {
         HashMap<String, Integer> presets = new HashMap<>();
+        String result;
 
         for (JSlider slider : sliders) {
             presets.put(slider.getName(), slider.getValue());
         }
 
-        return presets;
+        if (model.savePresetsToFile(presetName.getText(),presets)){
+            result = "Presets file saved succesfully.";
+            loadPresetsFromModel();
+        }
+        else result = "There was a problem saving presets to file. Check the log.";
+
+        JOptionPane.showMessageDialog(null, result, "Saving presets:", JOptionPane.INFORMATION_MESSAGE);
     }
 
 

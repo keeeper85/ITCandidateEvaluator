@@ -11,7 +11,7 @@ public class Model extends Observable {
         createTestingRecruitments();
     }
 
-    private void createTestingRecruitments(){
+    private void createTestingRecruitments(){ //todo create semi-real testing recruitment
         openRecruitmentProcesses = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             String name = "Rec_" + i;
@@ -81,5 +81,14 @@ public class Model extends Observable {
         }
 
         return listOfPresets;
+    }
+
+    public boolean savePresetsToFile(String fileName, HashMap<String, Integer> newDefaultPresets){
+        return Presets.saveNewPresetsToFile(fileName, newDefaultPresets);
+    }
+
+    public Recruitment startNewRecruitment(String recruitmentName, String presetsName, HashMap<String, Integer> modifiersValues){
+        Presets presets = new Presets(presetsName, modifiersValues);
+        return new Recruitment(this, recruitmentName, presets);
     }
 }

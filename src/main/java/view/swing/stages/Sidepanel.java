@@ -1,5 +1,7 @@
 package view.swing.stages;
 
+import view.swing.CandidateListView;
+import view.swing.RecruitmentsListView;
 import view.swing.View;
 import view.swing.ViewConstants;
 
@@ -208,10 +210,8 @@ public class Sidepanel extends JPanel {
                 String timePassed = String.valueOf(timerPanel.getSecondsElapsed());
                 collectedData.put("evaluationTimeSeconds", timePassed);
 
-                for (Map.Entry<String, String> stringStringEntry : collectedData.entrySet()) {
-                    System.out.println(stringStringEntry);
-                }
-                stageView.getView().startOver();
+                View view = stageView.getView();
+                view.setCurrentPanel(new RecruitmentsListView(view));
             }
         });
 
@@ -228,7 +228,7 @@ public class Sidepanel extends JPanel {
                 String userInput = (String) JOptionPane.showInputDialog(null, warning, "Confirm:", JOptionPane.WARNING_MESSAGE);
                 if (userInput.equals("discard")) {
                     View view = stageView.getView();
-                    view.startOver();
+                    view.setCurrentPanel(new RecruitmentsListView(view));
                 } else {
                     JOptionPane.showMessageDialog(null, "Deletion canceled or invalid input.");
                 }

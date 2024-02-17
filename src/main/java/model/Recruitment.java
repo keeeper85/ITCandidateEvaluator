@@ -167,6 +167,17 @@ public class Recruitment {
         return presets;
     }
 
+    public List<String> getStagesForEvaluation(){
+        List<String> stagesForEvaluation = new ArrayList<>();
+        HashMap<Stages,Integer> presetsValues = presets.getPresetsValues();
+
+        for (Map.Entry<Stages, Integer> entry : presetsValues.entrySet()) {
+            if (entry.getValue() > 0) stagesForEvaluation.add(entry.getKey().getStageName());
+        }
+
+        return stagesForEvaluation;
+    }
+
     public String getName() {
         return name;
     }

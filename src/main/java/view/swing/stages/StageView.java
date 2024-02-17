@@ -2,6 +2,7 @@ package view.swing.stages;
 
 import model.AbstractCandidate;
 import model.Candidate;
+import model.Recruitment;
 import view.swing.View;
 
 import javax.swing.*;
@@ -16,6 +17,7 @@ public class StageView extends JPanel {
     private List<JPanel> chosenStages = new ArrayList<>();
     private Sidepanel sidepanel;
     private AbstractCandidate candidate;
+    private Recruitment recruitment;
     private final int MAIN_PANEL_POSITION_X = 0;
     private final int MAIN_PANEL_POSITION_Y = 0;
     private final int MAIN_PANEL_WIDTH = 1000;
@@ -25,9 +27,11 @@ public class StageView extends JPanel {
     private final int SIDEPANEL_WIDTH = 280;
     private final int SIDEPANEL_HEIGHT = 700;
 
-    public StageView(View view, AbstractCandidate abstractCandidate) {
+    public StageView(View view, AbstractCandidate abstractCandidate, Recruitment recruitment) {
         this.view = view;
         this.candidate = abstractCandidate;
+        this.recruitment = recruitment;
+
         sidepanel = new Sidepanel(this);
         initialPanel = new CandidateView(this, candidate);
         currentStagePanel = initialPanel;
@@ -41,21 +45,30 @@ public class StageView extends JPanel {
 
         sidepanel.setBounds(SIDEPANEL_POSITION_X, SIDEPANEL_POSITION_Y, SIDEPANEL_WIDTH, SIDEPANEL_HEIGHT);
         add(sidepanel);
-        setChosenPanelsForTesting();
+        setStagesToBeEvaluated();
 
         revalidate();
         repaint();
     }
-    private void setChosenPanelsForTesting(){
+    private void setStagesToBeEvaluated(){
         chosenStages.add(initialPanel);
-        chosenStages.add(new ResumeStagePanel(this));
-        chosenStages.add(new LanguageStagePanel(this));
-        chosenStages.add(new ExperienceStagePanel(this));
-        chosenStages.add(new ProjectsStagePanel(this));
-        chosenStages.add(new LiveCodingStagePanel(this));
-        chosenStages.add(new QuestionsStagePanel(this));
-        chosenStages.add(new SalaryStagePanel(this));
-        chosenStages.add(new SoftSkillsStagePanel(this));
+
+        List<String> stagesForEvaluation = recruitment.getStagesForEvaluation();
+
+        for (String s : stagesForEvaluation) {
+            System.out.println(s);
+        }
+
+        for (String stageName : stagesForEvaluation) {
+            if (stageName.equals("resume")) chosenStages.add(new ResumeStagePanel(this));
+            if (stageName.equals("language")) chosenStages.add(new LanguageStagePanel(this));
+            if (stageName.equals("experience")) chosenStages.add(new ExperienceStagePanel(this));
+            if (stageName.equals("projects")) chosenStages.add(new ProjectsStagePanel(this));
+            if (stageName.equals("coding")) chosenStages.add(new LiveCodingStagePanel(this));
+            if (stageName.equals("questions")) chosenStages.add(new QuestionsStagePanel(this));
+            if (stageName.equals("salary")) chosenStages.add(new SalaryStagePanel(this));
+            if (stageName.equals("soft")) chosenStages.add(new SoftSkillsStagePanel(this));
+        }
     }
 
     public void setCurrentStagePanel(JPanel newPanel){
