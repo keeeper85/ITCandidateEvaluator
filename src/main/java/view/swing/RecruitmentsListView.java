@@ -199,12 +199,12 @@ public class RecruitmentsListView extends JPanel {
     }
 
     private JCheckBox createFinishedCheckBox(){
-        JCheckBox showOnlyUnfinishedCandidates = new JCheckBox();
-        showOnlyUnfinishedCandidates.setLabel("Show only unfinished processes");
+        JCheckBox showOnlyUnfinishedProcesses = new JCheckBox();
+        showOnlyUnfinishedProcesses.setLabel("Show only unfinished recruitments");
         int positionX = LIST_X + BUTTON_WIDTH + SMALL_SPACING;
-        showOnlyUnfinishedCandidates.setBounds(positionX, TOP_ROW_Y, SORTING_MENU_LABEL_WIDTH,SORTING_MENU_HEIGHT);
-        showOnlyUnfinishedCandidates.addActionListener(e -> {
-            if (showOnlyUnfinishedCandidates.isSelected()) {
+        showOnlyUnfinishedProcesses.setBounds(positionX, TOP_ROW_Y, SORTING_MENU_LABEL_WIDTH,SORTING_MENU_HEIGHT);
+        showOnlyUnfinishedProcesses.addActionListener(e -> {
+            if (showOnlyUnfinishedProcesses.isSelected()) {
                 showRecruitments = RecruitmentStatus.Unfinished;
             } else {
                 showRecruitments = RecruitmentStatus.All;
@@ -212,7 +212,7 @@ public class RecruitmentsListView extends JPanel {
             sortList(selectedOption, showRecruitments);
         });
 
-        return showOnlyUnfinishedCandidates;
+        return showOnlyUnfinishedProcesses;
     }
 
     private enum SortingOptions{Name_Ascending, Name_Descending, Date_Ascending, Date_Descending}

@@ -311,6 +311,14 @@ public class CandidateListView extends JPanel {
         showOnlyUnfinishedCandidates.setLabel("Show only unfinished candidates");
         int positionX = LIST_X + BUTTON_WIDTH + SMALL_SPACING;
         showOnlyUnfinishedCandidates.setBounds(positionX, TOP_ROW_Y, SORTING_MENU_LABEL_WIDTH,SORTING_MENU_HEIGHT);
+        showOnlyUnfinishedCandidates.addActionListener(e -> {
+            if (showOnlyUnfinishedCandidates.isSelected()) {
+                showCandidates = CandidateStatus.Unfinished;
+            } else {
+                showCandidates = CandidateStatus.All;
+            }
+            sortList(selectedOption, showCandidates);
+        });
 
         return showOnlyUnfinishedCandidates;
     }
