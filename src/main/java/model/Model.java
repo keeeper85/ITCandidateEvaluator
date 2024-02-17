@@ -1,9 +1,6 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Observable;
+import java.util.*;
 
 public class Model extends Observable {
 
@@ -65,5 +62,24 @@ public class Model extends Observable {
 
     public List<Recruitment> getOpenRecruitmentProcesses() {
         return openRecruitmentProcesses;
+    }
+
+    public HashMap<String,HashMap<String, Integer>> getListOfPresets(){
+        HashMap<String,HashMap<String, Integer>> listOfPresets = new HashMap<>();
+
+        HashSet<Presets> presets = Presets.loadPresetsFromDirectory();
+        for (Presets preset : presets) {
+            HashMap<Stages, Integer> presetsValues = preset.getPresetsValues();
+            HashMap<String, Integer> singlePreset = new HashMap<>();
+            for (Map.Entry<Stages, Integer> entry : presetsValues.entrySet()) {
+                String stageName = entry.getKey().getStageName();
+                Integer presetValue = entry.getValue();
+                singlePreset.put(stageName,presetValue);
+            }
+            String presetName = preset.getName();
+            listOfPresets.put(presetName, singlePreset);
+        }
+
+        return listOfPresets;
     }
 }

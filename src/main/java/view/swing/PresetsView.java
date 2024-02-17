@@ -1,18 +1,21 @@
 package view.swing;
 
+import model.Model;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
 
 public class PresetsView extends JPanel {
 
     private View view;
-    private String[] choicesForTestingOnly = {"Junior", "Regular", "Senior", "Custom"};
-    private String chosenPreset = choicesForTestingOnly[0];
+    private Model model;
+    private String[] presetChoices = {"Junior", "Regular", "Senior", "Custom"};
+    private HashMap<String,HashMap<String, Integer>> presets;
+    private String chosenPreset = presetChoices[0];
     private JTextField presetName;
     private List<JButton> buttons = new ArrayList<>();
     private List<JSlider> sliders = new ArrayList<>();
@@ -34,11 +37,13 @@ public class PresetsView extends JPanel {
 
     public PresetsView(View view) {
         this.view = view;
+        model = view.getModel();
         initPresetsView();
     }
 
     private void initPresetsView(){
         setLayout(null);
+        loadPresetsFromModel();
         addChoosePreset();
         addPresetNameField();
         addSliders();
@@ -60,13 +65,49 @@ public class PresetsView extends JPanel {
         }
     }
 
+    private void loadPresetsFromModel(){
+        presets = model.getListOfPresets();
+
+        List<String> presetNames = new ArrayList<>(presets.keySet());
+        Collections.sort(presetNames);
+        presetChoices = presetNames.toArray(new String[0]);
+    }
+
+    private void applyLoadedPresets(){
+        HashMap<String, Integer> slidersWithValues = getCurrentPreset();
+
+        for (JSlider slider : sliders) {
+            String sliderName = slider.getName().toLowerCase();
+            int count = 0;
+
+            for (Map.Entry<String, Integer> entry : slidersWithValues.entrySet()) {
+                String entryName = entry.getKey();
+                if (sliderName.contains(entryName)){
+                    slider.setValue(entry.getValue());
+                    break;
+                }
+                if (count == slidersWithValues.size() - 1) slider.setValue(0);
+                count++;
+            }
+        }
+
+    }
+
+    private HashMap<String, Integer> getCurrentPreset() {
+        for (Map.Entry<String, HashMap<String, Integer>> entry : presets.entrySet()) {
+            String presetName = entry.getKey();
+            if (presetName.equals(chosenPreset)) return entry.getValue();
+        }
+        return null;
+    }
+
     private void addChoosePreset() {
         JLabel choosePreset = new JLabel("Choose preset:");
         choosePreset.setFont(ViewConstants.FONT_LARGE);
         choosePreset.setBounds(TOP_ROW_X, TOP_ROW_Y, SMALL_ITEM_WIDTH, SMALL_ITEM_HEIGHT);
         add(choosePreset);
 
-        JComboBox<String> choiceMenu = new JComboBox<>(choicesForTestingOnly);
+        JComboBox<String> choiceMenu = new JComboBox<>(presetChoices);
         choiceMenu.setFont(ViewConstants.FONT_LARGE);
         int choiceMenuX = TOP_ROW_X + SMALL_ITEM_WIDTH;
         choiceMenu.setBounds(choiceMenuX, TOP_ROW_Y, SMALL_ITEM_WIDTH, SMALL_ITEM_HEIGHT);
@@ -74,6 +115,8 @@ public class PresetsView extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 presetName.setText((String) choiceMenu.getSelectedItem());
+                chosenPreset = (String) choiceMenu.getSelectedItem();
+                applyLoadedPresets();
                 repaint();
             }
         });

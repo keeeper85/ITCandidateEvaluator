@@ -107,6 +107,10 @@ public class Presets {
         return presetsValues;
     }
 
+    public String getName() {
+        return name;
+    }
+
     private String preparePresetsDescription(Presets presets){
         StringBuilder descriptionBuilder = new StringBuilder();
         for (Map.Entry<Stages, Integer> entry : presetsValues.entrySet()) {
