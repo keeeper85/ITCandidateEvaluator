@@ -2,6 +2,7 @@ package model;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class AbstractCandidate {
     protected final Recruitment recruitment;
@@ -14,6 +15,7 @@ public class AbstractCandidate {
     protected String additionalNotes = "";
     protected int evaluationTimeSeconds;
     protected int evaluationScore;
+    protected int valueCostRatio;
     protected int yearOfBirth;
     protected int expectedSalary;
     protected boolean isFinished;
@@ -25,7 +27,6 @@ public class AbstractCandidate {
         this.recruitment = recruitment;
         this.firstName = firstName;
         this.lastName = lastName;
-        id = recruitment.getCandidateList().size();
         isFinished = false;
         dateOfJoiningEvaluation = LocalDateTime.now();
     }
@@ -64,6 +65,10 @@ public class AbstractCandidate {
 
     public void setDateOfFinishingEvaluation(LocalDateTime dateOfFinishingEvaluation) {
         this.dateOfFinishingEvaluation = dateOfFinishingEvaluation;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getFirstName() {

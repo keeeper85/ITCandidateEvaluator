@@ -21,7 +21,7 @@ public class Model extends Observable {
             Recruitment recruitment = new Recruitment(this,name, Presets.createRandomPresetsForTesting());
             if (i == 0) {
                 recruitment.addCandidates(CandidateFactory.getCandidatesFromResumes("src/main/resources/resumeTest", recruitment));
-                recruitment.getCandidateList().add(new Candidate(recruitment, "Ben", "Filler"));
+                recruitment.addSingleCandidate(new Candidate(recruitment, "Ben", "Filler"));
             }
             if (i == 1) recruitment.getCandidateList().add(new Candidate(recruitment, "Ben", "Filler"));
             openRecruitmentProcesses.add(recruitment);

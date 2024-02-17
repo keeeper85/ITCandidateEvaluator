@@ -13,15 +13,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CandidateListView extends JPanel {
 
     private View view;
     private Recruitment recruitment;
+    private List<Candidate> listForSorting;
+    private List<Candidate> listForSortingUnfinished;
+    private SortingOptions selectedOption = SortingOptions.Date_Ascending;
+    private CandidateStatus showCandidates = CandidateStatus.All;
     private JList<Candidate> candidatesList;
     private DefaultListModel<Candidate> listModel;
-    private Candidate candidateSelected;
+    private Candidate selectedCandidate;
     private JButton openButton;
     private JButton cvButton;
     private JButton deleteButton;
@@ -59,6 +65,7 @@ public class CandidateListView extends JPanel {
         add(createScrollPane());
         add(createSortingMenu());
         add(createFinishedCheckBox());
+        sortList(SortingOptions.Date_Ascending, CandidateStatus.All);
 
         add(createOpenButton());
         add(createAddCandidateButton());
@@ -71,21 +78,71 @@ public class CandidateListView extends JPanel {
 
     private void populateCandidateList(){
         listModel = new DefaultListModel<>();
-        List<Candidate> candidates = recruitment.getCandidateList();
-        for (Candidate candidate : candidates) {
+        listForSorting = new ArrayList<>();
+        listForSortingUnfinished = new ArrayList<>();
+
+        for (Candidate candidate : recruitment.getCandidateList()) {
+            listForSorting.add(candidate);
+            if (!candidate.isFinished()) listForSortingUnfinished.add(candidate);
             listModel.addElement(candidate);
         }
+    }
+
+    private void sortList(SortingOptions options, CandidateStatus status){
+        List<Candidate> list;
+        if (status == CandidateStatus.All) list = listForSorting;
+        else list = listForSortingUnfinished;
+
+        switch (options){
+            case Name_Ascending:
+                Collections.sort(list, (o1, o2) -> o1.getLastName().compareTo(o2.getLastName()));
+                break;
+            case Name_Descending:
+                Collections.sort(list, (o1, o2) -> o2.getLastName().compareTo(o1.getLastName()));
+                break;
+            case Date_Ascending:
+                Collections.sort(list, (o1, o2) -> o1.getID().compareTo(o2.getID()));
+                break;
+            case Date_Descending:
+                Collections.sort(list, (o1, o2) -> o2.getID().compareTo(o1.getID()));
+                break;
+            case Score_Ascending:
+                Collections.sort(list, (o1, o2) -> o1.getEvaluationScore().compareTo(o2.getEvaluationScore()));
+                break;
+            case Score_Descending:
+                Collections.sort(list, (o1, o2) -> o2.getEvaluationScore().compareTo(o1.getEvaluationScore()));
+                break;
+            case ValueCost_Ascending:
+                Collections.sort(list, (o1, o2) -> o1.getValueCostRatio().compareTo(o2.getValueCostRatio()));
+                break;
+            case ValueCost_Descending:
+                Collections.sort(list, (o1, o2) -> o2.getValueCostRatio().compareTo(o1.getValueCostRatio()));
+                break;
+        }
+        updateList(list);
+    }
+
+    private void updateList(List<Candidate> list){
+        listModel = new DefaultListModel<>();
+        for (Candidate candidate : list) {
+            listModel.addElement(candidate);
+        }
+        remove(scrollPane);
+        add(createScrollPane());
+
+        repaint();
+        revalidate();
     }
 
     private JScrollPane createScrollPane(){
         candidatesList = new JList<>(listModel);
         candidatesList.setFont(ViewConstants.FONT_LARGE);
         candidatesList.addListSelectionListener(e -> {
-            candidateSelected = candidatesList.getSelectedValue();
+            selectedCandidate = candidatesList.getSelectedValue();
             openButton.setEnabled(true);
             deleteButton.setEnabled(true);
             feedbackButton.setEnabled(true);
-            if (candidateSelected.getResumePath() == null || candidateSelected.getResumePath().length() < 5) cvButton.setEnabled(false);
+            if (selectedCandidate.getResumePath() == null || selectedCandidate.getResumePath().length() < 5) cvButton.setEnabled(false);
             else cvButton.setEnabled(true);});
 
         scrollPane = new JScrollPane(candidatesList);
@@ -99,10 +156,10 @@ public class CandidateListView extends JPanel {
         openButton.setFont(ViewConstants.FONT_LARGE);
         openButton.setBounds(BUTTON_X, BUTTON_Y ,BUTTON_WIDTH ,BUTTON_HEIGHT);
         openButton.addActionListener(e -> {
-            if (candidateSelected != null) {
+            if (selectedCandidate != null) {
                 CandidateListView candidateListView = new CandidateListView(view);
-                StageView stageView = new StageView(view, candidateSelected);
-                stageView.setCandidate(candidateSelected);
+                StageView stageView = new StageView(view, selectedCandidate);
+                stageView.setCandidate(selectedCandidate);
                 view.setCurrentPanel(stageView);
             }
         });
@@ -143,9 +200,9 @@ public class CandidateListView extends JPanel {
         feedbackButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                {if (candidateSelected != null){
-                    if (candidateSelected.isFinished()){
-                        String feedback = candidateSelected.generateFeedback();
+                {if (selectedCandidate != null){
+                    if (selectedCandidate.isFinished()){
+                        String feedback = selectedCandidate.generateFeedback();
                         int choice = JOptionPane.showOptionDialog(null, feedback, "Copy to Clipboard",
                                 JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
                                 new String[]{"Back", "Copy"}, "Back");
@@ -172,9 +229,9 @@ public class CandidateListView extends JPanel {
         cvButton.setBounds(BUTTON_X, backButtonY ,BUTTON_WIDTH ,BUTTON_HEIGHT);
         cvButton.addActionListener((e -> {
             try {
-                if (candidateSelected != null){
-                    if (candidateSelected.getResumePath() != null)
-                        Desktop.getDesktop().open(new File(candidateSelected.getResumePath()));
+                if (selectedCandidate != null){
+                    if (selectedCandidate.getResumePath() != null)
+                        Desktop.getDesktop().open(new File(selectedCandidate.getResumePath()));
                 }
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
@@ -200,7 +257,7 @@ public class CandidateListView extends JPanel {
         addCandidateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                view.setCurrentPanel(new StageView(view, candidateSelected));
+                view.setCurrentPanel(new StageView(view, selectedCandidate));
             }
         });
         return addCandidateButton;
@@ -237,10 +294,14 @@ public class CandidateListView extends JPanel {
         }
     }
 
-    private JComboBox<String> createSortingMenu(){ //todo
+    private JComboBox<SortingOptions> createSortingMenu(){ //todo
 
-        JComboBox<String> choiceMenu = new JComboBox<>(ViewConstants.CANDIDATES_SORTING_OPTIONS);
+        JComboBox<SortingOptions> choiceMenu = new JComboBox<>(SortingOptions.values());
         choiceMenu.setBounds(LIST_X, TOP_ROW_Y, BUTTON_WIDTH, SORTING_MENU_HEIGHT);
+        choiceMenu.setSelectedItem(SortingOptions.Date_Ascending);
+        choiceMenu.addActionListener(e -> {
+            selectedOption = (SortingOptions) choiceMenu.getSelectedItem();
+            sortList(selectedOption, showCandidates);});
 
         return choiceMenu;
     }
@@ -253,4 +314,7 @@ public class CandidateListView extends JPanel {
 
         return showOnlyUnfinishedCandidates;
     }
+
+    private enum SortingOptions{Name_Ascending, Name_Descending, Date_Ascending, Date_Descending, Score_Ascending, Score_Descending, ValueCost_Ascending, ValueCost_Descending}
+    private enum CandidateStatus{All, Unfinished}
 }

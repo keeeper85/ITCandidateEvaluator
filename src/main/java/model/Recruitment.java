@@ -21,12 +21,14 @@ public class Recruitment {
     private int maxPossibleScore;
     private boolean isFinished;
     private boolean areSoftSkillsIncluded = false;
+    private int nextCandidateID;
 
     public Recruitment(Model model, String name, Presets presets) {
         this.model = model;
         this.name = name;
         this.presets = presets;
         candidateList = new ArrayList<>();
+        nextCandidateID = candidateList.size() + 1;
         dateOfCreation = LocalDateTime.now();
         maxPossibleScore = calculateMaxPossibleScore();
         isFinished = false;
@@ -148,7 +150,17 @@ public class Recruitment {
     }
 
     public void addCandidates(List<Candidate> newCandidates){
-        candidateList.addAll(newCandidates);
+        for (Candidate newCandidate : newCandidates) {
+            newCandidate.setId(nextCandidateID);
+            candidateList.add(newCandidate);
+            nextCandidateID++;
+        }
+    }
+
+    public void addSingleCandidate(Candidate candidate){
+        candidate.setId(nextCandidateID);
+        candidateList.add(candidate);
+        nextCandidateID++;
     }
 
     public Presets getPresets() {

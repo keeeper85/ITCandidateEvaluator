@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Candidate extends AbstractCandidate{
     private String age;
@@ -33,7 +34,7 @@ public class Candidate extends AbstractCandidate{
         return recruitment;
     }
 
-    public int getEvaluationScore() {
+    public Integer getEvaluationScore() {
         return evaluationScore;
     }
 
@@ -71,12 +72,14 @@ public class Candidate extends AbstractCandidate{
     public int getYearOfBirth(){
         return yearOfBirth;
     }
+    public Integer getID(){ return id; }
+    public Integer getValueCostRatio(){ return valueCostRatio; }
 
     @Override
     public String toString() {
         String joinDate = dateOfJoiningEvaluation.format(DateTimeFormatter.ISO_DATE);
         String score = isFinished ? String.valueOf(recruitment.calculateFinalCandidateScorePercent(this)) : "unfinished";
-        String description = String.format("%s %s (%s)   JOINED: %s   STATUS: %s", firstName, lastName, age, joinDate, score);
+        String description = String.format("%d. %s %s (%s)   JOINED: %s   STATUS: %s", id, lastName, firstName, age, joinDate, score);
         return description;
     }
 }
