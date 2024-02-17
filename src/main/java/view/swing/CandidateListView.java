@@ -1,6 +1,7 @@
 package view.swing;
 
 import model.Candidate;
+import model.CandidateFactory;
 import model.Recruitment;
 import view.swing.stages.StageView;
 
@@ -21,6 +22,11 @@ public class CandidateListView extends JPanel {
     private JList<Candidate> candidatesList;
     private DefaultListModel<Candidate> listModel;
     private Candidate candidateSelected;
+    private JButton openButton;
+    private JButton cvButton;
+    private JButton deleteButton;
+    private JButton feedbackButton;
+    private JScrollPane scrollPane;
     private final int TOP_ROW_Y = 20;
     private final int LIST_X = 30;
     private final int LIST_Y = 60;
@@ -74,15 +80,22 @@ public class CandidateListView extends JPanel {
     private JScrollPane createScrollPane(){
         candidatesList = new JList<>(listModel);
         candidatesList.setFont(ViewConstants.FONT_LARGE);
-        candidatesList.addListSelectionListener(e -> {candidateSelected = candidatesList.getSelectedValue();});
+        candidatesList.addListSelectionListener(e -> {
+            candidateSelected = candidatesList.getSelectedValue();
+            openButton.setEnabled(true);
+            deleteButton.setEnabled(true);
+            feedbackButton.setEnabled(true);
+            if (candidateSelected.getResumePath() == null || candidateSelected.getResumePath().length() < 5) cvButton.setEnabled(false);
+            else cvButton.setEnabled(true);});
 
-        JScrollPane scrollPane = new JScrollPane(candidatesList);
+        scrollPane = new JScrollPane(candidatesList);
         scrollPane.setBounds(LIST_X,LIST_Y,LIST_WIDTH,LIST_HEIGHT);
         return scrollPane;
     }
 
     private JButton createOpenButton(){
-        JButton openButton = new JButton("Open");
+        openButton = new JButton("Open");
+        openButton.setEnabled(false);
         openButton.setFont(ViewConstants.FONT_LARGE);
         openButton.setBounds(BUTTON_X, BUTTON_Y ,BUTTON_WIDTH ,BUTTON_HEIGHT);
         openButton.addActionListener(e -> {
@@ -93,14 +106,13 @@ public class CandidateListView extends JPanel {
                 view.setCurrentPanel(stageView);
             }
         });
-
-
         return openButton;
     }
 
     private JButton createDeleteButton(){
-        JButton deleteButton = new JButton("Delete");
+        deleteButton = new JButton("Delete");
         deleteButton.setFont(ViewConstants.FONT_LARGE);
+        deleteButton.setEnabled(false);
         int deleteButtonY = BUTTON_Y + SPACING + SPACING + SPACING;
         deleteButton.setBounds(BUTTON_X, deleteButtonY ,BUTTON_WIDTH ,BUTTON_HEIGHT);
 
@@ -123,8 +135,9 @@ public class CandidateListView extends JPanel {
         return deleteButton;
     }
     private JButton createShowFeedbackButton(){
-        JButton feedbackButton = new JButton("Feedback");
+        feedbackButton = new JButton("Feedback");
         feedbackButton.setFont(ViewConstants.FONT_LARGE);
+        feedbackButton.setEnabled(false);
         int backButtonY = BUTTON_Y + SPACING + SPACING + SPACING + SPACING;
         feedbackButton.setBounds(BUTTON_X, backButtonY ,BUTTON_WIDTH ,BUTTON_HEIGHT);
         feedbackButton.addActionListener(new ActionListener() {
@@ -152,7 +165,8 @@ public class CandidateListView extends JPanel {
     }
 
     private JButton createCVButton(){
-        JButton cvButton = new JButton("Open CV");
+        cvButton = new JButton("Open CV");
+        cvButton.setEnabled(false);
         cvButton.setFont(ViewConstants.FONT_LARGE);
         int backButtonY = BUTTON_Y + SPACING + SPACING + SPACING + SPACING + SPACING;
         cvButton.setBounds(BUTTON_X, backButtonY ,BUTTON_WIDTH ,BUTTON_HEIGHT);
@@ -213,11 +227,17 @@ public class CandidateListView extends JPanel {
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedDirectory = fileChooser.getSelectedFile();
             resumesDirectoryPath = selectedDirectory.getAbsolutePath();
-            JOptionPane.showMessageDialog(this, "Selected directory: " + resumesDirectoryPath);
+//            JOptionPane.showMessageDialog(this, "Selected directory: " + resumesDirectoryPath);
+            remove(scrollPane);
+            recruitment.addCandidates(CandidateFactory.getCandidatesFromResumes(resumesDirectoryPath, recruitment));
+            populateCandidateList();
+            add(createScrollPane());
+            revalidate();
+            repaint();
         }
     }
 
-    private JComboBox<String> createSortingMenu(){
+    private JComboBox<String> createSortingMenu(){ //todo
 
         JComboBox<String> choiceMenu = new JComboBox<>(ViewConstants.CANDIDATES_SORTING_OPTIONS);
         choiceMenu.setBounds(LIST_X, TOP_ROW_Y, BUTTON_WIDTH, SORTING_MENU_HEIGHT);

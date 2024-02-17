@@ -22,6 +22,8 @@ public class RecruitmentsListView extends JPanel {
     private DefaultListModel<Recruitment> listModel;
     private Recruitment selectedRecruitment;
     private JScrollPane scrollPane;
+    private JButton openButton;
+    private JButton deleteButton;
     private SortingOptions selectedOption = SortingOptions.Name_Ascending;
     private RecruitmentStatus showRecruitments = RecruitmentStatus.All;
     private final int TOP_ROW_Y = 20;
@@ -106,7 +108,10 @@ public class RecruitmentsListView extends JPanel {
     private JScrollPane createScrollPane(){
         recrutationsList = new JList<>(listModel);
         recrutationsList.setFont(ViewConstants.FONT_LARGE);
-        recrutationsList.addListSelectionListener(e -> {selectedRecruitment = recrutationsList.getSelectedValue();});
+        recrutationsList.addListSelectionListener(e -> {
+            selectedRecruitment = recrutationsList.getSelectedValue();
+            openButton.setEnabled(true);
+            deleteButton.setEnabled(true);});
 
         scrollPane = new JScrollPane(recrutationsList);
         scrollPane.setBounds(LIST_X,LIST_Y,LIST_WIDTH,LIST_HEIGHT);
@@ -114,8 +119,9 @@ public class RecruitmentsListView extends JPanel {
     }
 
     private JButton createOpenButton(){
-        JButton openButton = new JButton("Open");
+        openButton = new JButton("Open");
         openButton.setFont(ViewConstants.FONT_LARGE);
+        openButton.setEnabled(false);
         openButton.setBounds(BUTTON_X, BUTTON_Y ,BUTTON_WIDTH ,BUTTON_HEIGHT);
 
         openButton.addActionListener(e -> {
@@ -130,8 +136,9 @@ public class RecruitmentsListView extends JPanel {
     }
 
     private JButton createDeleteButton(){
-        JButton deleteButton = new JButton("Delete");
+        deleteButton = new JButton("Delete");
         deleteButton.setFont(ViewConstants.FONT_LARGE);
+        deleteButton.setEnabled(false);
         int deleteButtonY = BUTTON_Y + SPACING + SPACING;
         deleteButton.setBounds(BUTTON_X, deleteButtonY ,BUTTON_WIDTH ,BUTTON_HEIGHT);
 

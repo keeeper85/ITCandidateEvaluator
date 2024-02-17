@@ -15,6 +15,7 @@ public class Sidepanel extends JPanel {
     private JButton saveScoreButton;
     private JButton finishButton;
     private JButton continueButton;
+    private JButton backButton;
     private TimerPanel timerPanel;
     private final int TIMER_LABEL_POSITION_X = 85;
     private final int TIMER_LABEL_POSITION_Y = 5;
@@ -29,6 +30,7 @@ public class Sidepanel extends JPanel {
     private final int TEXT_FIELD_CHAR_LIMIT = 20;
     private final int NOTES_FIELD_CHAR_LIMIT = 200;
     private boolean isTheLastStep = false;
+    private boolean isTheFirstStep = true;
     private boolean isQuestionStage = false;
     private boolean areStagesPrepared = false;
     private StageView stageView;
@@ -151,11 +153,13 @@ public class Sidepanel extends JPanel {
             isQuestionStage = true;
         }
         else isQuestionStage = false;
+        isTheFirstStep = false;
 
         return stages.get(nextStageIndex);
     }
     private JButton createBackButton(){
-        JButton backButton = new JButton("Back");
+        backButton = new JButton("Back");
+        backButton.setEnabled(false);
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -189,6 +193,8 @@ public class Sidepanel extends JPanel {
         }
         else isQuestionStage = false;
 
+        if (previousStage instanceof CandidateView) isTheFirstStep = true;
+
         return previousStage;
     }
 
@@ -197,6 +203,7 @@ public class Sidepanel extends JPanel {
         saveExitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                currentStage = (Collectable) stageView.getCurrentStagePanel();
                 HashMap<String, String> collectedData = currentStage.collectData();
                 String timePassed = String.valueOf(timerPanel.getSecondsElapsed());
                 collectedData.put("evaluationTimeSeconds", timePassed);
@@ -204,7 +211,7 @@ public class Sidepanel extends JPanel {
                 for (Map.Entry<String, String> stringStringEntry : collectedData.entrySet()) {
                     System.out.println(stringStringEntry);
                 }
-                System.exit(0);
+                stageView.getView().startOver();
             }
         });
 
@@ -283,6 +290,10 @@ public class Sidepanel extends JPanel {
             finishButton.setVisible(false);
             continueButton.setVisible(true);
         }
+        if (isTheFirstStep){
+            backButton.setEnabled(false);
+        }
+        else backButton.setEnabled(true);
 
         repaint();
         revalidate();
