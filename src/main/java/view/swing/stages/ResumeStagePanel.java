@@ -12,7 +12,7 @@ public class ResumeStagePanel extends AbstractStage {
     @Override
     protected void init() {
         add(createTitleLabel("Resume & Social Media Evaluation Stage"));
-        add(createInfoLabel(ViewConstants.RESUME_STAGE_INFO));
+        add(createScrollableInfoLabel(ViewConstants.RESUME_STAGE_INFO));
         add(createScoreSlider("resume"));
     }
 }

@@ -3,18 +3,25 @@ package view.swing.stages;
 import view.swing.ViewConstants;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.TreeMap;
 
 public class LiveCodingStagePanel extends AbstractStage {
     private TreeMap<String,String> pair;
-    private final int TASK_PICK_MENU_X = 200;
-    private final int TASK_PICK_MENU_Y = 100;
-    private final int TASK_PICK_MENU_WIDTH = 500;
+    private String currentTaskBody = "";
+    private String selectedSnippet = "Choose task: ";
+    private JButton copyToClipboardButton;
+    private final int TASK_PICK_MENU_X = 150;
+    private final int TASK_PICK_MENU_Y = 60;
+    private final int TASK_PICK_MENU_WIDTH = 400;
     private final int TASK_PICK_MENU_HEIGHT = 20;
+    private final int COPY_BUTTON_X = TASK_PICK_MENU_X + TASK_PICK_MENU_WIDTH + 10;
+    private final int COPY_BUTTON_WIDTH = 200;
 
     public LiveCodingStagePanel(StageView stageView) {
         super(stageView);
@@ -25,7 +32,8 @@ public class LiveCodingStagePanel extends AbstractStage {
     protected void init() {
         add(createTitleLabel("Live Coding Evaluation Stage"));
         add(createTaskPickMenu());
-        add(createInfoLabel(ViewConstants.LIVE_CODING_STAGE_INFO));
+        add(createCopyToClipboardButton());
+        add(createScrollableInfoLabel(ViewConstants.LIVE_CODING_STAGE_INFO));
         add(createScoreSlider("coding"));
     }
 
@@ -36,14 +44,11 @@ public class LiveCodingStagePanel extends AbstractStage {
         taskPickMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String selectedTask = taskPickMenu.getSelectedItem().toString();
-                if (selectedTask.contains("Choose")){
-                    infoLabel.setText(ViewConstants.LIVE_CODING_STAGE_INFO);
-                }
-                else {
-                    String text = pair.get(taskPickMenu.getSelectedItem().toString());
-                    infoLabel.setText(text);
-                }
+                selectedSnippet = taskPickMenu.getSelectedItem().toString();
+                currentTaskBody = pair.get(selectedSnippet);
+                infoLabel.setText(currentTaskBody);
+
+                updateCopyButton();
             }
         });
         return taskPickMenu;
@@ -51,17 +56,15 @@ public class LiveCodingStagePanel extends AbstractStage {
 
     private String[] createSnippetsForTaskPickMenu(List<String> tasks){
         createSnippetAndBodyPair(tasks);
-        String[] snippets = new String[tasks.size()];
+        List<String> sortedKeysList = new ArrayList<>(pair.keySet());
+        sortedKeysList.sort(Comparator.comparingInt(String::length));
 
-        for (int i = 0; i < tasks.size(); i++) {
-            String snippet = createSnippet(tasks.get(i));
-            snippets[i] = snippet;
-        }
-        return snippets;
+        return sortedKeysList.toArray(new String[0]);
     }
 
     private void createSnippetAndBodyPair(List<String> tasks){
         pair = new TreeMap<>();
+        pair.put("Choose task: ", ViewConstants.LIVE_CODING_STAGE_INFO);
 
         for (String task : tasks) {
             pair.put(createSnippet(task),task);
@@ -72,5 +75,27 @@ public class LiveCodingStagePanel extends AbstractStage {
         String[] allLines = taskBody.split("\n");
 
         return allLines[0];
+    }
+
+    private JButton createCopyToClipboardButton(){
+        copyToClipboardButton = new JButton("Copy to Clipboard");
+        copyToClipboardButton.setFont(ViewConstants.FONT_SMALL);
+        copyToClipboardButton.setEnabled(false);
+        copyToClipboardButton.setBounds(COPY_BUTTON_X, TASK_PICK_MENU_Y, COPY_BUTTON_WIDTH, TASK_PICK_MENU_HEIGHT);
+        copyToClipboardButton.addActionListener(e -> {copyToClipboard();});
+
+        return copyToClipboardButton;
+    }
+
+    private void copyToClipboard() {
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        String htmlTagsRemoved = currentTaskBody.replace("<br>","").replace("<html>","").replace("</html>","");
+        StringSelection selection = new StringSelection(htmlTagsRemoved);
+        clipboard.setContents(selection, null);
+    }
+
+    private void updateCopyButton(){
+        if (selectedSnippet.contains("Choose")) copyToClipboardButton.setEnabled(false);
+        else copyToClipboardButton.setEnabled(true);
     }
 }

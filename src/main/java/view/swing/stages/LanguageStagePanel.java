@@ -2,8 +2,6 @@ package view.swing.stages;
 
 import view.swing.ViewConstants;
 
-import java.util.HashMap;
-
 public class LanguageStagePanel extends AbstractStage{
     public LanguageStagePanel(StageView stageView) {
         super(stageView);
@@ -12,7 +10,7 @@ public class LanguageStagePanel extends AbstractStage{
     @Override
     protected void init() {
         add(createTitleLabel("English Language Fluency Evaluation Stage"));
-        add(createInfoLabel(ViewConstants.LANGUAGE_STAGE_INFO));
+        add(createScrollableInfoLabel(ViewConstants.LANGUAGE_STAGE_INFO));
         add(createScoreSlider("language"));
     }
 }

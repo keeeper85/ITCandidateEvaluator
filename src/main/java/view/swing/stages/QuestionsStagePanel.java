@@ -32,7 +32,7 @@ public class QuestionsStagePanel extends AbstractStage {
     @Override
     protected void init() {
         add(createTitleLabel("Technical Questions Evaluation Stage"));
-        add(createInfoLabel(ViewConstants.QUESTIONS_STAGE_INFO));
+        add(createScrollableInfoLabel(ViewConstants.QUESTIONS_STAGE_INFO));
         add(createScoreSlider("questions"));
 
         initTestingMap();

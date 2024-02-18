@@ -30,7 +30,7 @@ public class SalaryStagePanel extends AbstractStage {
     @Override
     protected void init() {
         add(createTitleLabel("Salary Expectations Evaluation Stage"));
-        add(createInfoLabel(ViewConstants.SALARY_STAGE_INFO));
+        add(createScrollableInfoLabel(ViewConstants.SALARY_STAGE_INFO));
         add(createScoreLabel());
         scoreLabel.setText("Move the slider to match (roughly) the candidate's salary expectations:");
 

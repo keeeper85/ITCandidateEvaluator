@@ -22,9 +22,10 @@ public abstract class AbstractStage extends JPanel implements Collectable {
     private final int TITLE_WIDTH = 900;
     private final int TITLE_HEIGHT = 50;
     private final int INFO_WIDTH = 900;
-    private final int INFO_HEIGHT = 500;
+    private final int INFO_HEIGHT = 460;
     protected final int SLIDER_WIDTH = 800;
     protected final int SLIDER_HEIGHT = 40;
+    protected final int SPACING = 40;
 
     public AbstractStage(StageView stageView) {
         this.stageView = stageView;
@@ -39,16 +40,22 @@ public abstract class AbstractStage extends JPanel implements Collectable {
         JLabel title = new JLabel(stageTitle);
         title.setFont(ViewConstants.FONT_LARGE);
         title.setBounds(POSITION_X,INITIAL_POSITION_Y,TITLE_WIDTH,TITLE_HEIGHT);
+
         return title;
     }
 
-    protected JLabel createInfoLabel(String stageInfo){
+    protected JScrollPane createScrollableInfoLabel(String stageInfo){
         infoLabel = new JLabel(stageInfo);
         infoLabel.setFont(ViewConstants.FONT_STAGE_INFO);
 
-        int positionY = INITIAL_POSITION_Y + TITLE_HEIGHT;
-        infoLabel.setBounds(POSITION_X,positionY,INFO_WIDTH,INFO_HEIGHT);
-        return infoLabel;
+        int positionY = INITIAL_POSITION_Y + TITLE_HEIGHT + SPACING;
+
+        JScrollPane scrollPane = new JScrollPane(infoLabel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setBorder(null);
+        scrollPane.setBounds(POSITION_X,positionY,INFO_WIDTH,INFO_HEIGHT);
+
+        return scrollPane;
     }
 
     protected JSlider createScoreSlider(String sliderName){
