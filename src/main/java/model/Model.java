@@ -91,4 +91,8 @@ public class Model extends Observable {
         Presets presets = new Presets(presetsName, modifiersValues);
         return new Recruitment(this, recruitmentName, presets);
     }
+
+    public List<String> getLiveCodingTasks(){
+        return LiveCoding.getLiveCodingTasksList();
+    }
 }

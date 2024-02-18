@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 
 public class LiveCodingStagePanel extends AbstractStage {
-
     private final int TASK_PICK_MENU_X = 200;
     private final int TASK_PICK_MENU_Y = 100;
     private final int TASK_PICK_MENU_WIDTH = 500;
@@ -16,6 +15,7 @@ public class LiveCodingStagePanel extends AbstractStage {
 
     public LiveCodingStagePanel(StageView stageView) {
         super(stageView);
+        ordinal = 5;
     }
 
     @Override
@@ -27,7 +27,7 @@ public class LiveCodingStagePanel extends AbstractStage {
     }
 
     private JComboBox<String> createTaskPickMenu(){
-        String[] tasksForTesting = {"Choose task:","Task_1", "Task_2", "Task_3", "Task_4"};
+        String[] tasksForTesting = model.getLiveCodingTasks().toArray(new String[0]);
         JComboBox<String> taskPickMenu = new JComboBox<>(tasksForTesting);
         taskPickMenu.setBounds(TASK_PICK_MENU_X, TASK_PICK_MENU_Y, TASK_PICK_MENU_WIDTH, TASK_PICK_MENU_HEIGHT);
         taskPickMenu.addActionListener(new ActionListener() {

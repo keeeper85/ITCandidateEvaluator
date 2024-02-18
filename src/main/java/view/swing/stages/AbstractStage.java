@@ -1,5 +1,6 @@
 package view.swing.stages;
 
+import model.Model;
 import view.swing.ViewConstants;
 
 import javax.swing.*;
@@ -8,8 +9,9 @@ import javax.swing.event.ChangeListener;
 import java.util.HashMap;
 
 public abstract class AbstractStage extends JPanel implements Collectable {
-
     private StageView stageView;
+    protected int ordinal;
+    protected Model model;
     protected JLabel infoLabel;
     protected JLabel scoreLabel;
     protected JSlider scoreSlider;
@@ -26,6 +28,7 @@ public abstract class AbstractStage extends JPanel implements Collectable {
 
     public AbstractStage(StageView stageView) {
         this.stageView = stageView;
+        this.model = stageView.getView().getModel();
         setLayout(null);
         init();
     }
@@ -95,5 +98,9 @@ public abstract class AbstractStage extends JPanel implements Collectable {
         score.put(scoreSlider.getName(), String.valueOf(value));
 
         return score;
+    }
+    @Override
+    public int getOrdinal() {
+        return ordinal;
     }
 }

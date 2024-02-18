@@ -7,6 +7,7 @@ import java.util.HashMap;
 public class LanguageStagePanel extends AbstractStage{
     public LanguageStagePanel(StageView stageView) {
         super(stageView);
+        ordinal = 2;
     }
     @Override
     protected void init() {

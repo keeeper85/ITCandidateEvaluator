@@ -8,7 +8,6 @@ import javax.swing.event.ChangeListener;
 import java.util.HashMap;
 
 public class SalaryStagePanel extends AbstractStage {
-
     private final int TEXT_FIELDS_Y = 640;
     private final int FROM_FIELD_X = 110;
     private final int TO_FIELD_X = 815;
@@ -25,6 +24,7 @@ public class SalaryStagePanel extends AbstractStage {
 
     public SalaryStagePanel(StageView stageView) {
         super(stageView);
+        ordinal = 7;
     }
 
     @Override

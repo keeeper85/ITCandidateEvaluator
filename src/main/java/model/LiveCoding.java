@@ -1,24 +1,20 @@
 package model;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
 
 public class LiveCoding {
 
-    private static final Path taskFilesDirectory = Paths.get("src/main/resources/liveCoding");
+    private static final Path TASK_FILES_DIRECTORY = Paths.get("src/main/resources/liveCoding");
 
     public static List<String> getLiveCodingTasksList(){
         List<String> tasksList = new ArrayList<>();
-        List<Path> files = getTaskFiles(taskFilesDirectory);
+        List<Path> files = getTaskFiles(TASK_FILES_DIRECTORY);
 
         for (Path file : files) {
             List<String> lines = new ArrayList<>();

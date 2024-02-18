@@ -15,6 +15,7 @@ import java.util.List;
 
 public class CandidateView extends JPanel implements Collectable {
 
+    public final int ordinal = 0;
     private StageView stageView;
     private AbstractCandidate candidate;
     private List<JLabel> labels = new ArrayList<>();
@@ -192,5 +193,10 @@ public class CandidateView extends JPanel implements Collectable {
         }
         candidateData.put(notes.getName(), notes.getText());
         return candidateData;
+    }
+
+    @Override
+    public int getOrdinal() {
+        return ordinal;
     }
 }

@@ -81,9 +81,9 @@ public class Sidepanel extends JPanel {
                         System.out.println(stringStringEntry);
                     }
 
-                    JPanel nextStage = getNextStage();
+                    Collectable nextStage = getNextStage();
                     if (nextStage != null) {
-                        currentStage = (Collectable) nextStage;
+                        currentStage = nextStage;
                         stageView.setCurrentStagePanel(nextStage);
                     }
                     updateButtons();
@@ -101,7 +101,7 @@ public class Sidepanel extends JPanel {
 
     private boolean areFieldInputsCorrect() {
         //comment for testing
-        currentStage = (Collectable) stageView.getCurrentStagePanel();
+        currentStage = stageView.getCurrentStagePanel();
         if (currentStage instanceof CandidateView){
             System.out.println("test");
             CandidateView candidateView = (CandidateView) currentStage;
@@ -139,9 +139,15 @@ public class Sidepanel extends JPanel {
         return true;
     }
 
-    private JPanel getNextStage(){
-        List<JPanel> stages = stageView.getChosenStages();
-        JPanel currentStage = stageView.getCurrentStagePanel();
+    private Collectable getNextStage(){
+        List<Collectable> stages = stageView.getChosenStages();
+
+        for (Collectable stage : stages) {
+            System.out.println(stage.getClass().getSimpleName());
+        }
+
+        Collectable currentStage = stageView.getCurrentStagePanel();
+        System.out.println("current" + stageView.getCurrentStagePanel().getClass().getSimpleName());
         int currentStageIndex = stages.indexOf(currentStage);
         int nextStageIndex = currentStageIndex + 1;
 
@@ -150,7 +156,7 @@ public class Sidepanel extends JPanel {
             return null;
         }
         isTheLastStep = false;
-        JPanel nextStage = stages.get(nextStageIndex);
+        Collectable nextStage = stages.get(nextStageIndex);
         if (nextStage instanceof QuestionsStagePanel) {
             isQuestionStage = true;
         }
@@ -165,9 +171,9 @@ public class Sidepanel extends JPanel {
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JPanel previousStage = getPreviousStage();
+                Collectable previousStage = getPreviousStage();
                 if (previousStage != null) {
-                    currentStage = (Collectable) previousStage;
+                    currentStage = previousStage;
                     stageView.setCurrentStagePanel(previousStage);
                 }
                 updateButtons();
@@ -177,9 +183,9 @@ public class Sidepanel extends JPanel {
         buttons.add(backButton);
         return backButton;
     }
-    private JPanel getPreviousStage(){
-        List<JPanel> stages = stageView.getChosenStages();
-        JPanel currentStage = stageView.getCurrentStagePanel();
+    private Collectable getPreviousStage(){
+        List<Collectable> stages = stageView.getChosenStages();
+        Collectable currentStage = stageView.getCurrentStagePanel();
 
         int currentStageIndex = stages.indexOf(currentStage);
         int previousStageIndex = currentStageIndex - 1;
@@ -189,7 +195,7 @@ public class Sidepanel extends JPanel {
         }
         isTheLastStep = false;
 
-        JPanel previousStage = stages.get(previousStageIndex);
+        Collectable previousStage = stages.get(previousStageIndex);
         if (previousStage instanceof QuestionsStagePanel) {
             isQuestionStage = true;
         }

@@ -2,19 +2,23 @@ package view.swing.stages;
 
 import model.AbstractCandidate;
 import model.Candidate;
+import model.Model;
 import model.Recruitment;
 import view.swing.View;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class StageView extends JPanel {
     private View view;
-    private JPanel initialPanel;
-    private JPanel currentStagePanel;
-    private JPanel previousStagePanel;
-    private List<JPanel> chosenStages = new ArrayList<>();
+    private Model model;
+    private Collectable initialPanel;
+    private Collectable currentStagePanel;
+    private Collectable previousStagePanel;
+    private List<Collectable> chosenStages = new ArrayList<>();
     private Sidepanel sidepanel;
     private AbstractCandidate candidate;
     private Recruitment recruitment;
@@ -29,6 +33,7 @@ public class StageView extends JPanel {
 
     public StageView(View view, AbstractCandidate abstractCandidate, Recruitment recruitment) {
         this.view = view;
+        this.model = view.getModel();
         this.candidate = abstractCandidate;
         this.recruitment = recruitment;
 
@@ -40,8 +45,9 @@ public class StageView extends JPanel {
 
     private void initStageView(){
         setLayout(null);
-        currentStagePanel.setBounds(MAIN_PANEL_POSITION_X, MAIN_PANEL_POSITION_Y, MAIN_PANEL_WIDTH, MAIN_PANEL_HEIGHT);
-        add(currentStagePanel);
+        JPanel currentPanel = (JPanel) currentStagePanel;
+        currentPanel.setBounds(MAIN_PANEL_POSITION_X, MAIN_PANEL_POSITION_Y, MAIN_PANEL_WIDTH, MAIN_PANEL_HEIGHT);
+        add(currentPanel);
 
         sidepanel.setBounds(SIDEPANEL_POSITION_X, SIDEPANEL_POSITION_Y, SIDEPANEL_WIDTH, SIDEPANEL_HEIGHT);
         add(sidepanel);
@@ -55,10 +61,6 @@ public class StageView extends JPanel {
 
         List<String> stagesForEvaluation = recruitment.getStagesForEvaluation();
 
-        for (String s : stagesForEvaluation) {
-            System.out.println(s);
-        }
-
         for (String stageName : stagesForEvaluation) {
             if (stageName.equals("resume")) chosenStages.add(new ResumeStagePanel(this));
             if (stageName.equals("language")) chosenStages.add(new LanguageStagePanel(this));
@@ -69,24 +71,32 @@ public class StageView extends JPanel {
             if (stageName.equals("salary")) chosenStages.add(new SalaryStagePanel(this));
             if (stageName.equals("soft")) chosenStages.add(new SoftSkillsStagePanel(this));
         }
+        Collections.sort(chosenStages, (c1, c2) -> c1.getOrdinal() - c2.getOrdinal());
     }
 
-    public void setCurrentStagePanel(JPanel newPanel){
+    public void setCurrentStagePanel(Collectable newPanel){
         previousStagePanel = currentStagePanel;
-        remove(currentStagePanel);
+        JPanel currentPanel = (JPanel) currentStagePanel;
+        remove(currentPanel);
         currentStagePanel = newPanel;
-        currentStagePanel.setBounds(MAIN_PANEL_POSITION_X, MAIN_PANEL_POSITION_Y, MAIN_PANEL_WIDTH, MAIN_PANEL_HEIGHT);
-        add(currentStagePanel);
+        currentPanel = (JPanel) currentStagePanel;
+        currentPanel.setBounds(MAIN_PANEL_POSITION_X, MAIN_PANEL_POSITION_Y, MAIN_PANEL_WIDTH, MAIN_PANEL_HEIGHT);
+        add(currentPanel);
 
         revalidate();
         repaint();
     }
 
-    public List<JPanel> getChosenStages() {
+    public List<Collectable> getChosenStages() {
+//        List<JPanel> stages = new ArrayList<>();
+//        for (Collectable chosenStage : chosenStages) {
+//            stages.add((JPanel) chosenStage);
+//        }
+
         return chosenStages;
     }
 
-    public JPanel getCurrentStagePanel() {
+    public Collectable getCurrentStagePanel() {
         return currentStagePanel;
     }
 

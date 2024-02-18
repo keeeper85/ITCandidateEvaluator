@@ -6,6 +6,7 @@ public class ResumeStagePanel extends AbstractStage {
 
     public ResumeStagePanel(StageView stageView) {
         super(stageView);
+        ordinal = 1;
     }
 
     @Override

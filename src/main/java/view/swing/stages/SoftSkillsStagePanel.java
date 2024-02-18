@@ -5,10 +5,10 @@ import view.swing.ViewConstants;
 import javax.swing.*;
 import java.util.HashMap;
 
-public class SoftSkillsStagePanel extends AbstractStage {
-
+public class SoftSkillsStagePanel extends AbstractStage { ;
     public SoftSkillsStagePanel(StageView stageView) {
         super(stageView);
+        ordinal = 8;
     }
 
     @Override

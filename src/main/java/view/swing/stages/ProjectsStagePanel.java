@@ -6,9 +6,9 @@ import javax.swing.*;
 import java.util.HashMap;
 
 public class ProjectsStagePanel extends AbstractStage {
-
     public ProjectsStagePanel(StageView stageView) {
         super(stageView);
+        ordinal = 4;
     }
     @Override
     protected void init() {

@@ -9,7 +9,6 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class QuestionsStagePanel extends AbstractStage {
-
     private final int FILE_CHOOSER_X = 50;
     private final int QUESTION_CHOOSER_X = 350;
     private final int QUESTION_NAME_X = 650;
@@ -27,6 +26,7 @@ public class QuestionsStagePanel extends AbstractStage {
 
     public QuestionsStagePanel(StageView stageView) {
         super(stageView);
+        ordinal = 6;
     }
 
     @Override
