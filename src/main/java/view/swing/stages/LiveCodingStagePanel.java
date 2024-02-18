@@ -6,8 +6,11 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
+import java.util.List;
+import java.util.TreeMap;
 
 public class LiveCodingStagePanel extends AbstractStage {
+    private TreeMap<String,String> pair;
     private final int TASK_PICK_MENU_X = 200;
     private final int TASK_PICK_MENU_Y = 100;
     private final int TASK_PICK_MENU_WIDTH = 500;
@@ -27,7 +30,7 @@ public class LiveCodingStagePanel extends AbstractStage {
     }
 
     private JComboBox<String> createTaskPickMenu(){
-        String[] tasksForTesting = model.getLiveCodingTasks().toArray(new String[0]);
+        String[] tasksForTesting = createSnippetsForTaskPickMenu(model.getLiveCodingTasks());
         JComboBox<String> taskPickMenu = new JComboBox<>(tasksForTesting);
         taskPickMenu.setBounds(TASK_PICK_MENU_X, TASK_PICK_MENU_Y, TASK_PICK_MENU_WIDTH, TASK_PICK_MENU_HEIGHT);
         taskPickMenu.addActionListener(new ActionListener() {
@@ -37,9 +40,37 @@ public class LiveCodingStagePanel extends AbstractStage {
                 if (selectedTask.contains("Choose")){
                     infoLabel.setText(ViewConstants.LIVE_CODING_STAGE_INFO);
                 }
-                else infoLabel.setText(taskPickMenu.getSelectedItem().toString());
+                else {
+                    String text = pair.get(taskPickMenu.getSelectedItem().toString());
+                    infoLabel.setText(text);
+                }
             }
         });
         return taskPickMenu;
+    }
+
+    private String[] createSnippetsForTaskPickMenu(List<String> tasks){
+        createSnippetAndBodyPair(tasks);
+        String[] snippets = new String[tasks.size()];
+
+        for (int i = 0; i < tasks.size(); i++) {
+            String snippet = createSnippet(tasks.get(i));
+            snippets[i] = snippet;
+        }
+        return snippets;
+    }
+
+    private void createSnippetAndBodyPair(List<String> tasks){
+        pair = new TreeMap<>();
+
+        for (String task : tasks) {
+            pair.put(createSnippet(task),task);
+        }
+    }
+
+    private String createSnippet(String taskBody){
+        String[] allLines = taskBody.split("\n");
+
+        return allLines[0];
     }
 }

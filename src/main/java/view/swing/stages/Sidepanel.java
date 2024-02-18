@@ -142,12 +142,7 @@ public class Sidepanel extends JPanel {
     private Collectable getNextStage(){
         List<Collectable> stages = stageView.getChosenStages();
 
-        for (Collectable stage : stages) {
-            System.out.println(stage.getClass().getSimpleName());
-        }
-
         Collectable currentStage = stageView.getCurrentStagePanel();
-        System.out.println("current" + stageView.getCurrentStagePanel().getClass().getSimpleName());
         int currentStageIndex = stages.indexOf(currentStage);
         int nextStageIndex = currentStageIndex + 1;
 
