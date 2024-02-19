@@ -1,0 +1,21 @@
+<html><b>Find a substring</b><br>
+The getPartOfString method must return the substring that begins with
+the character after the first space and ends with the end of the word
+that follows the 4th space.<br><br>
+Example:<br>
+<i>"CodeGym is the best place to learn Java."</i><br><br>
+
+Result:<br>
+<i>"is the best place"</i><br><br>
+
+Example:<br>
+<i>"Amigo and Diego are best friends!"</i><br><br>
+
+Result:<br>
+<i>"and Diego are best"</i><br><br>
+
+If the input data is invalid, throw a StringTooShortException <br>
+(create an exception).</html>
+
+
+

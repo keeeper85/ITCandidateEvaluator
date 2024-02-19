@@ -1,0 +1,34 @@
+<html><b>Refactoring methods</b><br>
+Refactor the writeZipEntriesToFile method to use the Java 7 try-with-resources construct. <br><br>
+
+<pre>BufferedWriter writer = null;<br>
+        ZipFile zip = null;<br>
+        try {<br>
+            zip = new ZipFile(zipFileName);<br>
+            writer = Files.newBufferedWriter(outputFilePath, charset);<br>
+            String newLine = System.getProperty("line.separator");<br>
+            for (Enumeration entries = zip.entries();<br> entries.hasMoreElements(); ) {    <br>    
+                String zipEntryName = ((ZipEntry)<br> entries.nextElement()).getName() + newLine;<br>
+                writer.write(zipEntryName, 0, zipEntryName.length());<br>
+            }<br>
+        } catch (IOException e) {<br>
+            e.printStackTrace();<br>
+        } finally {<br>
+            if (writer != null) {<br>
+                try {<br>
+                    writer.close();<br>
+                } catch (IOException e1) {<br>
+                    e1.printStackTrace();<br>
+                }<br>
+            }<br>
+            if (zip != null) {<br>
+                try {<br>
+                    zip.close();<br>
+                } catch (IOException e1) {<br>
+                    e1.printStackTrace();<br>
+                }<br>
+            }<br>
+        }<br>
+		</pre></html>
+		
+

@@ -11,6 +11,7 @@ import java.util.HashMap;
 public abstract class AbstractStage extends JPanel implements Collectable {
     private StageView stageView;
     protected int ordinal;
+    protected String chooseFile = "Choose file:";
     protected Model model;
     protected JLabel infoLabel;
     protected JLabel scoreLabel;

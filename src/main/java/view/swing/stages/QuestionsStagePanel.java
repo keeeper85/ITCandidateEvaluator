@@ -4,6 +4,8 @@ import model.Question;
 import view.swing.ViewConstants;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
@@ -21,11 +23,10 @@ public class QuestionsStagePanel extends AbstractStage {
     private List<Question> questions;
     private List<String> filesList;
     private List<Question> questionsDisplayedInChooser;
-    private List<Question> selectedFileQuestions;
-    private TreeMap<String, List<Question>> categorizedQuestions = new TreeMap<>();
-    private HashMap<String, String> questionsEvaluated = new HashMap<>();
-    private String selectedFile = "Choose file:";
-    private String selectedQuestion = "Choose question:";
+    private HashMap<String, String> questionsEvaluatedForCollection = new HashMap<>();
+    private List<String> questionsEvaluatedForDisplay = new ArrayList<>();
+    private String selectedFile = chooseFile;
+    private String selectedQuestion = "";
     private JTextField questionNameField;
     private JComboBox<Question> questionChooser;
 
@@ -56,7 +57,7 @@ public class QuestionsStagePanel extends AbstractStage {
     private List<String> getFilesList(List<Question> questions){
         List<String> filesList = new ArrayList<>();
         TreeSet<String> sortedUniqueFileNames = new TreeSet<>();
-        filesList.add("Choose file:");
+        filesList.add(chooseFile);
         selectedFile = filesList.get(0);
 
         for (Question question : questions) {
@@ -71,7 +72,7 @@ public class QuestionsStagePanel extends AbstractStage {
     private List<Question> getQuestions(String fileName, List<Question> questions) {
         List<Question> questionBodies = new ArrayList<>();
         for (Question question : questions) {
-            if (fileName.equals("Choose file:")) {
+            if (fileName.equals(chooseFile)) {
                 updateTextFields(ViewConstants.QUESTIONS_STAGE_INFO);
                 break;
             }
@@ -100,6 +101,14 @@ public class QuestionsStagePanel extends AbstractStage {
         questionNameField = new JTextField();
         questionNameField.setBounds(QUESTION_NAME_X, MENU_Y, ITEM_WIDTH, ITEM_HEIGHT);
         questionNameField.setText("...");
+        questionNameField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String currentInput = questionNameField.getText();
+                updateTextFields(currentInput);
+            }
+        });
+
         return questionNameField;
     }
     private JComboBox<Question> createQuestionChooser(){
@@ -126,8 +135,23 @@ public class QuestionsStagePanel extends AbstractStage {
     }
 
     private void updateTextFields(String newText){
-        if (!selectedFile.equals("Choose file:") && newText != null) questionNameField.setText(newText);
-        infoLabel.setText(newText);
+        if (!selectedFile.equals(chooseFile) && newText != null) {
+            StringBuilder listBuilder = new StringBuilder();
+            int questionCounter = 1;
+            for (String questionEvaluated : questionsEvaluatedForDisplay) {
+                listBuilder.append("<html>").append(questionCounter + ". ").append(questionEvaluated).append("<br>");
+                questionCounter++;
+            }
+            if (questionCounter <= 2) listBuilder.append("<html>").append("<b>").append(newText).append("</b>").append("</html>");
+            else listBuilder.append("<b>").append(newText).append("</b>").append("</html>");
+            questionNameField.setText(newText);
+            infoLabel.setText(listBuilder.toString());
+        }
+        else {
+            questionNameField.setText("");
+            infoLabel.setText(newText);
+        }
+
     }
 
     private JButton createRandomQuestionButton(){
@@ -153,13 +177,24 @@ public class QuestionsStagePanel extends AbstractStage {
 
     public void updateQuestionsEvaluated(){
         isQuestionAsked = true;
-        String stringFromScoreSliderValue = String.valueOf(scoreSlider.getValue());
-        questionsEvaluated.put(questionNameField.getText(), stringFromScoreSliderValue);
-        scoreSlider.setValue(SLIDER_DEFAULT_VALUE);
+        String currentQuestion = questionNameField.getText();
+        String errorMessage = "The question must have a name! Pick one from the list or type in your question.";
+        if (currentQuestion.isEmpty()) JOptionPane.showMessageDialog(null, errorMessage, "Saving score: failure.", JOptionPane.ERROR_MESSAGE);
+        else if (!questionsEvaluatedForCollection.containsKey(currentQuestion)){
+            String stringFromScoreSliderValue = String.valueOf(scoreSlider.getValue());
+            questionsEvaluatedForCollection.put(currentQuestion, stringFromScoreSliderValue);
+            questionsEvaluatedForDisplay.add(currentQuestion);
+            scoreSlider.setValue(SLIDER_DEFAULT_VALUE);
+            updateTextFields(selectedQuestion);
+        }
+        else {
+            errorMessage = "You can't ask the same question twice.";
+            JOptionPane.showMessageDialog(null, errorMessage, "Saving score: failure.", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public int getNumberOfQuestionsEvaluated(){
-        return questionsEvaluated.size();
+        return questionsEvaluatedForCollection.size();
     }
 
     public boolean isQuestionAsked() {
@@ -169,6 +204,6 @@ public class QuestionsStagePanel extends AbstractStage {
     @Override
     public HashMap<String, String> collectData() {
         selectedQuestion = questionNameField.getText();
-        return questionsEvaluated;
+        return questionsEvaluatedForCollection;
     }
 }
