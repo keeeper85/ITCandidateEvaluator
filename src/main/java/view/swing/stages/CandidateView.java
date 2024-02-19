@@ -1,8 +1,6 @@
 package view.swing.stages;
 
-import model.AbstractCandidate;
-import model.Candidate;
-import view.swing.View;
+import controller.CandidateDTO;
 import view.swing.ViewConstants;
 
 import javax.swing.*;
@@ -10,6 +8,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,7 +16,7 @@ public class CandidateView extends JPanel implements Collectable {
 
     public final int ordinal = 0;
     private StageView stageView;
-    private AbstractCandidate candidate;
+    private CandidateDTO temporaryCandidate;
     private List<JLabel> labels = new ArrayList<>();
     private List<JTextField> textFields = new ArrayList<>();
     private JTextArea notes;
@@ -42,12 +41,12 @@ public class CandidateView extends JPanel implements Collectable {
     private final int PICK_BUTTON_POSITION_X = 890;
     private final int PICK_BUTTON_POSITION_Y = 320;
 
-    public CandidateView(StageView stageView, AbstractCandidate candidate) {
+    public CandidateView(StageView stageView, CandidateDTO temporaryCandidate) {
         this.stageView = stageView;
-        this.candidate = candidate;
-        candidate = stageView.getCandidate();
+        this.temporaryCandidate = temporaryCandidate;
+        temporaryCandidate = stageView.getCandidate();
         initCandidateView();
-        if (candidate != null) copyCandidateData();
+        if (temporaryCandidate != null) copyCandidateData();
     }
 
     private void initCandidateView(){
@@ -65,11 +64,11 @@ public class CandidateView extends JPanel implements Collectable {
 
     private void copyCandidateData(){
         System.out.println("copied");
-        firstName.setText(candidate.getFirstName());
-        lastName.setText(candidate.getLastName());
-        yearOfBirth.setText(String.valueOf(candidate.getYearOfBirth()));
-        resumePath.setText(candidate.getPathToResumeFile());
-        notes.setText(candidate.getAdditionalNotes());
+        firstName.setText(temporaryCandidate.getFirstName());
+        lastName.setText(temporaryCandidate.getLastName());
+        yearOfBirth.setText(String.valueOf(temporaryCandidate.getYearOfBirth()));
+        resumePath.setText(temporaryCandidate.getPathToResumeFile());
+        notes.setText(temporaryCandidate.getNotes());
 
         repaint();
         revalidate();
@@ -181,12 +180,36 @@ public class CandidateView extends JPanel implements Collectable {
         add(pickResumeFileButton);
     }
 
-    public void setCandidate(Candidate candidate) {
-        this.candidate = candidate;
+    public void setTemporaryCandidate(CandidateDTO temporaryCandidate) {
+        this.temporaryCandidate = temporaryCandidate;
     }
 
     @Override
     public HashMap<String, String> collectData() {
+        String firstName = this.firstName.getText();
+        String lastName = this.lastName.getText();
+        String year = this.yearOfBirth.getText();
+
+        if (firstName.isEmpty() || lastName.isEmpty()){
+            JOptionPane.showMessageDialog(null, ViewConstants.INPUT_ERROR_MESSAGE, "Text input error", JOptionPane.WARNING_MESSAGE);
+        }
+        else{
+            temporaryCandidate.setFirstName(firstName);
+            temporaryCandidate.setLastName(lastName);
+            temporaryCandidate.setPathToResumeFile(resumePath.getText());
+            temporaryCandidate.setNotes(notes.getText());
+        }
+        if (!year.isEmpty()){
+            try{
+                int yearOfBirth = Integer.parseInt(year);
+                int tooOld = 1900;
+                int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+                if (yearOfBirth > tooOld && yearOfBirth < currentYear) temporaryCandidate.setYearOfBirth(yearOfBirth);
+            } catch (NumberFormatException ignored){
+                JOptionPane.showMessageDialog(null, ViewConstants.INPUT_ERROR_MESSAGE, "Text input error", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+
         HashMap<String, String> candidateData = new HashMap<>();
         for (JTextField textField : textFields) {
             candidateData.put(textField.getName(), textField.getText());

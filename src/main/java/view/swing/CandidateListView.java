@@ -1,5 +1,6 @@
 package view.swing;
 
+import controller.CandidateDTO;
 import model.Candidate;
 import model.CandidateFactory;
 import model.Recruitment;
@@ -158,8 +159,9 @@ public class CandidateListView extends JPanel {
         openButton.addActionListener(e -> {
             if (selectedCandidate != null) {
                 CandidateListView candidateListView = new CandidateListView(view);
-                StageView stageView = new StageView(view, selectedCandidate, recruitment);
-                stageView.setCandidate(selectedCandidate);
+                CandidateDTO temporaryCandidate = new CandidateDTO(selectedCandidate, recruitment);
+                StageView stageView = new StageView(view, temporaryCandidate, recruitment);
+                stageView.setCandidate(temporaryCandidate);
                 view.setCurrentPanel(stageView);
             }
         });
@@ -257,7 +259,8 @@ public class CandidateListView extends JPanel {
         addCandidateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                view.setCurrentPanel(new StageView(view, selectedCandidate, recruitment));
+                CandidateDTO temporaryCandidate = new CandidateDTO(null, recruitment);
+                view.setCurrentPanel(new StageView(view, temporaryCandidate, recruitment));
             }
         });
         return addCandidateButton;

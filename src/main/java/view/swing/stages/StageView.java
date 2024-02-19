@@ -1,5 +1,6 @@
 package view.swing.stages;
 
+import controller.CandidateDTO;
 import model.AbstractCandidate;
 import model.Candidate;
 import model.Model;
@@ -20,7 +21,7 @@ public class StageView extends JPanel {
     private Collectable previousStagePanel;
     private List<Collectable> chosenStages = new ArrayList<>();
     private Sidepanel sidepanel;
-    private AbstractCandidate candidate;
+    private CandidateDTO candidate;
     private Recruitment recruitment;
     private final int MAIN_PANEL_POSITION_X = 0;
     private final int MAIN_PANEL_POSITION_Y = 0;
@@ -31,10 +32,10 @@ public class StageView extends JPanel {
     private final int SIDEPANEL_WIDTH = 280;
     private final int SIDEPANEL_HEIGHT = 700;
 
-    public StageView(View view, AbstractCandidate abstractCandidate, Recruitment recruitment) {
+    public StageView(View view, CandidateDTO temporaryCandidate, Recruitment recruitment) {
         this.view = view;
         this.model = view.getModel();
-        this.candidate = abstractCandidate;
+        this.candidate = temporaryCandidate;
         this.recruitment = recruitment;
 
         sidepanel = new Sidepanel(this);
@@ -104,11 +105,11 @@ public class StageView extends JPanel {
         return view;
     }
 
-    public void setCandidate(Candidate candidate) {
+    public void setCandidate(CandidateDTO candidate) {
         this.candidate = candidate;
     }
 
-    public AbstractCandidate getCandidate() {
+    public CandidateDTO getCandidate() {
         return candidate;
     }
 }

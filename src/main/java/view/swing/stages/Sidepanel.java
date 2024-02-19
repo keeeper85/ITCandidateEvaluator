@@ -1,5 +1,6 @@
 package view.swing.stages;
 
+import controller.CandidateDTO;
 import view.swing.CandidateListView;
 import view.swing.RecruitmentsListView;
 import view.swing.View;
@@ -14,6 +15,7 @@ public class Sidepanel extends JPanel {
     private List<Collectable> stagesToComplete = new ArrayList<>();
     private HashMap<String, String> allStagesScore = new HashMap<>();
     private Collectable currentStage = null;
+    private CandidateDTO temporaryCandidate;
     private JButton saveScoreButton;
     private JButton finishButton;
     private JButton continueButton;
@@ -40,6 +42,8 @@ public class Sidepanel extends JPanel {
 
     public Sidepanel(StageView stageView) {
         this.stageView = stageView;
+        temporaryCandidate = stageView.getCandidate();
+
         initSidepanel();
     }
 
@@ -206,6 +210,7 @@ public class Sidepanel extends JPanel {
         saveExitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                temporaryCandidate.saveData();
                 currentStage = (Collectable) stageView.getCurrentStagePanel();
                 HashMap<String, String> collectedData = currentStage.collectData();
                 String timePassed = String.valueOf(timerPanel.getSecondsElapsed());
