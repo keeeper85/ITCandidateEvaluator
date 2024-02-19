@@ -5,9 +5,11 @@ import java.util.*;
 public class Model extends Observable {
 
     private List<Recruitment> openRecruitmentProcesses; //todo SQL
+    private QuestionFactory questionFactory;
 
     public Model() {
-        loadQuestionsFromFiles();
+        questionFactory = new QuestionFactory();
+        loadQuestionsFromFiles(questionFactory);
         createTestingRecruitments();
     }
 
@@ -25,8 +27,8 @@ public class Model extends Observable {
         }
     }
 
-    private void loadQuestionsFromFiles(){
-        Thread questionLoader = new Thread(new QuestionFactory());
+    private void loadQuestionsFromFiles(QuestionFactory questionFactory){
+        Thread questionLoader = new Thread(questionFactory);
         questionLoader.start();
     }
 
@@ -94,5 +96,9 @@ public class Model extends Observable {
 
     public List<String> getLiveCodingTasks(){
         return LiveCoding.getLiveCodingTasksList();
+    }
+
+    public List<Question> getQuestionList(){
+        return questionFactory.getPreparedList();
     }
 }

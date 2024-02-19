@@ -1,5 +1,6 @@
 package view.swing.stages;
 
+import model.Question;
 import view.swing.ViewConstants;
 
 import javax.swing.*;
@@ -12,17 +13,21 @@ public class QuestionsStagePanel extends AbstractStage {
     private final int FILE_CHOOSER_X = 50;
     private final int QUESTION_CHOOSER_X = 350;
     private final int QUESTION_NAME_X = 650;
-    private final int MENU_Y = 100;
+    private final int MENU_Y = 60;
     private final int ITEM_WIDTH = 250;
     private final int ITEM_HEIGHT = 20;
     private final int SPACING = 5;
     private boolean isQuestionAsked = false;
-    private TreeMap<String, List<String>> filesWithQuestionsForTesting;
+    private List<Question> questions;
+    private List<String> filesList;
+    private List<Question> questionsDisplayedInChooser;
+    private List<Question> selectedFileQuestions;
+    private TreeMap<String, List<Question>> categorizedQuestions = new TreeMap<>();
     private HashMap<String, String> questionsEvaluated = new HashMap<>();
-    private String selectedFile;
-    private String selectedQuestion;
+    private String selectedFile = "Choose file:";
+    private String selectedQuestion = "Choose question:";
     private JTextField questionNameField;
-    private JComboBox<String> questionChooser;
+    private JComboBox<Question> questionChooser;
 
     public QuestionsStagePanel(StageView stageView) {
         super(stageView);
@@ -35,46 +40,58 @@ public class QuestionsStagePanel extends AbstractStage {
         add(createScrollableInfoLabel(ViewConstants.QUESTIONS_STAGE_INFO));
         add(createScoreSlider("questions"));
 
-        initTestingMap();
-        add(createFileChooser());
         add(createQuestionNameField());
+        initQuestions();
+        add(createFileChooser());
         add(createQuestionChooser());
         add(createRandomQuestionButton());
     }
 
-    private void initTestingMap(){
-        filesWithQuestionsForTesting = new TreeMap<>();
-        List<String> file1 = new ArrayList<>();
-        List<String> file2 = new ArrayList<>();
-        List<String> file3 = new ArrayList<>();
-        List<String> file4 = new ArrayList<>();
+    private void initQuestions(){
+        questions = model.getQuestionList();
+        filesList = getFilesList(questions);
+        questionsDisplayedInChooser = getQuestions(filesList.get(0), questions);
+    }
 
-        filesWithQuestionsForTesting.put("Java/Basics", file1);
-        filesWithQuestionsForTesting.put("Java/Advanced", file2);
-        filesWithQuestionsForTesting.put("SQL", file3);
-        filesWithQuestionsForTesting.put("Spring", file4);
+    private List<String> getFilesList(List<Question> questions){
+        List<String> filesList = new ArrayList<>();
+        TreeSet<String> sortedUniqueFileNames = new TreeSet<>();
+        filesList.add("Choose file:");
+        selectedFile = filesList.get(0);
 
-        for (Map.Entry<String, List<String>> entry : filesWithQuestionsForTesting.entrySet()) {
-            List<String> list = entry.getValue();
-            for (int i = 0; i < 5; i++) {
-                String question = entry.getKey() + " [q]Question_" + i;
-                list.add(question);
+        for (Question question : questions) {
+            String sourceFileName = question.getSourceFileName();
+            sortedUniqueFileNames.add(sourceFileName);
+        }
+        filesList.addAll(sortedUniqueFileNames);
+
+        return filesList;
+    }
+
+    private List<Question> getQuestions(String fileName, List<Question> questions) {
+        List<Question> questionBodies = new ArrayList<>();
+        for (Question question : questions) {
+            if (fileName.equals("Choose file:")) {
+                updateTextFields(ViewConstants.QUESTIONS_STAGE_INFO);
+                break;
+            }
+            if (question.getSourceFileName().equals(fileName)) {
+                questionBodies.add(question);
             }
         }
+
+        return questionBodies;
     }
 
     private JComboBox<String> createFileChooser(){
-        String[] filesForTesting = {"Choose file:","Java/Basics", "Java/Advanced", "SQL", "Spring"};
-        List<String> fileNames = new ArrayList<>();
-        fileNames.addAll(filesWithQuestionsForTesting.keySet());
-        JComboBox<String> fileChooser = new JComboBox<>(createComboModel(fileNames));
+        JComboBox<String> fileChooser = new JComboBox<>(createComboModel(filesList));
         fileChooser.setBounds(FILE_CHOOSER_X, MENU_Y, ITEM_WIDTH, ITEM_HEIGHT);
         fileChooser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                selectedFile = fileChooser.getSelectedItem().toString();
-                remove(questionChooser);
-                add(createQuestionChooser());
+                selectedFile = (String) fileChooser.getSelectedItem();
+                questionsDisplayedInChooser = getQuestions(selectedFile,questions);
+                questionChooser.setModel(createComboModel(questionsDisplayedInChooser));
             }
         });
         return fileChooser;
@@ -85,26 +102,23 @@ public class QuestionsStagePanel extends AbstractStage {
         questionNameField.setText("...");
         return questionNameField;
     }
-    private JComboBox<String> createQuestionChooser(){
-        List<String> questionList = new ArrayList<>();
-        for (Map.Entry<String, List<String>> entry : filesWithQuestionsForTesting.entrySet()) {
-            String fileName = entry.getKey();
-            if (fileName.equals(selectedFile)) {questionList = entry.getValue();}
-        }
-        questionChooser = new JComboBox<>(createComboModel(questionList));
+    private JComboBox<Question> createQuestionChooser(){
+        questionChooser = new JComboBox<>(createComboModel(questionsDisplayedInChooser));
         questionChooser.setBounds(QUESTION_CHOOSER_X, MENU_Y, ITEM_WIDTH, ITEM_HEIGHT);
         questionChooser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                selectedQuestion = "[question]" + questionChooser.getSelectedItem().toString();
+                Question question = (Question) questionChooser.getSelectedItem();
+                selectedQuestion = question.getQuestionBody();
                 updateTextFields(selectedQuestion);
             }
         });
         return questionChooser;
     }
-    private DefaultComboBoxModel<String> createComboModel(List<String> list){
-        DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<>();
-        for (String value : list) {
+
+    private <E> DefaultComboBoxModel<E> createComboModel(List<E> list){
+        DefaultComboBoxModel<E> comboBoxModel = new DefaultComboBoxModel<>();
+        for (E value : list) {
             comboBoxModel.addElement(value);
         }
 
@@ -112,7 +126,7 @@ public class QuestionsStagePanel extends AbstractStage {
     }
 
     private void updateTextFields(String newText){
-        questionNameField.setText(newText);
+        if (!selectedFile.equals("Choose file:") && newText != null) questionNameField.setText(newText);
         infoLabel.setText(newText);
     }
 
@@ -124,18 +138,13 @@ public class QuestionsStagePanel extends AbstractStage {
         randomQuestion.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int numberOfQuestionsInTheList = 0;
-                List<String> questionList = null;
-                for (Map.Entry<String, List<String>> entry : filesWithQuestionsForTesting.entrySet()) {
-                    String fileName = entry.getKey();
-                    if (fileName.equals(selectedFile)) {
-                        questionList = entry.getValue();
-                        numberOfQuestionsInTheList = questionList.size();}
-                }
-                if (questionList != null && questionList.size() > 0){
-                    int randomIndex = ThreadLocalRandom.current().nextInt(0, numberOfQuestionsInTheList);
-                    String randomQuestion = questionList.get(randomIndex);
-                    updateTextFields(randomQuestion);
+                try{
+                    int questionNumber = questionsDisplayedInChooser.size() - 1;
+                    int randomIndex = ThreadLocalRandom.current().nextInt(0, questionNumber);
+                    Question question = questionsDisplayedInChooser.get(randomIndex);
+                    updateTextFields(question.getQuestionBody());
+                } catch (IllegalArgumentException ignored){
+                    JOptionPane.showMessageDialog(null,"Choose a file first.", "No file chosen", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

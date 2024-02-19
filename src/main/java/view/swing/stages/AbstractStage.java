@@ -22,10 +22,10 @@ public abstract class AbstractStage extends JPanel implements Collectable {
     private final int TITLE_WIDTH = 900;
     private final int TITLE_HEIGHT = 50;
     private final int INFO_WIDTH = 900;
-    private final int INFO_HEIGHT = 460;
+    private final int INFO_HEIGHT = 440;
     protected final int SLIDER_WIDTH = 800;
     protected final int SLIDER_HEIGHT = 40;
-    protected final int SPACING = 40;
+    protected final int SPACING = 60;
 
     public AbstractStage(StageView stageView) {
         this.stageView = stageView;

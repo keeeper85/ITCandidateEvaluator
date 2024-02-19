@@ -20,8 +20,7 @@ public class ITCandidateEvaluator {
 
         SwingUtilities.invokeLater(() ->{view.initView();});
 
-        int size = model.getListOfPresets().size();
-        System.out.println(size);
+
 
 
 //        HashMap<String, Integer> testMap = new HashMap<>();
