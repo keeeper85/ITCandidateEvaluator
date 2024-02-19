@@ -1,14 +1,13 @@
 package controller;
 
-import model.AbstractCandidate;
-import model.Candidate;
-import model.Recruitment;
-import model.Stages;
+import model.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
 public class CandidateDTO {
     private HashMap<String, String> rawScores = new HashMap<>();
+    private HashMap<Question, Integer> evaluatedQuestions = new HashMap<>();
     private Candidate candidate;
     private Recruitment recruitment;
     private String firstName = "";
@@ -16,6 +15,10 @@ public class CandidateDTO {
     private int yearOfBirth = 0;
     private String pathToResumeFile = "";
     private String notes = "";
+    private int minOfferedSalary;
+    private int maxOfferedSalary;
+    private int expectedSalary;
+    private int evaluationTimeSeconds;
 
     public CandidateDTO(Candidate candidate, Recruitment recruitment) {
         this.candidate = candidate;
@@ -39,28 +42,36 @@ public class CandidateDTO {
 
     }
 
-    public void saveDataAndFinish(Candidate candidate){
-        if (isCandidateAlreadyCreated()) transferDataToRealCandidate(candidate);
+    public void saveDataAndCompleteEvaluation(){
+        if (candidate != null) transferDataToRealCandidate(candidate);
         else createNewCandidate(true);
     }
 
     private void createNewCandidate(boolean isFinished) {
-        Candidate newCandidate = new Candidate(recruitment,firstName,lastName);
-        recruitment.addSingleCandidate(newCandidate);
+        candidate = new Candidate(recruitment,firstName,lastName);
+        recruitment.addSingleCandidate(candidate);
+        transferDataToRealCandidate(candidate);
+        if (isFinished) candidate.setFinished(true);
     }
 
     private void transferDataToRealCandidate(Candidate candidate) {
-
-
+        candidate.setYearOfBirth(yearOfBirth);
+        candidate.setPathToResumeFile(pathToResumeFile);
+        candidate.setAdditionalNotes(notes);
+        candidate.setEvaluationTimeSeconds(evaluationTimeSeconds);
+        candidate.setDateOfFinishingEvaluation(LocalDateTime.now());
+        candidate.getEvaluatedQuestions().putAll(evaluatedQuestions);
+        candidate.setMaxOfferedSalary(maxOfferedSalary);
+        candidate.setMinOfferedSalary(minOfferedSalary);
+        candidate.setExpectedSalary(expectedSalary);
     }
 
-    private boolean isCandidateAlreadyCreated(){
-
-        return false;
+    public HashMap<String, String> getRawScores() {
+        return rawScores;
     }
 
-    public void setRawScores(HashMap<String, String> rawScores) {
-        this.rawScores = rawScores;
+    public HashMap<Question, Integer> getEvaluatedQuestions() {
+        return evaluatedQuestions;
     }
 
     public String getFirstName() {
@@ -101,5 +112,21 @@ public class CandidateDTO {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public void setMinOfferedSalary(int minOfferedSalary) {
+        this.minOfferedSalary = minOfferedSalary;
+    }
+
+    public void setMaxOfferedSalary(int maxOfferedSalary) {
+        this.maxOfferedSalary = maxOfferedSalary;
+    }
+
+    public void setExpectedSalary(int expectedSalary) {
+        this.expectedSalary = expectedSalary;
+    }
+
+    public void setEvaluationTimeSeconds(int evaluationTimeSeconds) {
+        this.evaluationTimeSeconds = evaluationTimeSeconds;
     }
 }

@@ -18,6 +18,8 @@ public class AbstractCandidate {
     protected int valueCostRatio;
     protected int yearOfBirth;
     protected int expectedSalary;
+    protected int minOfferedSalary;
+    protected int maxOfferedSalary;
     protected boolean isFinished;
     protected LocalDateTime dateOfJoiningEvaluation;
     protected LocalDateTime dateOfFinishingEvaluation;
@@ -70,7 +72,6 @@ public class AbstractCandidate {
     public void setId(int id) {
         this.id = id;
     }
-
     public String getFirstName() {
         return firstName;
     }
@@ -89,5 +90,17 @@ public class AbstractCandidate {
 
     public int getYearOfBirth() {
         return yearOfBirth;
+    }
+
+    public void setExpectedSalary(int expectedSalary) {
+        this.expectedSalary = expectedSalary;
+    }
+
+    public void setMinOfferedSalary(int minOfferedSalary) {
+        this.minOfferedSalary = minOfferedSalary;
+    }
+
+    public void setMaxOfferedSalary(int maxOfferedSalary) {
+        this.maxOfferedSalary = maxOfferedSalary;
     }
 }

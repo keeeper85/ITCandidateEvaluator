@@ -2,7 +2,6 @@ package view.swing;
 
 import controller.Controller;
 import model.Model;
-import view.swing.stages.Sidepanel;
 
 import javax.swing.*;
 import java.util.Observable;
@@ -41,6 +40,11 @@ public class View extends JFrame implements Observer {
         add(newPanel);
         revalidate();
         repaint();
+    }
+
+    public void resetPreviousPanels() {
+        previousPanels = new Stack<>();
+        previousPanels.add(new InitialView(this));
     }
 
     public void returnToPreviousPanel(){

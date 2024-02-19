@@ -1,7 +1,6 @@
 package view.swing.stages;
 
 import controller.CandidateDTO;
-import view.swing.CandidateListView;
 import view.swing.RecruitmentsListView;
 import view.swing.View;
 import view.swing.ViewConstants;
@@ -12,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.util.*;
 
 public class Sidepanel extends JPanel {
+    private View view;
     private List<Collectable> stagesToComplete = new ArrayList<>();
     private HashMap<String, String> allStagesScore = new HashMap<>();
     private Collectable currentStage = null;
@@ -42,6 +42,7 @@ public class Sidepanel extends JPanel {
 
     public Sidepanel(StageView stageView) {
         this.stageView = stageView;
+        view = stageView.getView();
         temporaryCandidate = stageView.getCandidate();
 
         initSidepanel();
@@ -233,7 +234,6 @@ public class Sidepanel extends JPanel {
                 String warning = "Do you want to cancel this evaluation?\nThis operation can not be undone!\nType 'discard' to undo all the changes you've made.";
                 String userInput = (String) JOptionPane.showInputDialog(null, warning, "Confirm:", JOptionPane.WARNING_MESSAGE);
                 if (userInput.equals("discard")) {
-                    View view = stageView.getView();
                     view.setCurrentPanel(new RecruitmentsListView(view));
                 } else {
                     JOptionPane.showMessageDialog(null, "Deletion canceled or invalid input.");
@@ -271,13 +271,13 @@ public class Sidepanel extends JPanel {
         finishButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("-----------------------");
-                String timePassed = String.valueOf(timerPanel.getSecondsElapsed());
-                allStagesScore.put("evaluationTimeSeconds", timePassed);
-                for (Map.Entry<String, String> stringStringEntry : allStagesScore.entrySet()) {
-                    System.out.println(stringStringEntry.getKey() + " = " + stringStringEntry.getValue());
+                int choice = JOptionPane.showConfirmDialog(null, "Do you want to finish the evaluation for the current candidate? (you won't be able to edit the scores later)", "Is everything ready?", JOptionPane.YES_NO_OPTION);
+                if (choice == 0){
+                    temporaryCandidate.setEvaluationTimeSeconds(timerPanel.getSecondsElapsed());
+                    temporaryCandidate.saveDataAndCompleteEvaluation();
+                    view.setCurrentPanel(new RecruitmentsListView(view));
+                    view.resetPreviousPanels();
                 }
-                System.exit(0);
             }
         });
 

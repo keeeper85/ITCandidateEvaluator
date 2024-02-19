@@ -1,5 +1,6 @@
 package view.swing.stages;
 
+import controller.CandidateDTO;
 import model.Model;
 import view.swing.ViewConstants;
 
@@ -9,7 +10,7 @@ import javax.swing.event.ChangeListener;
 import java.util.HashMap;
 
 public abstract class AbstractStage extends JPanel implements Collectable {
-    private StageView stageView;
+    protected StageView stageView;
     protected int ordinal;
     protected String chooseFile = "Choose file:";
     protected Model model;
@@ -102,8 +103,9 @@ public abstract class AbstractStage extends JPanel implements Collectable {
     @Override
     public HashMap<String, String> collectData() {
         HashMap<String, String> score = new HashMap<>();
-        int value = scoreSlider.getValue();
-        score.put(scoreSlider.getName(), String.valueOf(value));
+        String value = String.valueOf(scoreSlider.getValue());
+        score.put(scoreSlider.getName(), value);
+        stageView.getCandidate().getRawScores().put(scoreSlider.getName(), value);
 
         return score;
     }

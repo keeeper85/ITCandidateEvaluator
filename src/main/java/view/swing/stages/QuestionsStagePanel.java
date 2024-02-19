@@ -23,7 +23,7 @@ public class QuestionsStagePanel extends AbstractStage {
     private List<Question> questions;
     private List<String> filesList;
     private List<Question> questionsDisplayedInChooser;
-    private HashMap<String, String> questionsEvaluatedForCollection = new HashMap<>();
+    private HashMap<Question, Integer> questionsEvaluatedForCollection = new HashMap<>();
     private List<String> questionsEvaluatedForDisplay = new ArrayList<>();
     private String selectedFile = chooseFile;
     private String selectedQuestion = "";
@@ -182,7 +182,7 @@ public class QuestionsStagePanel extends AbstractStage {
         if (currentQuestion.isEmpty()) JOptionPane.showMessageDialog(null, errorMessage, "Saving score: failure.", JOptionPane.ERROR_MESSAGE);
         else if (!questionsEvaluatedForCollection.containsKey(currentQuestion)){
             String stringFromScoreSliderValue = String.valueOf(scoreSlider.getValue());
-            questionsEvaluatedForCollection.put(currentQuestion, stringFromScoreSliderValue);
+            questionsEvaluatedForCollection.put(new Question("", currentQuestion), scoreSlider.getValue()); //todo
             questionsEvaluatedForDisplay.add(currentQuestion);
             scoreSlider.setValue(SLIDER_DEFAULT_VALUE);
             updateTextFields(selectedQuestion);
@@ -203,7 +203,8 @@ public class QuestionsStagePanel extends AbstractStage {
 
     @Override
     public HashMap<String, String> collectData() {
+        stageView.getCandidate().getEvaluatedQuestions().putAll(questionsEvaluatedForCollection);
         selectedQuestion = questionNameField.getText();
-        return questionsEvaluatedForCollection;
+        return new HashMap<>();
     }
 }

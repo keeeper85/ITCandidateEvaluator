@@ -1,5 +1,6 @@
 package view.swing.stages;
 
+import controller.CandidateDTO;
 import view.swing.ViewConstants;
 
 import javax.swing.*;
@@ -104,11 +105,18 @@ public class SalaryStagePanel extends AbstractStage {
     @Override
     public HashMap<String, String> collectData() {
         updateScoreSlider();
+
+        CandidateDTO temporaryCandidate = stageView.getCandidate();
+        temporaryCandidate.setMinOfferedSalary(from);
+        temporaryCandidate.setMaxOfferedSalary(to);
+        temporaryCandidate.setExpectedSalary(scoreSlider.getValue());
+
         HashMap<String, String> score = new HashMap<>();
         double expectedSalary = scoreSlider.getValue();
         double average = (to + from) / AVERAGE_FACTOR;
         int ratio = (int) (expectedSalary / average * PERCENT);
         score.put(scoreSlider.getName(), String.valueOf(ratio));
+        temporaryCandidate.getRawScores().put(scoreSlider.getName(), String.valueOf(ratio));
         score.put("money", String.valueOf(expectedSalary));
 
         return score;
