@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+//TODO RR: if the class has static methods only then should be final with private constructor
 public class CandidateFactory {
 
     private final static Pattern removePdfExtension = Pattern.compile("pdf");;
@@ -26,13 +27,14 @@ public class CandidateFactory {
         List<Candidate> candidates = createCandidates(recruitment, fileNames);
         return candidates;
     }
-
+//TODO RR: method return type should be "Map" (interface instead of the specific implementation)
     public static HashMap<String,String> getFileNames(String directoryWithResumesInPdf){
         HashMap<String,String> filesAndTheirNames = new HashMap<>();
 
         try (Stream<Path> paths = Files.list(Paths.get(directoryWithResumesInPdf))) {
             paths.filter(file -> file.toString().endsWith(".pdf"))
                     .forEach(file -> {
+// TODO RR: if no need to have below then should be removed                        
 //                        fileNames.add(file.getFileName().toString());
                         filesAndTheirNames.put(file.toString(), file.getFileName().toString());
                     });
