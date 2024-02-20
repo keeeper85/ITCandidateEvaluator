@@ -79,7 +79,7 @@ public class Candidate extends AbstractCandidate{
     public String toString() {
         String joinDate = dateOfJoiningEvaluation.format(DateTimeFormatter.ISO_DATE);
         String score = isFinished ? String.valueOf(recruitment.calculateFinalCandidateScorePercent(this)) : "unfinished";
-        String description = String.format("%d. %s %s (%s)   JOINED: %s   STATUS: %s", id, lastName, firstName, age, joinDate, score);
+        String description = String.format("%d. %s %s (%s)   JOINED: %s   SCORE: %s", id, lastName, firstName, age, joinDate, score);
         return description;
     }
 }

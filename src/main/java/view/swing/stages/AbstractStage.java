@@ -105,7 +105,7 @@ public abstract class AbstractStage extends JPanel implements Collectable {
         HashMap<String, String> score = new HashMap<>();
         String value = String.valueOf(scoreSlider.getValue());
         score.put(scoreSlider.getName(), value);
-        stageView.getCandidate().getRawScores().put(scoreSlider.getName(), value);
+        stageView.getCandidate().getRawScores().put(scoreSlider.getName(), scoreSlider.getValue());
 
         return score;
     }

@@ -241,10 +241,15 @@ public class PresetsView extends JPanel {
                 else{
                     CandidateListView candidateListView = new CandidateListView(view);
                     Recruitment recruitment = model.startNewRecruitment(name, presetName.getText(), currentSliderSettings);
-                    candidateListView.setRecruitment(recruitment);
-
-                    dialog.dispose();
-                    view.setCurrentPanel(candidateListView);
+                    if (recruitment == null) {
+                        dialog.dispose();
+                        JOptionPane.showMessageDialog(null, "This name is invalid. Try different.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                    else{
+                        candidateListView.setRecruitment(recruitment);
+                        dialog.dispose();
+                        view.setCurrentPanel(candidateListView);
+                    }
                 }
             }
         });

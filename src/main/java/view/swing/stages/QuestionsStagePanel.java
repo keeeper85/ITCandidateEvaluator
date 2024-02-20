@@ -1,5 +1,6 @@
 package view.swing.stages;
 
+import controller.CandidateDTO;
 import model.Question;
 import view.swing.ViewConstants;
 
@@ -203,7 +204,10 @@ public class QuestionsStagePanel extends AbstractStage {
 
     @Override
     public HashMap<String, String> collectData() {
-        stageView.getCandidate().getEvaluatedQuestions().putAll(questionsEvaluatedForCollection);
+        CandidateDTO temporaryCandidate = stageView.getCandidate();
+        temporaryCandidate.getEvaluatedQuestions().putAll(questionsEvaluatedForCollection);
+        int averageScore = temporaryCandidate.calculateQuestionsAverageScore();
+        temporaryCandidate.getRawScores().put(scoreSlider.getName(), averageScore);
         selectedQuestion = questionNameField.getText();
         return new HashMap<>();
     }

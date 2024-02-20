@@ -116,7 +116,7 @@ public class SalaryStagePanel extends AbstractStage {
         double average = (to + from) / AVERAGE_FACTOR;
         int ratio = (int) (expectedSalary / average * PERCENT);
         score.put(scoreSlider.getName(), String.valueOf(ratio));
-        temporaryCandidate.getRawScores().put(scoreSlider.getName(), String.valueOf(ratio));
+        temporaryCandidate.getRawScores().put(scoreSlider.getName(), ratio);
         score.put("money", String.valueOf(expectedSalary));
 
         return score;

@@ -17,6 +17,7 @@ public class ITCandidateEvaluator {
         Model model = new Model();
         Controller controller = new Controller(model);
         View view = controller.getView();
+        model.addObserver(view);
 
         SwingUtilities.invokeLater(() ->{view.initView();});
 

@@ -33,13 +33,13 @@ public class Feedback {
         feedback.append("You ranked: ").append(positionAmongAllCandidates).append(" among ").append(numberOfCandidates).append(" candidates interviewed.\n\n");
         feedback.append("FOR RECRUITER ONLY!\n");
         if (stagePresent(Stages.SALARY, recruitment))  {
-            feedback.append("Salary expected: ").append(candidate.getExpectedSalary()).append("%\n");
+            feedback.append("Salary expected: ").append(candidate.getExpectedSalary()).append("\n");
             feedback.append("Salary expectations score: ").append(getStageScore(Stages.SALARY, candidate)).append("%\n");
             feedback.append("Value/cost ratio: ").append(recruitment.calculateCostValueRatio(candidate)).append("%\n");
         }
         if (stagePresent(Stages.SOFT_SKILLS, recruitment)) feedback.append("Soft skills: ").append(getStageScore(Stages.SOFT_SKILLS, candidate)).append("%\n");
         String additionalNotes = candidate.getAdditionalNotes();
-        if (additionalNotes.length() > 0) feedback.append("Additional notes: ").append(additionalNotes).append("%\n");
+        if (additionalNotes.length() > 0) feedback.append("Additional notes: ").append(additionalNotes).append("\n");
 
         return feedback.toString();
     }
@@ -82,7 +82,7 @@ public class Feedback {
         for (Map.Entry<Question, Integer> question : evaluatedQuestion.entrySet()) {
             String questionBody = question.getKey().getQuestionBody();
             int score = question.getValue();
-            questionFeedbackBuilder.append("\t-").append(questionBody).append(" : ").append(score).append("%.\n");
+            questionFeedbackBuilder.append("   -").append(questionBody).append(" : ").append(score).append("%.\n");
         }
 
         return questionFeedbackBuilder.toString();

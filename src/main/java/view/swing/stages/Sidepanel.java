@@ -276,7 +276,7 @@ public class Sidepanel extends JPanel {
                     temporaryCandidate.setEvaluationTimeSeconds(timerPanel.getSecondsElapsed());
                     temporaryCandidate.saveDataAndCompleteEvaluation();
                     view.setCurrentPanel(new RecruitmentsListView(view));
-                    view.resetPreviousPanels();
+                    view.resetPreviousPanels(); //todo refresh recruitment and candidate list view models
                 }
             }
         });

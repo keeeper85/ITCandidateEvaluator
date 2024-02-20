@@ -2,6 +2,7 @@ package model;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class AbstractCandidate {
@@ -9,7 +10,7 @@ public class AbstractCandidate {
     protected final String firstName;
     protected final String lastName;
     protected int id;
-    protected HashMap<Stages, Integer> scores;
+    protected HashMap<Stages, Integer> scores = new HashMap<>();
     protected HashMap<Question, Integer> evaluatedQuestions = new HashMap<>();
     protected String pathToResumeFile;
     protected String additionalNotes = "";
@@ -23,7 +24,6 @@ public class AbstractCandidate {
     protected boolean isFinished;
     protected LocalDateTime dateOfJoiningEvaluation;
     protected LocalDateTime dateOfFinishingEvaluation;
-    protected String age;
 
     public AbstractCandidate(Recruitment recruitment, String firstName, String lastName) {
         this.recruitment = recruitment;
@@ -33,12 +33,22 @@ public class AbstractCandidate {
         dateOfJoiningEvaluation = LocalDateTime.now();
     }
 
-    public void setScores(HashMap<Stages, Integer> scores) {
-        this.scores = scores;
+    public HashMap<Stages, Integer> getScores() {
+        return scores;
     }
 
-    public void setEvaluatedQuestions(HashMap<Question, Integer> evaluatedQuestions) {
-        this.evaluatedQuestions = evaluatedQuestions;
+    public void translateAndAddRawScores(HashMap<String, Integer> rawScores){
+        for (Map.Entry<String, Integer> rawScore : rawScores.entrySet()) {
+            String stageRawName = rawScore.getKey();
+            int sliderValue = rawScore.getValue();
+            for (Stages stage : Stages.values()) {
+                String stageName = stage.getStageName().toLowerCase();
+                if (stageName.contains(stageRawName)){
+                    scores.put(stage, sliderValue);
+                }
+            }
+        }
+        isFinished = true;
     }
 
     public void setPathToResumeFile(String pathToResumeFile) {

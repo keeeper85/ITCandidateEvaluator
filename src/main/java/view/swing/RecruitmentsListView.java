@@ -59,7 +59,7 @@ public class RecruitmentsListView extends JPanel {
         add(createBackButton());
     }
 
-    private void populateRecruitmentList(){
+    public void populateRecruitmentList(){
         listModel = new DefaultListModel<>();
         listForSorting = new ArrayList<>();
         listForSortingUnfinished = new ArrayList<>();

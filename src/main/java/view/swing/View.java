@@ -2,6 +2,7 @@ package view.swing;
 
 import controller.Controller;
 import model.Model;
+import model.Recruitment;
 
 import javax.swing.*;
 import java.util.Observable;
@@ -12,6 +13,7 @@ public class View extends JFrame implements Observer {
 
     private Model model;
     private Controller controller;
+    private Recruitment newRecruitment;
     private JPanel currentPanel;
     private Stack<JPanel> previousPanels = new Stack<>();
 
@@ -71,6 +73,10 @@ public class View extends JFrame implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-
+        if (currentPanel instanceof RecruitmentsListView){
+            RecruitmentsListView recruitmentsListView = (RecruitmentsListView) currentPanel;
+            recruitmentsListView.populateRecruitmentList();
+        }
+        System.out.println("recruitment has been created");
     }
 }

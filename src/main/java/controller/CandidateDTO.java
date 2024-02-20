@@ -4,9 +4,10 @@ import model.*;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Map;
 
 public class CandidateDTO {
-    private HashMap<String, String> rawScores = new HashMap<>();
+    private HashMap<String, Integer> rawScores = new HashMap<>();
     private HashMap<Question, Integer> evaluatedQuestions = new HashMap<>();
     private Candidate candidate;
     private Recruitment recruitment;
@@ -64,9 +65,21 @@ public class CandidateDTO {
         candidate.setMaxOfferedSalary(maxOfferedSalary);
         candidate.setMinOfferedSalary(minOfferedSalary);
         candidate.setExpectedSalary(expectedSalary);
+        candidate.translateAndAddRawScores(rawScores);
     }
 
-    public HashMap<String, String> getRawScores() {
+    public int calculateQuestionsAverageScore(){
+        int numberOfQuestions = evaluatedQuestions.size();
+        int totalScore = 0;
+
+        for (Map.Entry<Question, Integer> questions : evaluatedQuestions.entrySet()) {
+            int currentQuestionScore = questions.getValue();
+            totalScore += currentQuestionScore;
+        }
+        return totalScore / numberOfQuestions;
+    }
+
+    public HashMap<String, Integer> getRawScores() {
         return rawScores;
     }
 

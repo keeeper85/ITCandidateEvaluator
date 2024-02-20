@@ -11,6 +11,7 @@ public class Model extends Observable {
         questionFactory = new QuestionFactory();
         loadQuestionsFromFiles(questionFactory);
         createTestingRecruitments();
+        startMonitoringRecruitments();
     }
 
     private void createTestingRecruitments(){ //todo create semi-real testing recruitment
@@ -32,9 +33,16 @@ public class Model extends Observable {
         questionLoader.start();
     }
 
-    public Recruitment createNewRecruitment(String name, Presets presets){
-        if (nameIsAvailable(name)){
-            Recruitment recruitment = new Recruitment(this, name, presets);
+    private void startMonitoringRecruitments(){
+        Thread recruitmentMonitor = new Thread(new RecruitmentMonitor(this));
+        recruitmentMonitor.setDaemon(true);
+        recruitmentMonitor.start();
+    }
+
+    public Recruitment startNewRecruitment(String recruitmentName, String presetsName, HashMap<String, Integer> modifiersValues){
+        Presets presets = new Presets(presetsName, modifiersValues);
+        if (nameIsAvailable(recruitmentName)){
+            Recruitment recruitment = new Recruitment(this, recruitmentName, presets);
             openRecruitmentProcesses.add(recruitment);
 
             return recruitment;
@@ -89,16 +97,34 @@ public class Model extends Observable {
         return Presets.saveNewPresetsToFile(fileName, newDefaultPresets);
     }
 
-    public Recruitment startNewRecruitment(String recruitmentName, String presetsName, HashMap<String, Integer> modifiersValues){
-        Presets presets = new Presets(presetsName, modifiersValues);
-        return new Recruitment(this, recruitmentName, presets);
-    }
-
     public List<String> getLiveCodingTasks(){
         return LiveCoding.getLiveCodingTasksList();
     }
 
     public List<Question> getQuestionList(){
         return questionFactory.getPreparedList();
+    }
+
+    private class RecruitmentMonitor implements Runnable{
+
+        Model model;
+
+        public RecruitmentMonitor(Model model) {
+            this.model = model;
+        }
+
+        @Override
+        public void run() {
+            int numberOfRecruitments = openRecruitmentProcesses.size();
+            while (true){
+                int currentNumberOfRecruitments = openRecruitmentProcesses.size();
+                if (currentNumberOfRecruitments != numberOfRecruitments){
+                    model.setChanged();
+                    model.notifyObservers();
+                    numberOfRecruitments = currentNumberOfRecruitments;
+                }
+            }
+
+        }
     }
 }
