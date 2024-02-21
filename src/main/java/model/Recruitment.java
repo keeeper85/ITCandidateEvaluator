@@ -64,11 +64,11 @@ public class Recruitment {
     }
 
     public int calculateCandidateScore(Candidate candidate){
-        HashMap<Stages, Integer> stagesModifiers = presets.getPresetsValues();
-        HashMap<Stages, Integer> candidateResults = candidate.getScores();
+        Map<Stages, Integer> stagesModifiers = presets.getPresetsValues();
+        Map<Stages, Integer> candidateResults = candidate.getScores();
         int finalScore = 0;
 
-        HashMap<Stages, Double> modifiedScores = calculateModifiedScore(stagesModifiers, candidateResults);
+        Map<Stages, Double> modifiedScores = calculateModifiedScore(stagesModifiers, candidateResults);
         for (Map.Entry<Stages, Double> entry : modifiedScores.entrySet()) {
             Stages stage = entry.getKey();
             if (!stage.equals(Stages.SALARY) && !stage.equals(Stages.SOFT_SKILLS)){
@@ -85,7 +85,7 @@ public class Recruitment {
         return finalScore;
     }
 
-    public HashMap<Stages, Double> calculateModifiedScore(HashMap<Stages, Integer> stagesModifiers, HashMap<Stages, Integer> candidateResults){
+    public HashMap<Stages, Double> calculateModifiedScore(Map<Stages, Integer> stagesModifiers, Map<Stages, Integer> candidateResults){
         HashMap<Stages, Double> modifiedScores = new HashMap<>();
 
         for (Map.Entry<Stages, Integer> stageModifier : stagesModifiers.entrySet()) {
@@ -106,14 +106,14 @@ public class Recruitment {
     }
 
     public double getSoftSkillsModifier(Candidate candidate){
-        HashMap<Stages, Integer> stagesModifiers = presets.getPresetsValues();
+        Map<Stages, Integer> stagesModifiers = presets.getPresetsValues();
         Integer presetsModifier = stagesModifiers.entrySet().stream()
                 .filter(entry -> entry.getKey() == Stages.SOFT_SKILLS)
                 .map(Map.Entry::getValue)
                 .findFirst()
                 .orElse(0);
 
-        HashMap<Stages, Integer> candidateResults = candidate.getScores();
+        Map<Stages, Integer> candidateResults = candidate.getScores();
         Integer softSkillsSliderValue = candidateResults.entrySet().stream()
                 .filter(entry -> entry.getKey() == Stages.SOFT_SKILLS)
                 .map(Map.Entry::getValue)
@@ -132,7 +132,7 @@ public class Recruitment {
         return percentScore;
     }
     public int calculateCostValueRatio(Candidate candidate){
-        HashMap<Stages, Integer> candidateResults = candidate.getScores();
+        Map<Stages, Integer> candidateResults = candidate.getScores();
         Integer salarySliderValue = candidateResults.entrySet().stream()
                 .filter(entry -> entry.getKey() == Stages.SALARY)
                 .map(Map.Entry::getValue)

@@ -7,15 +7,17 @@ import java.util.List;
 import java.util.Map;
 
 public class AbstractCandidate {
+
     protected final Recruitment recruitment;
     protected final String firstName;
     protected final String lastName;
-    protected int id;
-    protected HashMap<Stages, Integer> scores = new HashMap<>();
-    protected HashMap<Question, Integer> evaluatedQuestions = new HashMap<>();
+    protected Map<Stages, Integer> scores = new HashMap<>();
+    protected Map<Question, Integer> evaluatedQuestions = new HashMap<>();
     protected List<String> questionsEvaluatedForDisplay = new ArrayList<>();
-    protected String pathToResumeFile;
+    protected String pathToResumeFile = "";
     protected String additionalNotes = "";
+    protected String age;
+    protected int id;
     protected int evaluationTimeSeconds;
     protected int evaluationScore;
     protected int valueCostRatio;
@@ -35,11 +37,14 @@ public class AbstractCandidate {
         dateOfJoiningEvaluation = LocalDateTime.now();
     }
 
-    public HashMap<Stages, Integer> getScores() {
-        return scores;
+    public String calculateAge(){
+        if (yearOfBirth <= 0) return "N/A";
+        int age = LocalDateTime.now().getYear() - yearOfBirth;
+
+        return String.valueOf(age);
     }
 
-    public void translateAndAddRawScores(HashMap<String, Integer> rawScores){
+    public void translateAndAddRawScores(Map<String, Integer> rawScores){
         for (Map.Entry<String, Integer> rawScore : rawScores.entrySet()) {
             String stageRawName = rawScore.getKey();
             int sliderValue = rawScore.getValue();
@@ -51,94 +56,72 @@ public class AbstractCandidate {
             }
         }
     }
-
-    public void setPathToResumeFile(String pathToResumeFile) {
-        this.pathToResumeFile = pathToResumeFile;
-    }
-
-    public void setAdditionalNotes(String additionalNotes) {
-        this.additionalNotes = additionalNotes;
-    }
-
-    public void setEvaluationTimeSeconds(int evaluationTimeSeconds) {
-        this.evaluationTimeSeconds = evaluationTimeSeconds;
-    }
-
-    public void setYearOfBirth(int yearOfBirth) {
-        this.yearOfBirth = yearOfBirth;
-    }
-
-    public void setFinished(boolean finished) {
-        isFinished = finished;
-    }
-
-    public void setDateOfJoiningEvaluation(LocalDateTime dateOfJoiningEvaluation) {
-        this.dateOfJoiningEvaluation = dateOfJoiningEvaluation;
-    }
-
-    public void setDateOfFinishingEvaluation(LocalDateTime dateOfFinishingEvaluation) {
-        this.dateOfFinishingEvaluation = dateOfFinishingEvaluation;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    public Recruitment getRecruitment() { return recruitment; }
     public String getFirstName() {
         return firstName;
     }
-
     public String getLastName() {
         return lastName;
     }
-
-    public String getPathToResumeFile() {
-        return pathToResumeFile;
+    public Map<Stages, Integer> getScores() {
+        return scores;
     }
-
-    public String getAdditionalNotes() {
-        return additionalNotes;
-    }
-
-    public int getYearOfBirth() {
-        return yearOfBirth;
-    }
-
-    public void setExpectedSalary(int expectedSalary) {
-        this.expectedSalary = expectedSalary;
-    }
-
-    public void setMinOfferedSalary(int minOfferedSalary) {
-        this.minOfferedSalary = minOfferedSalary;
-    }
-
-    public void setMaxOfferedSalary(int maxOfferedSalary) {
-        this.maxOfferedSalary = maxOfferedSalary;
-    }
-
-    public int getEvaluationTimeSeconds() {
-        return evaluationTimeSeconds;
-    }
-
-    public int getMinOfferedSalary() {
-        return minOfferedSalary;
-    }
-
-    public int getMaxOfferedSalary() {
-        return maxOfferedSalary;
-    }
-
-    public LocalDateTime getDateOfJoiningEvaluation() {
-        return dateOfJoiningEvaluation;
-    }
-
-    public LocalDateTime getDateOfFinishingEvaluation() {
-        return dateOfFinishingEvaluation;
-    }
-
     public List<String> getQuestionsEvaluatedForDisplay() {
         return questionsEvaluatedForDisplay;
     }
     public void setQuestionsEvaluatedForDisplay(List<String> questionsEvaluatedForDisplay) {
         this.questionsEvaluatedForDisplay = questionsEvaluatedForDisplay;
     }
+    public int getYearOfBirth() {
+        return yearOfBirth;
+    }
+    public void setYearOfBirth(int yearOfBirth) { this.yearOfBirth = yearOfBirth; }
+    public String getPathToResumeFile() {
+        return pathToResumeFile;
+    }
+    public void setPathToResumeFile(String pathToResumeFile) {
+        this.pathToResumeFile = pathToResumeFile;
+    }
+    public String getAdditionalNotes() {
+        return additionalNotes;
+    }
+    public void setAdditionalNotes(String additionalNotes) {
+        this.additionalNotes = additionalNotes;
+    }
+    public Integer getID() { return id; }
+    public void setId(int id) {
+        this.id = id;
+    }
+    public int getEvaluationTimeSeconds() {
+        return evaluationTimeSeconds;
+    }
+    public void setEvaluationTimeSeconds(int evaluationTimeSeconds) { this.evaluationTimeSeconds = evaluationTimeSeconds; }
+    public Integer getEvaluationScore() { return evaluationScore; }
+    public void setEvaluationScore(int evaluationScore) { this.evaluationScore = evaluationScore; }
+    public int getExpectedSalary() { return expectedSalary; }
+    public void setExpectedSalary(int expectedSalary) {
+        this.expectedSalary = expectedSalary;
+    }
+    public int getMinOfferedSalary() {
+        return minOfferedSalary;
+    }
+    public void setMinOfferedSalary(int minOfferedSalary) {
+        this.minOfferedSalary = minOfferedSalary;
+    }
+    public int getMaxOfferedSalary() {
+        return maxOfferedSalary;
+    }
+    public void setMaxOfferedSalary(int maxOfferedSalary) {
+        this.maxOfferedSalary = maxOfferedSalary;
+    }
+    public boolean isFinished() { return isFinished; }
+    public void setFinished(boolean finished) {
+        isFinished = finished;
+        dateOfFinishingEvaluation = LocalDateTime.now();
+    }
+    public LocalDateTime getDateOfJoiningEvaluation() {
+        return dateOfJoiningEvaluation;
+    }
+    public Map<Question, Integer> getEvaluatedQuestions() { return evaluatedQuestions; }
+    public Integer getValueCostRatio() { return valueCostRatio; }
 }

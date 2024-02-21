@@ -9,23 +9,23 @@ import java.util.List;
 import java.util.Map;
 
 public class CandidateDTO {
-    private HashMap<String, Integer> rawScores = new HashMap<>();
-    private HashMap<Question, Integer> evaluatedQuestions = new HashMap<>();
+    private Map<String, Integer> rawScores = new HashMap<>();
+    private Map<Question, Integer> evaluatedQuestions = new HashMap<>();
     private List<String> questionsEvaluatedForDisplay = new ArrayList<>();
     private List<String> sliderNames;
     private Candidate candidate;
     private Recruitment recruitment;
     private String firstName = "";
     private String lastName = "";
-    private int yearOfBirth = 0;
     private String pathToResumeFile = "";
     private String notes = "";
+    private int yearOfBirth;
+    private int evaluationTimeSeconds;
     private int minOfferedSalary = 5000;
     private int maxOfferedSalary = 10000;
     private int expectedSalary = 7500;
-    private int evaluationTimeSeconds = 0;
     private boolean isFinished;
-    public CandidateDTO(Candidate candidate, Recruitment recruitment) {
+    CandidateDTO(Candidate candidate, Recruitment recruitment) {
         this.candidate = candidate;
         this.recruitment = recruitment;
         sliderNames = getSliderNames();
@@ -59,7 +59,7 @@ public class CandidateDTO {
         }
     }
 
-    private HashMap<String, Integer> copyScores(Candidate candidate) {
+    private Map<String, Integer> copyScores(Candidate candidate) {
         Map<Stages, Integer> scores = candidate.getScores();
         HashMap<String, Integer> rawScores = new HashMap<>();
 
@@ -72,7 +72,7 @@ public class CandidateDTO {
         return rawScores;
     }
 
-    private HashMap<Question, Integer> copyEvaluatedQuestions(Candidate candidate) {
+    private Map<Question, Integer> copyEvaluatedQuestions(Candidate candidate) {
         return candidate.getEvaluatedQuestions();
     }
 
@@ -99,7 +99,6 @@ public class CandidateDTO {
         candidate.setPathToResumeFile(pathToResumeFile);
         candidate.setAdditionalNotes(notes);
         candidate.setEvaluationTimeSeconds(evaluationTimeSeconds);
-        candidate.setDateOfFinishingEvaluation(LocalDateTime.now());
         candidate.getEvaluatedQuestions().putAll(evaluatedQuestions);
         candidate.setMaxOfferedSalary(maxOfferedSalary);
         candidate.setMinOfferedSalary(minOfferedSalary);
@@ -123,95 +122,30 @@ public class CandidateDTO {
         return 0;
     }
 
-    public HashMap<String, Integer> getRawScores() {
-        return rawScores;
-    }
-
-    public HashMap<Question, Integer> getEvaluatedQuestions() {
-        return evaluatedQuestions;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public int getYearOfBirth() {
-        return yearOfBirth;
-    }
-
-    public String getPathToResumeFile() {
-        return pathToResumeFile;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setYearOfBirth(int yearOfBirth) {
-        this.yearOfBirth = yearOfBirth;
-    }
-
-    public void setPathToResumeFile(String pathToResumeFile) {
-        this.pathToResumeFile = pathToResumeFile;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
-
-    public void setMinOfferedSalary(int minOfferedSalary) {
-        this.minOfferedSalary = minOfferedSalary;
-    }
-
-    public void setMaxOfferedSalary(int maxOfferedSalary) {
-        this.maxOfferedSalary = maxOfferedSalary;
-    }
-
-    public void setExpectedSalary(int expectedSalary) {
-        this.expectedSalary = expectedSalary;
-    }
-
-    public void setEvaluationTimeSeconds(int evaluationTimeSeconds) {
-        this.evaluationTimeSeconds = evaluationTimeSeconds;
-    }
-
-    public void setFinished(boolean finished) {
-        isFinished = finished;
-    }
-
-    public int getEvaluationTimeSeconds() {
-        return evaluationTimeSeconds;
-    }
-
+    public Map<String, Integer> getRawScores() { return rawScores; }
+    public Map<Question, Integer> getEvaluatedQuestions() { return evaluatedQuestions; }
+    public String getFirstName() { return firstName; }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
+    public String getLastName() { return lastName; }
+    public void setLastName(String lastName) { this.lastName = lastName; }
+    public int getYearOfBirth() { return yearOfBirth; }
+    public void setYearOfBirth(int yearOfBirth) { this.yearOfBirth = yearOfBirth; }
+    public String getPathToResumeFile() { return pathToResumeFile; }
+    public void setPathToResumeFile(String pathToResumeFile) { this.pathToResumeFile = pathToResumeFile; }
+    public String getNotes() { return notes; }
+    public void setNotes(String notes) { this.notes = notes; }
+    public int getExpectedSalary() { return expectedSalary; }
+    public void setExpectedSalary(int expectedSalary) { this.expectedSalary = expectedSalary; }
+    public int getMinOfferedSalary() { return minOfferedSalary; }
+    public void setMinOfferedSalary(int minOfferedSalary) { this.minOfferedSalary = minOfferedSalary; }
+    public int getMaxOfferedSalary() { return maxOfferedSalary; }
+    public void setMaxOfferedSalary(int maxOfferedSalary) { this.maxOfferedSalary = maxOfferedSalary; }
+    public int getEvaluationTimeSeconds() { return evaluationTimeSeconds; }
+    public void setEvaluationTimeSeconds(int evaluationTimeSeconds) { this.evaluationTimeSeconds = evaluationTimeSeconds; }
+    public List<String> getQuestionsEvaluatedForDisplay() { return questionsEvaluatedForDisplay; }
     public void setQuestionsEvaluatedForDisplay(List<String> questionsEvaluatedForDisplay) {
         this.questionsEvaluatedForDisplay = questionsEvaluatedForDisplay;
     }
+    public void setFinished(boolean finished) { isFinished = finished; }
 
-    public List<String> getQuestionsEvaluatedForDisplay() {
-        return questionsEvaluatedForDisplay;
-    }
-
-    public int getMinOfferedSalary() {
-        return minOfferedSalary;
-    }
-
-    public int getMaxOfferedSalary() {
-        return maxOfferedSalary;
-    }
-
-    public int getExpectedSalary() {
-        return expectedSalary;
-    }
 }

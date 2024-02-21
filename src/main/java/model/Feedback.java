@@ -71,7 +71,7 @@ public class Feedback {
     }
 
     private static int getStageScore(Stages stage, Candidate candidate) {
-        HashMap<Stages, Integer> stagesScores = candidate.getScores();
+        Map<Stages, Integer> stagesScores = candidate.getScores();
 
         for (Map.Entry<Stages, Integer> entry : stagesScores.entrySet()) {
             Stages currentStage = entry.getKey();
@@ -82,7 +82,7 @@ public class Feedback {
     }
 
     private static String addQuestionFeedback(Candidate candidate) {
-        HashMap<Question, Integer> evaluatedQuestion = candidate.getEvaluatedQuestions();
+        Map<Question, Integer> evaluatedQuestion = candidate.getEvaluatedQuestions();
         StringBuilder questionFeedbackBuilder = new StringBuilder();
 
         for (Map.Entry<Question, Integer> question : evaluatedQuestion.entrySet()) {

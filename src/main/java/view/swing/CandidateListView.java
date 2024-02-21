@@ -1,6 +1,7 @@
 package view.swing;
 
 import controller.CandidateDTO;
+import controller.Controller;
 import model.Candidate;
 import model.CandidateFactory;
 import model.Recruitment;
@@ -21,6 +22,7 @@ import java.util.List;
 public class CandidateListView extends JPanel {
 
     private View view;
+    private Controller controller;
     private Recruitment recruitment;
     private List<Candidate> listForSorting;
     private List<Candidate> listForSortingUnfinished;
@@ -50,6 +52,7 @@ public class CandidateListView extends JPanel {
 
     public CandidateListView(View view) {
         this.view = view;
+        controller = view.getController();
     }
 
     public void setRecruitment(Recruitment recruitment) {
@@ -143,7 +146,7 @@ public class CandidateListView extends JPanel {
             openButton.setEnabled(true);
             deleteButton.setEnabled(true);
             feedbackButton.setEnabled(true);
-            if (selectedCandidate.getResumePath() == null || selectedCandidate.getResumePath().length() < 5) cvButton.setEnabled(false);
+            if (selectedCandidate.getPathToResumeFile() == null || selectedCandidate.getPathToResumeFile().length() < 5) cvButton.setEnabled(false);
             else cvButton.setEnabled(true);});
 
         scrollPane = new JScrollPane(candidatesList);
@@ -161,7 +164,7 @@ public class CandidateListView extends JPanel {
                 if (selectedCandidate.isFinished()) JOptionPane.showMessageDialog(null, "This candidate has finished evaluation. You can't edit data anymore.", "Information", JOptionPane.INFORMATION_MESSAGE);
                 else{
                     CandidateListView candidateListView = new CandidateListView(view);
-                    CandidateDTO temporaryCandidate = new CandidateDTO(selectedCandidate, recruitment); //todo use Controller to create DTO instance
+                    CandidateDTO temporaryCandidate = controller.createTemporaryCandidate(selectedCandidate, recruitment);
                     StageView stageView = new StageView(view, temporaryCandidate, recruitment);
                     stageView.setCandidate(temporaryCandidate);
                     view.setCurrentPanel(stageView);
@@ -235,8 +238,8 @@ public class CandidateListView extends JPanel {
         cvButton.addActionListener((e -> {
             try {
                 if (selectedCandidate != null){
-                    if (selectedCandidate.getResumePath() != null)
-                        Desktop.getDesktop().open(new File(selectedCandidate.getResumePath()));
+                    if (selectedCandidate.getPathToResumeFile() != null)
+                        Desktop.getDesktop().open(new File(selectedCandidate.getPathToResumeFile()));
                 }
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
@@ -262,7 +265,7 @@ public class CandidateListView extends JPanel {
         addCandidateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CandidateDTO temporaryCandidate = new CandidateDTO(null, recruitment); //todo use Controller to create DTO instance
+                CandidateDTO temporaryCandidate = controller.createTemporaryCandidate(null, recruitment);
                 view.setCurrentPanel(new StageView(view, temporaryCandidate, recruitment));
             }
         });

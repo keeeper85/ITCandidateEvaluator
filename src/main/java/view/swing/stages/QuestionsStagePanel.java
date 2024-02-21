@@ -24,7 +24,7 @@ public class QuestionsStagePanel extends AbstractStage {
     private List<Question> questions;
     private List<String> filesList;
     private List<Question> questionsDisplayedInChooser;
-    private HashMap<Question, Integer> questionsEvaluatedForCollection = new HashMap<>();
+    private Map<Question, Integer> questionsEvaluatedForCollection = new HashMap<>();
     private List<String> questionsEvaluatedForDisplay = new ArrayList<>();
     private String selectedFile = chooseFile;
     private String selectedQuestion = "";

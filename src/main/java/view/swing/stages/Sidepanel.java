@@ -218,6 +218,7 @@ public class Sidepanel extends JPanel {
 
                 View view = stageView.getView();
                 view.setCurrentPanel(new RecruitmentsListView(view));
+                view.resetPreviousPanels();
             }
         });
 

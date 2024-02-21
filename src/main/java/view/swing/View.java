@@ -70,7 +70,7 @@ public class View extends JFrame implements Observer {
     public Model getModel() {
         return model;
     }
-
+    public Controller getController() { return controller; }
     @Override
     public void update(Observable o, Object arg) {
         if (currentPanel instanceof RecruitmentsListView){
