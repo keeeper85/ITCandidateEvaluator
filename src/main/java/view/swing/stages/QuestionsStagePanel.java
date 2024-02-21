@@ -33,6 +33,10 @@ public class QuestionsStagePanel extends AbstractStage {
 
     public QuestionsStagePanel(StageView stageView) {
         super(stageView);
+        CandidateDTO temporaryCandidate = stageView.getCandidate();
+        questionsEvaluatedForCollection = temporaryCandidate.getEvaluatedQuestions();
+        questionsEvaluatedForDisplay = temporaryCandidate.getQuestionsEvaluatedForDisplay();
+        if (questionsEvaluatedForDisplay.size() > 0) isQuestionAsked = true;
         ordinal = 6;
     }
 
@@ -206,6 +210,7 @@ public class QuestionsStagePanel extends AbstractStage {
     public HashMap<String, String> collectData() {
         CandidateDTO temporaryCandidate = stageView.getCandidate();
         temporaryCandidate.getEvaluatedQuestions().putAll(questionsEvaluatedForCollection);
+        temporaryCandidate.setQuestionsEvaluatedForDisplay(questionsEvaluatedForDisplay);
         int averageScore = temporaryCandidate.calculateQuestionsAverageScore();
         temporaryCandidate.getRawScores().put(scoreSlider.getName(), averageScore);
         selectedQuestion = questionNameField.getText();

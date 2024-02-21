@@ -1,5 +1,6 @@
 package model;
 
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Feedback {
@@ -15,6 +16,8 @@ public class Feedback {
         int finalScorePercent = candidate.getEvaluationScore();
         int numberOfCandidates = allCandidates.size();
         int positionAmongAllCandidates = getPosition(candidate, allCandidates);
+        String joinDate = candidate.getDateOfJoiningEvaluation().format(DateTimeFormatter.ISO_DATE);
+        String finishDate = candidate.getDateOfJoiningEvaluation().format(DateTimeFormatter.ISO_DATE);
 
         StringBuilder feedback = new StringBuilder();
         feedback.append("Thank you for participation in our recruitment process!").append("\n");
@@ -33,8 +36,11 @@ public class Feedback {
         feedback.append("You ranked: ").append(positionAmongAllCandidates).append(" among ").append(numberOfCandidates).append(" candidates interviewed.\n\n");
         feedback.append("FOR RECRUITER ONLY!\n");
         if (stagePresent(Stages.SALARY, recruitment))  {
+            feedback.append("The candidate joined the process on ").append(joinDate).append("\n");
+            feedback.append("The candidate got evaluated on ").append(finishDate).append("\n");
+            feedback.append("Evaluation time: ").append(changeSecondsToTime(candidate.getEvaluationTimeSeconds())).append("\n");
             feedback.append("Salary expected: ").append(candidate.getExpectedSalary()).append("\n");
-            feedback.append("Salary expectations score: ").append(getStageScore(Stages.SALARY, candidate)).append("%\n");
+            feedback.append(generateSalaryExpectationDescription(getStageScore(Stages.SALARY, candidate))).append("\n");
             feedback.append("Value/cost ratio: ").append(recruitment.calculateCostValueRatio(candidate)).append("%\n");
         }
         if (stagePresent(Stages.SOFT_SKILLS, recruitment)) feedback.append("Soft skills: ").append(getStageScore(Stages.SOFT_SKILLS, candidate)).append("%\n");
@@ -86,6 +92,42 @@ public class Feedback {
         }
 
         return questionFeedbackBuilder.toString();
+    }
+
+    private static String changeSecondsToTime(int seconds) {
+        if (seconds < 0) {
+            throw new IllegalArgumentException("Seconds should be a non-negative integer.");
+        }
+
+        int days = seconds / (60 * 60 * 24);
+        int hours = (seconds % (60 * 60 * 24)) / (60 * 60);
+        int minutes = (seconds % (60 * 60)) / 60;
+        int remainingSeconds = seconds % 60;
+
+        StringBuilder time = new StringBuilder();
+
+        if (days > 0) {
+            time.append(days).append(" day").append(days > 1 ? "s" : "").append(" ");
+        }
+        if (hours > 0) {
+            time.append(hours).append(" hour").append(hours > 1 ? "s" : "").append(" ");
+        }
+        if (minutes > 0) {
+            time.append(minutes).append(" minute").append(minutes > 1 ? "s" : "").append(" ");
+        }
+        if (remainingSeconds > 0) {
+            time.append(remainingSeconds).append(" second").append(remainingSeconds > 1 ? "s" : "");
+        }
+
+        return time.toString().trim();
+    }
+
+    private static String generateSalaryExpectationDescription(int salarySliderValue){
+        int percentage = 100;
+        int expectedSalaryToAverageRatio = salarySliderValue - percentage;
+        if (expectedSalaryToAverageRatio > 0) return "Salary expectations: " + expectedSalaryToAverageRatio + "% more than average.";
+        if (expectedSalaryToAverageRatio < 0) return "Salary expectations: " + -expectedSalaryToAverageRatio + "% less than average.";
+        else return "Salary expectations equals the average.";
     }
 
 }

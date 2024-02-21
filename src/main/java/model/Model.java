@@ -14,7 +14,7 @@ public class Model extends Observable {
         startMonitoringRecruitments();
     }
 
-    private void createTestingRecruitments(){ //todo create semi-real testing recruitment
+    private void createTestingRecruitments(){
         openRecruitmentProcesses = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             String name = "Rec_" + i;
@@ -31,12 +31,6 @@ public class Model extends Observable {
     private void loadQuestionsFromFiles(QuestionFactory questionFactory){
         Thread questionLoader = new Thread(questionFactory);
         questionLoader.start();
-    }
-
-    private void startMonitoringRecruitments(){
-        Thread recruitmentMonitor = new Thread(new RecruitmentMonitor(this));
-        recruitmentMonitor.setDaemon(true);
-        recruitmentMonitor.start();
     }
 
     public Recruitment startNewRecruitment(String recruitmentName, String presetsName, HashMap<String, Integer> modifiersValues){
@@ -104,15 +98,16 @@ public class Model extends Observable {
     public List<Question> getQuestionList(){
         return questionFactory.getPreparedList();
     }
-
+    private void startMonitoringRecruitments(){
+        Thread recruitmentMonitor = new Thread(new RecruitmentMonitor(this));
+        recruitmentMonitor.setDaemon(true);
+        recruitmentMonitor.start();
+    }
     private class RecruitmentMonitor implements Runnable{
-
         Model model;
-
         public RecruitmentMonitor(Model model) {
             this.model = model;
         }
-
         @Override
         public void run() {
             int numberOfRecruitments = openRecruitmentProcesses.size();

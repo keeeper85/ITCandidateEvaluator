@@ -3,12 +3,16 @@ package controller;
 import model.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CandidateDTO {
     private HashMap<String, Integer> rawScores = new HashMap<>();
     private HashMap<Question, Integer> evaluatedQuestions = new HashMap<>();
+    private List<String> questionsEvaluatedForDisplay = new ArrayList<>();
+    private List<String> sliderNames;
     private Candidate candidate;
     private Recruitment recruitment;
     private String firstName = "";
@@ -16,15 +20,26 @@ public class CandidateDTO {
     private int yearOfBirth = 0;
     private String pathToResumeFile = "";
     private String notes = "";
-    private int minOfferedSalary;
-    private int maxOfferedSalary;
-    private int expectedSalary;
-    private int evaluationTimeSeconds;
-
+    private int minOfferedSalary = 5000;
+    private int maxOfferedSalary = 10000;
+    private int expectedSalary = 7500;
+    private int evaluationTimeSeconds = 0;
+    private boolean isFinished;
     public CandidateDTO(Candidate candidate, Recruitment recruitment) {
         this.candidate = candidate;
         this.recruitment = recruitment;
+        sliderNames = getSliderNames();
         copyDataFromRealCandidate(candidate);
+    }
+
+    private List<String> getSliderNames() {
+        List<String> sliderNames = new ArrayList<>();
+
+        for (Stages stage : Stages.values()) {
+            sliderNames.add(stage.getStageName());
+        }
+
+        return sliderNames;
     }
 
     private void copyDataFromRealCandidate(Candidate candidate) {
@@ -34,7 +49,31 @@ public class CandidateDTO {
             yearOfBirth = candidate.getYearOfBirth();
             pathToResumeFile = candidate.getPathToResumeFile();
             notes = candidate.getAdditionalNotes();
+            rawScores = copyScores(candidate);
+            evaluatedQuestions = copyEvaluatedQuestions(candidate);
+            evaluationTimeSeconds = candidate.getEvaluationTimeSeconds();
+            minOfferedSalary = candidate.getMinOfferedSalary();
+            maxOfferedSalary = candidate.getMaxOfferedSalary();
+            expectedSalary = candidate.getExpectedSalary();
+            questionsEvaluatedForDisplay = candidate.getQuestionsEvaluatedForDisplay();
         }
+    }
+
+    private HashMap<String, Integer> copyScores(Candidate candidate) {
+        Map<Stages, Integer> scores = candidate.getScores();
+        HashMap<String, Integer> rawScores = new HashMap<>();
+
+        for (Map.Entry<Stages, Integer> entry : scores.entrySet()) {
+            String sliderName = entry.getKey().getStageName();
+            for (String name : sliderNames) {
+                if (sliderName.equals(name)) rawScores.put(sliderName, entry.getValue());
+            }
+        }
+        return rawScores;
+    }
+
+    private HashMap<Question, Integer> copyEvaluatedQuestions(Candidate candidate) {
+        return candidate.getEvaluatedQuestions();
     }
 
     public void saveData(){
@@ -66,17 +105,22 @@ public class CandidateDTO {
         candidate.setMinOfferedSalary(minOfferedSalary);
         candidate.setExpectedSalary(expectedSalary);
         candidate.translateAndAddRawScores(rawScores);
+        candidate.setQuestionsEvaluatedForDisplay(questionsEvaluatedForDisplay);
+        candidate.setFinished(isFinished);
     }
 
     public int calculateQuestionsAverageScore(){
         int numberOfQuestions = evaluatedQuestions.size();
-        int totalScore = 0;
+        if (numberOfQuestions > 0){
+            int totalScore = 0;
 
-        for (Map.Entry<Question, Integer> questions : evaluatedQuestions.entrySet()) {
-            int currentQuestionScore = questions.getValue();
-            totalScore += currentQuestionScore;
+            for (Map.Entry<Question, Integer> questions : evaluatedQuestions.entrySet()) {
+                int currentQuestionScore = questions.getValue();
+                totalScore += currentQuestionScore;
+            }
+            return totalScore / numberOfQuestions;
         }
-        return totalScore / numberOfQuestions;
+        return 0;
     }
 
     public HashMap<String, Integer> getRawScores() {
@@ -141,5 +185,33 @@ public class CandidateDTO {
 
     public void setEvaluationTimeSeconds(int evaluationTimeSeconds) {
         this.evaluationTimeSeconds = evaluationTimeSeconds;
+    }
+
+    public void setFinished(boolean finished) {
+        isFinished = finished;
+    }
+
+    public int getEvaluationTimeSeconds() {
+        return evaluationTimeSeconds;
+    }
+
+    public void setQuestionsEvaluatedForDisplay(List<String> questionsEvaluatedForDisplay) {
+        this.questionsEvaluatedForDisplay = questionsEvaluatedForDisplay;
+    }
+
+    public List<String> getQuestionsEvaluatedForDisplay() {
+        return questionsEvaluatedForDisplay;
+    }
+
+    public int getMinOfferedSalary() {
+        return minOfferedSalary;
+    }
+
+    public int getMaxOfferedSalary() {
+        return maxOfferedSalary;
+    }
+
+    public int getExpectedSalary() {
+        return expectedSalary;
     }
 }

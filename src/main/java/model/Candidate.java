@@ -11,8 +11,7 @@ public class Candidate extends AbstractCandidate{
 
     public Candidate(Recruitment recruitment, String firstName, String lastName) {
         super(recruitment, firstName, lastName);
-//        age = calculateAge();
-        age = String.valueOf(ThreadLocalRandom.current().nextInt(20,40));
+        age = calculateAge();
     }
 
     public HashMap<Stages, Integer> getScores() {
@@ -73,7 +72,9 @@ public class Candidate extends AbstractCandidate{
         return yearOfBirth;
     }
     public Integer getID(){ return id; }
-    public Integer getValueCostRatio(){ return valueCostRatio; }
+    public Integer getValueCostRatio(){
+        valueCostRatio = recruitment.calculateCostValueRatio(this);
+        return valueCostRatio; }
 
     @Override
     public String toString() {

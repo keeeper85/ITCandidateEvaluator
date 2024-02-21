@@ -1,6 +1,7 @@
 package view.swing.stages;
 
 import controller.CandidateDTO;
+import model.Candidate;
 import view.swing.ViewConstants;
 
 import javax.swing.*;
@@ -8,7 +9,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.util.HashMap;
 
-public class SalaryStagePanel extends AbstractStage {
+public class SalaryStagePanel extends AbstractStage { ;
     private final int TEXT_FIELDS_Y = 640;
     private final int FROM_FIELD_X = 110;
     private final int TO_FIELD_X = 815;
@@ -16,15 +17,23 @@ public class SalaryStagePanel extends AbstractStage {
     private final int FIELD_HEIGHT = 30;
     private final int AVERAGE_FACTOR = 2;
     private final int PERCENT = 100;
-    private final String EXAMPLE_MIN_SALARY = "5000";
-    private final String EXAMPLE_MAX_SALARY = "9000";
     private JTextField fromField;
     private JTextField toField;
-    private int from = 0;
-    private int to = 0;
+    private int from = 5000;
+    private int to = 10000;
+    private int expectedSalary = 7500;
 
     public SalaryStagePanel(StageView stageView) {
         super(stageView);
+        from = temporaryCandidate.getMinOfferedSalary();
+        to = temporaryCandidate.getMaxOfferedSalary();
+        expectedSalary = temporaryCandidate.getExpectedSalary();
+
+        fromField.setText(String.valueOf(from));
+        toField.setText(String.valueOf(to));
+        updateScoreSlider();
+        scoreSlider.setValue(expectedSalary);
+
         ordinal = 7;
     }
 
@@ -42,7 +51,7 @@ public class SalaryStagePanel extends AbstractStage {
 
     private JTextField createFromField(){
         fromField = new JTextField();
-        fromField.setText(EXAMPLE_MIN_SALARY);
+        fromField.setText(String.valueOf(from));
         fromField.setBounds(FROM_FIELD_X, TEXT_FIELDS_Y, FIELD_WIDTH, FIELD_HEIGHT);
         return fromField;
     }
@@ -82,7 +91,7 @@ public class SalaryStagePanel extends AbstractStage {
 
     private JTextField createToField(){
         toField = new JTextField();
-        toField.setText(EXAMPLE_MAX_SALARY);
+        toField.setText("10000");
         toField.setBounds(TO_FIELD_X, TEXT_FIELDS_Y, FIELD_WIDTH, FIELD_HEIGHT);
         return toField;
     }

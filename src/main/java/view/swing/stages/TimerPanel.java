@@ -12,11 +12,11 @@ public class TimerPanel extends JPanel {
     private final int TIMER_DELAY = 1000;
     private final int SECONDS_IN_HOUR = 3600;
     private final int MINUTES_IN_HOUR = 60;
-
     private int secondsElapsed;
 
-    public TimerPanel() {
+    public TimerPanel(int secondsElapsed) {
         setLayout(new FlowLayout());
+        this.secondsElapsed = secondsElapsed;
 
         timerLabel = new JLabel("00:00:00");
         add(timerLabel);
@@ -35,13 +35,15 @@ public class TimerPanel extends JPanel {
             }
         });
         add(pauseButton);
+
         timer = new Timer(TIMER_DELAY, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                secondsElapsed++;
+                TimerPanel.this.secondsElapsed++;
                 updateTimerLabel();
             }
         });
+        updateTimerLabel();
         timer.start();
     }
 

@@ -1,9 +1,10 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class AbstractCandidate {
     protected final Recruitment recruitment;
@@ -12,15 +13,16 @@ public class AbstractCandidate {
     protected int id;
     protected HashMap<Stages, Integer> scores = new HashMap<>();
     protected HashMap<Question, Integer> evaluatedQuestions = new HashMap<>();
+    protected List<String> questionsEvaluatedForDisplay = new ArrayList<>();
     protected String pathToResumeFile;
     protected String additionalNotes = "";
     protected int evaluationTimeSeconds;
     protected int evaluationScore;
     protected int valueCostRatio;
     protected int yearOfBirth;
-    protected int expectedSalary;
-    protected int minOfferedSalary;
-    protected int maxOfferedSalary;
+    protected int expectedSalary = 7500;
+    protected int minOfferedSalary = 5000;
+    protected int maxOfferedSalary = 10000;
     protected boolean isFinished;
     protected LocalDateTime dateOfJoiningEvaluation;
     protected LocalDateTime dateOfFinishingEvaluation;
@@ -48,7 +50,6 @@ public class AbstractCandidate {
                 }
             }
         }
-        isFinished = true;
     }
 
     public void setPathToResumeFile(String pathToResumeFile) {
@@ -112,5 +113,32 @@ public class AbstractCandidate {
 
     public void setMaxOfferedSalary(int maxOfferedSalary) {
         this.maxOfferedSalary = maxOfferedSalary;
+    }
+
+    public int getEvaluationTimeSeconds() {
+        return evaluationTimeSeconds;
+    }
+
+    public int getMinOfferedSalary() {
+        return minOfferedSalary;
+    }
+
+    public int getMaxOfferedSalary() {
+        return maxOfferedSalary;
+    }
+
+    public LocalDateTime getDateOfJoiningEvaluation() {
+        return dateOfJoiningEvaluation;
+    }
+
+    public LocalDateTime getDateOfFinishingEvaluation() {
+        return dateOfFinishingEvaluation;
+    }
+
+    public List<String> getQuestionsEvaluatedForDisplay() {
+        return questionsEvaluatedForDisplay;
+    }
+    public void setQuestionsEvaluatedForDisplay(List<String> questionsEvaluatedForDisplay) {
+        this.questionsEvaluatedForDisplay = questionsEvaluatedForDisplay;
     }
 }

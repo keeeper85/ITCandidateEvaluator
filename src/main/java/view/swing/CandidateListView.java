@@ -158,11 +158,14 @@ public class CandidateListView extends JPanel {
         openButton.setBounds(BUTTON_X, BUTTON_Y ,BUTTON_WIDTH ,BUTTON_HEIGHT);
         openButton.addActionListener(e -> {
             if (selectedCandidate != null) {
-                CandidateListView candidateListView = new CandidateListView(view);
-                CandidateDTO temporaryCandidate = new CandidateDTO(selectedCandidate, recruitment);
-                StageView stageView = new StageView(view, temporaryCandidate, recruitment);
-                stageView.setCandidate(temporaryCandidate);
-                view.setCurrentPanel(stageView);
+                if (selectedCandidate.isFinished()) JOptionPane.showMessageDialog(null, "This candidate has finished evaluation. You can't edit data anymore.", "Information", JOptionPane.INFORMATION_MESSAGE);
+                else{
+                    CandidateListView candidateListView = new CandidateListView(view);
+                    CandidateDTO temporaryCandidate = new CandidateDTO(selectedCandidate, recruitment); //todo use Controller to create DTO instance
+                    StageView stageView = new StageView(view, temporaryCandidate, recruitment);
+                    stageView.setCandidate(temporaryCandidate);
+                    view.setCurrentPanel(stageView);
+                }
             }
         });
         return openButton;
@@ -259,7 +262,7 @@ public class CandidateListView extends JPanel {
         addCandidateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CandidateDTO temporaryCandidate = new CandidateDTO(null, recruitment);
+                CandidateDTO temporaryCandidate = new CandidateDTO(null, recruitment); //todo use Controller to create DTO instance
                 view.setCurrentPanel(new StageView(view, temporaryCandidate, recruitment));
             }
         });

@@ -81,7 +81,6 @@ public class Recruitment {
             double multiplier = SOFT_SKILLS_FACTOR + getSoftSkillsModifier(candidate);
             finalScore = (int) (finalScore * multiplier);
         }
-        System.out.println(finalScore + " points");
 
         return finalScore;
     }

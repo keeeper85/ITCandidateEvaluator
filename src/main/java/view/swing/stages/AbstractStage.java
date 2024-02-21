@@ -1,6 +1,7 @@
 package view.swing.stages;
 
 import controller.CandidateDTO;
+import model.Candidate;
 import model.Model;
 import view.swing.ViewConstants;
 
@@ -8,9 +9,11 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.util.HashMap;
+import java.util.Map;
 
 public abstract class AbstractStage extends JPanel implements Collectable {
     protected StageView stageView;
+    protected CandidateDTO temporaryCandidate;
     protected int ordinal;
     protected String chooseFile = "Choose file:";
     protected Model model;
@@ -32,8 +35,10 @@ public abstract class AbstractStage extends JPanel implements Collectable {
     public AbstractStage(StageView stageView) {
         this.stageView = stageView;
         this.model = stageView.getView().getModel();
+        temporaryCandidate =  stageView.getCandidate();
         setLayout(null);
         init();
+        adjustScoreSliderValue();
     }
 
     protected abstract void init();
@@ -75,6 +80,16 @@ public abstract class AbstractStage extends JPanel implements Collectable {
         });
 
         return scoreSlider;
+    }
+
+    protected void adjustScoreSliderValue(){
+        CandidateDTO temporaryCandidate = stageView.getCandidate();
+        Map<String, Integer> rawScores = temporaryCandidate.getRawScores();
+        String sliderName = scoreSlider.getName();
+
+        for (Map.Entry<String, Integer> entry : rawScores.entrySet()) {
+            if (entry.getKey().equals(sliderName)) scoreSlider.setValue(entry.getValue());
+        }
     }
 
     protected JLabel createScoreLabel(){

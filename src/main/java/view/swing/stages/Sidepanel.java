@@ -82,9 +82,7 @@ public class Sidepanel extends JPanel {
                 if (areFieldInputsCorrect()){
                     HashMap<String, String> collectedData = currentStage.collectData();
                     allStagesScore.putAll(collectedData);
-                    for (Map.Entry<String, String> stringStringEntry : collectedData.entrySet()) {
-                        System.out.println(stringStringEntry);
-                    }
+
 
                     Collectable nextStage = getNextStage();
                     if (nextStage != null) {
@@ -211,9 +209,10 @@ public class Sidepanel extends JPanel {
         saveExitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                temporaryCandidate.saveData();
                 currentStage = (Collectable) stageView.getCurrentStagePanel();
                 HashMap<String, String> collectedData = currentStage.collectData();
+                temporaryCandidate.setEvaluationTimeSeconds(timerPanel.getSecondsElapsed());
+                temporaryCandidate.saveData();
                 String timePassed = String.valueOf(timerPanel.getSecondsElapsed());
                 collectedData.put("evaluationTimeSeconds", timePassed);
 
@@ -274,9 +273,10 @@ public class Sidepanel extends JPanel {
                 int choice = JOptionPane.showConfirmDialog(null, "Do you want to finish the evaluation for the current candidate? (you won't be able to edit the scores later)", "Is everything ready?", JOptionPane.YES_NO_OPTION);
                 if (choice == 0){
                     temporaryCandidate.setEvaluationTimeSeconds(timerPanel.getSecondsElapsed());
+                    temporaryCandidate.setFinished(true);
                     temporaryCandidate.saveDataAndCompleteEvaluation();
                     view.setCurrentPanel(new RecruitmentsListView(view));
-                    view.resetPreviousPanels(); //todo refresh recruitment and candidate list view models
+                    view.resetPreviousPanels();
                 }
             }
         });
@@ -310,7 +310,7 @@ public class Sidepanel extends JPanel {
         evaluationTime.setBounds(TIMER_LABEL_POSITION_X, TIMER_LABEL_POSITION_Y, TIMER_LABEL_WIDTH, TIMER_LABEL_HEIGHT);
         add(evaluationTime);
 
-        timerPanel = new TimerPanel();
+        timerPanel = new TimerPanel(temporaryCandidate.getEvaluationTimeSeconds());
         timerPanel.setBounds(BUTTON_POSITION_X, TIMER_PANEL_POSITION_Y, BUTTON_WIDTH, BUTTON_HEIGHT);
         add(timerPanel);
     }
