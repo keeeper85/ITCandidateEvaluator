@@ -3,7 +3,6 @@ package model;
 import java.util.*;
 
 public class Model extends Observable {
-
     private List<Recruitment> openRecruitmentProcesses; //todo SQL
     private QuestionFactory questionFactory;
 
@@ -32,6 +31,11 @@ public class Model extends Observable {
         Thread questionLoader = new Thread(questionFactory);
         questionLoader.start();
     }
+    private void startMonitoringRecruitments(){
+        Thread recruitmentMonitor = new Thread(new RecruitmentMonitor(this));
+        recruitmentMonitor.setDaemon(true);
+        recruitmentMonitor.start();
+    }
 
     public Recruitment startNewRecruitment(String recruitmentName, String presetsName, HashMap<String, Integer> modifiersValues){
         Presets presets = new Presets(presetsName, modifiersValues);
@@ -52,14 +56,6 @@ public class Model extends Observable {
         return true;
     }
 
-    public Recruitment openExistingRecruitment(String name){
-        for (Recruitment openRecruitmentProcess : openRecruitmentProcesses) {
-            String openRecruitmentProcessName = openRecruitmentProcess.getName();
-            if (name.equals(openRecruitmentProcessName)) return openRecruitmentProcess;
-        }
-        return null;
-    }
-
     public boolean deleteExistingRecruitment(Recruitment recruitment){
         return openRecruitmentProcesses.remove(recruitment);
     }
@@ -68,10 +64,10 @@ public class Model extends Observable {
         return openRecruitmentProcesses;
     }
 
-    public HashMap<String,HashMap<String, Integer>> getListOfPresets(){
-        HashMap<String,HashMap<String, Integer>> listOfPresets = new HashMap<>();
+    public Map<String,HashMap<String, Integer>> getListOfPresets(){
+        Map<String,HashMap<String, Integer>> listOfPresets = new HashMap<>();
 
-        HashSet<Presets> presets = Presets.loadPresetsFromDirectory();
+        Set<Presets> presets = Presets.loadPresetsFromDirectory();
         for (Presets preset : presets) {
             HashMap<Stages, Integer> presetsValues = preset.getPresetsValues();
             HashMap<String, Integer> singlePreset = new HashMap<>();
@@ -90,7 +86,6 @@ public class Model extends Observable {
     public boolean savePresetsToFile(String fileName, HashMap<String, Integer> newDefaultPresets){
         return Presets.saveNewPresetsToFile(fileName, newDefaultPresets);
     }
-
     public List<String> getLiveCodingTasks(){
         return LiveCoding.getLiveCodingTasksList();
     }
@@ -98,25 +93,27 @@ public class Model extends Observable {
     public List<Question> getQuestionList(){
         return questionFactory.getPreparedList();
     }
-    private void startMonitoringRecruitments(){
-        Thread recruitmentMonitor = new Thread(new RecruitmentMonitor(this));
-        recruitmentMonitor.setDaemon(true);
-        recruitmentMonitor.start();
-    }
+
+
     private class RecruitmentMonitor implements Runnable{
         Model model;
+        int numberOfRecruitments = openRecruitmentProcesses.size();
         public RecruitmentMonitor(Model model) {
             this.model = model;
         }
         @Override
         public void run() {
-            int numberOfRecruitments = openRecruitmentProcesses.size();
             while (true){
                 int currentNumberOfRecruitments = openRecruitmentProcesses.size();
                 if (currentNumberOfRecruitments != numberOfRecruitments){
                     model.setChanged();
                     model.notifyObservers();
                     numberOfRecruitments = currentNumberOfRecruitments;
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
             }
 

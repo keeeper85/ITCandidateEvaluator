@@ -11,31 +11,28 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-//TODO RR: if the class has static methods only then should be final with private constructor
-public class CandidateFactory {
-
-    private final static Pattern removePdfExtension = Pattern.compile("pdf");;
-    private final static Pattern removeNonLetterCharacters = Pattern.compile("[^a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ]");
-    private final static Pattern removeCvTags = Pattern.compile("resume|CV", Pattern.CASE_INSENSITIVE);
+public final class CandidateFactory {
+    private final static Pattern REMOVE_PDF_EXTENSION = Pattern.compile("pdf");;
+    private final static Pattern REMOVE_NON_LETTER_CHARACTERS = Pattern.compile("[^a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ]");
+    private final static Pattern REMOVE_CV_TAGS = Pattern.compile("resume|CV", Pattern.CASE_INSENSITIVE);
+    private CandidateFactory() {}
 
     public static List<Candidate> getCandidatesFromResumes(String directoryWithResumesInPdf, Recruitment recruitment){
-        HashMap<String,String> fileNames = getFileNames(directoryWithResumesInPdf);
-        iterateOverMapElementsAndReplace(fileNames, removePdfExtension);
-        iterateOverMapElementsAndReplace(fileNames, removeNonLetterCharacters);
-        iterateOverMapElementsAndReplace(fileNames, removeCvTags);
+        Map<String,String> fileNames = getFileNames(directoryWithResumesInPdf);
+        iterateOverMapElementsAndReplace(fileNames, REMOVE_PDF_EXTENSION);
+        iterateOverMapElementsAndReplace(fileNames, REMOVE_NON_LETTER_CHARACTERS);
+        iterateOverMapElementsAndReplace(fileNames, REMOVE_CV_TAGS);
         separateFirstAndLastNames(fileNames);
         List<Candidate> candidates = createCandidates(recruitment, fileNames);
         return candidates;
     }
-//TODO RR: method return type should be "Map" (interface instead of the specific implementation)
-    public static HashMap<String,String> getFileNames(String directoryWithResumesInPdf){
+
+    public static Map<String,String> getFileNames(String directoryWithResumesInPdf){
         HashMap<String,String> filesAndTheirNames = new HashMap<>();
 
         try (Stream<Path> paths = Files.list(Paths.get(directoryWithResumesInPdf))) {
             paths.filter(file -> file.toString().endsWith(".pdf"))
                     .forEach(file -> {
-// TODO RR: if no need to have below then should be removed                        
-//                        fileNames.add(file.getFileName().toString());
                         filesAndTheirNames.put(file.toString(), file.getFileName().toString());
                     });
         } catch (IOException e) {
@@ -44,7 +41,7 @@ public class CandidateFactory {
         return filesAndTheirNames;
     }
 
-    private static void iterateOverMapElementsAndReplace(HashMap<String,String> fileNames, Pattern pattern){
+    private static void iterateOverMapElementsAndReplace(Map<String,String> fileNames, Pattern pattern){
         for (Map.Entry<String, String> entry : fileNames.entrySet()) {
             String oldValue = entry.getValue();
             String newValue = pattern.matcher(oldValue).replaceAll("");
@@ -52,7 +49,7 @@ public class CandidateFactory {
         }
     }
 
-    private static void separateFirstAndLastNames(HashMap<String,String> fileNames) {
+    private static void separateFirstAndLastNames(Map<String,String> fileNames) {
         for (Map.Entry<String, String> entry : fileNames.entrySet()) {
             String oldValue = entry.getValue();
             String newValue = separateValuesWithSpace(oldValue);
@@ -87,10 +84,10 @@ public class CandidateFactory {
         return separatedValues;
     }
 
-    private static List<Candidate> createCandidates(Recruitment recruitment, HashMap<String,String> fileNames) {
+    private static List<Candidate> createCandidates(Recruitment recruitment, Map<String,String> fileNames) {
         List<Candidate> candidates = new ArrayList<>();
-        String firstName = "???";
-        String lastName = "???";
+        String firstName;
+        String lastName;
 
         for (Map.Entry<String, String> entry : fileNames.entrySet()) {
             String[] firstAndLastName = entry.getValue().split(" ");
@@ -110,21 +107,4 @@ public class CandidateFactory {
         }
         return candidates;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

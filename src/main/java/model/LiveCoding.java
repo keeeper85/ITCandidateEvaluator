@@ -8,16 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class LiveCoding {
-
+final class LiveCoding {
     private static final Path TASK_FILES_DIRECTORY = Paths.get("src/main/resources/liveCoding");
+
+    private LiveCoding() {}
 
     public static List<String> getLiveCodingTasksList(){
         List<String> tasksList = new ArrayList<>();
         List<Path> files = getTaskFiles(TASK_FILES_DIRECTORY);
 
         for (Path file : files) {
-            List<String> lines = new ArrayList<>();
+            List<String> lines;
             try {
                 lines = Files.readAllLines(file);
                 String task = changeListToString(lines);
@@ -30,7 +31,7 @@ public class LiveCoding {
         return tasksList;
     }
 
-    public static List<Path> getTaskFiles(Path path){
+    private static List<Path> getTaskFiles(Path path){
         List<Path> files = new ArrayList<>();
 
         try (Stream<Path> paths = Files.list(path)) {
@@ -45,7 +46,7 @@ public class LiveCoding {
         return files;
     }
 
-    public static String changeListToString(List<String> lines){
+    private static String changeListToString(List<String> lines){
         StringBuilder builder = new StringBuilder();
 
         for (String line : lines) {
@@ -54,7 +55,4 @@ public class LiveCoding {
 
         return builder.toString();
     }
-
-
-
 }

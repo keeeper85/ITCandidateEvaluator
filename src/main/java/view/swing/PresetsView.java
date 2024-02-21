@@ -18,7 +18,7 @@ public class PresetsView extends JPanel {
     private View view;
     private Model model;
     private String[] presetChoices;
-    private HashMap<String,HashMap<String, Integer>> presets;
+    private Map<String,HashMap<String, Integer>> presets;
     private HashMap<String, Integer> currentSliderSettings = new HashMap<>();
     private String chosenPreset;
     private JTextField presetName;
@@ -243,7 +243,7 @@ public class PresetsView extends JPanel {
                     Recruitment recruitment = model.startNewRecruitment(name, presetName.getText(), currentSliderSettings);
                     if (recruitment == null) {
                         dialog.dispose();
-                        JOptionPane.showMessageDialog(null, "This name is invalid. Try different.", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "This name has already been chosen. Try different.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                     else{
                         candidateListView.setRecruitment(recruitment);

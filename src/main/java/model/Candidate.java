@@ -1,10 +1,6 @@
 package model;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Candidate extends AbstractCandidate{
 
@@ -15,7 +11,7 @@ public class Candidate extends AbstractCandidate{
     public String generateFeedback(){
         isFinished = true;
         evaluationScore = recruitment.calculateFinalCandidateScorePercent(this);
-        return Feedback.generateFeedback(this);
+        return FeedbackHelper.generateFeedback(this);
     }
     @Override
     public String toString() {
