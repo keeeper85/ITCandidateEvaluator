@@ -108,6 +108,8 @@ public class CandidateDTO {
         candidate.translateAndAddRawScores(rawScores);
         candidate.setQuestionsEvaluatedForDisplay(questionsEvaluatedForDisplay);
         candidate.setFinished(isFinished);
+
+        candidate.getRecruitment().getModel().updateRecruitmentList();
     }
 
     public int calculateQuestionsAverageScore(){

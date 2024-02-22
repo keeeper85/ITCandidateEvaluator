@@ -1,6 +1,7 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import controller.Controller;
 import model.*;
+import model.storage.FileStrategy;
 import view.swing.View;
 
 import javax.swing.*;
@@ -14,7 +15,7 @@ import java.util.stream.Stream;
 
 public class ITCandidateEvaluator {
     public static void main(String[] args) {
-        Model model = new Model();
+        Model model = new Model(new FileStrategy());
         Controller controller = new Controller(model);
         View view = controller.getView();
         model.addObserver(view);

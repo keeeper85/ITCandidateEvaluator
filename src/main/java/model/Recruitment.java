@@ -176,6 +176,7 @@ public class Recruitment {
     public Presets getPresets() {
         return presets;
     }
+    public Model getModel() { return model; }
     public boolean isFinished() {
         return isFinished;
     }

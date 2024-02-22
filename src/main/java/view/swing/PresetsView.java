@@ -258,7 +258,7 @@ public class PresetsView extends JPanel {
                     Recruitment recruitment = model.startNewRecruitment(name, presetName.getText(), currentSliderSettings);
                     if (recruitment == null) {
                         dialog.dispose();
-                        JOptionPane.showMessageDialog(null, "This name has already been chosen. Try different.", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "This name is taken or invalid (use only characters allowed for naming files). Try different.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                     else{
                         candidateListView.setRecruitment(recruitment);

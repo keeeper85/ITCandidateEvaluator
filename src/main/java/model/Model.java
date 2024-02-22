@@ -1,30 +1,28 @@
 package model;
 
+import model.storage.StorageStrategy;
+
 import java.util.*;
 
 public class Model extends Observable {
+    private StorageStrategy storageStrategy;
     private List<Recruitment> openRecruitmentProcesses; //todo SQL
     private QuestionFactory questionFactory;
 
-    public Model() {
+    public Model(StorageStrategy storageStrategy) {
+        this.storageStrategy = storageStrategy;
         questionFactory = new QuestionFactory();
         loadQuestionsFromFiles(questionFactory);
-        createTestingRecruitments();
+        loadRecruitmentList();
         startMonitoringRecruitments();
     }
 
-    private void createTestingRecruitments(){
-        openRecruitmentProcesses = new ArrayList<>();
-//        for (int i = 0; i < 10; i++) {
-//            String name = "Rec_" + i;
-//            Recruitment recruitment = new Recruitment(this,name, Presets.createRandomPresetsForTesting());
-//            if (i == 0) {
-//                recruitment.addCandidates(CandidateFactory.getCandidatesFromResumes("src/main/resources/resumeTest", recruitment));
-//                recruitment.addSingleCandidate(new Candidate(recruitment, "Ben", "Filler"));
-//            }
-//            if (i == 1) recruitment.getCandidateList().add(new Candidate(recruitment, "Ben", "Filler"));
-//            openRecruitmentProcesses.add(recruitment);
-//        }
+    private void loadRecruitmentList(){
+        openRecruitmentProcesses = storageStrategy.getRecruitmentList();
+    }
+
+    public boolean updateRecruitmentList(){
+        return storageStrategy.updateRecruitmentList(openRecruitmentProcesses);
     }
 
     private void loadQuestionsFromFiles(QuestionFactory questionFactory){
@@ -39,16 +37,17 @@ public class Model extends Observable {
 
     public Recruitment startNewRecruitment(String recruitmentName, String presetsName, HashMap<String, Integer> modifiersValues){
         Presets presets = new Presets(presetsName, modifiersValues);
-        if (nameIsAvailable(recruitmentName)){
+        if (canThisNameBeUsed(recruitmentName)){
             Recruitment recruitment = new Recruitment(this, recruitmentName, presets);
             openRecruitmentProcesses.add(recruitment);
+            if (!updateRecruitmentList()) return null;
 
             return recruitment;
         }
         return null;
     }
 
-    private boolean nameIsAvailable(String name) {
+    private boolean canThisNameBeUsed(String name) {
         for (Recruitment openRecruitmentProcess : openRecruitmentProcesses) {
             String takenName = openRecruitmentProcess.getName();
             if (name.equals(takenName)) return false;
@@ -57,7 +56,9 @@ public class Model extends Observable {
     }
 
     public boolean deleteExistingRecruitment(Recruitment recruitment){
-        return openRecruitmentProcesses.remove(recruitment);
+        openRecruitmentProcesses.remove(recruitment);
+
+        return updateRecruitmentList();
     }
 
     public List<Recruitment> getOpenRecruitmentProcesses() {
@@ -106,6 +107,7 @@ public class Model extends Observable {
             while (true){
                 int currentNumberOfRecruitments = openRecruitmentProcesses.size();
                 if (currentNumberOfRecruitments != numberOfRecruitments){
+                    model.updateRecruitmentList();
                     model.setChanged();
                     model.notifyObservers();
                     numberOfRecruitments = currentNumberOfRecruitments;
