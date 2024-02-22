@@ -9,11 +9,11 @@ import java.util.Map;
 public class AbstractCandidate {
 
     protected final Recruitment recruitment;
-    protected final String firstName;
-    protected final String lastName;
     protected Map<Stages, Integer> scores = new HashMap<>();
     protected Map<Question, Integer> evaluatedQuestions = new HashMap<>();
     protected List<String> questionsEvaluatedForDisplay = new ArrayList<>();
+    protected String firstName;
+    protected String lastName;
     protected String pathToResumeFile = "";
     protected String additionalNotes = "";
     protected String age;
@@ -60,9 +60,11 @@ public class AbstractCandidate {
     public String getFirstName() {
         return firstName;
     }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
     public String getLastName() {
         return lastName;
     }
+    public void setLastName(String lastName) { this.lastName = lastName; }
     public Map<Stages, Integer> getScores() {
         return scores;
     }

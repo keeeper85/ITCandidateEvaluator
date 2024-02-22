@@ -95,6 +95,8 @@ public class CandidateDTO {
     }
 
     private void transferDataToRealCandidate(Candidate candidate) {
+        candidate.setFirstName(firstName);
+        candidate.setLastName(lastName);
         candidate.setYearOfBirth(yearOfBirth);
         candidate.setPathToResumeFile(pathToResumeFile);
         candidate.setAdditionalNotes(notes);

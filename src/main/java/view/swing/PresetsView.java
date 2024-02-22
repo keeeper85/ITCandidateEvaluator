@@ -18,7 +18,7 @@ public class PresetsView extends JPanel {
     private View view;
     private Model model;
     private String[] presetChoices;
-    private Map<String,HashMap<String, Integer>> presets;
+    private Map<String,Map<String, Integer>> presets;
     private HashMap<String, Integer> currentSliderSettings = new HashMap<>();
     private String chosenPreset;
     private JTextField presetName;
@@ -80,7 +80,7 @@ public class PresetsView extends JPanel {
     }
 
     private void applyLoadedPresets(){
-        HashMap<String, Integer> slidersWithValues = getCurrentPreset();
+        Map<String, Integer> slidersWithValues = getCurrentPreset();
 
         for (JSlider slider : sliders) {
             String sliderName = slider.getName().toLowerCase();
@@ -99,8 +99,8 @@ public class PresetsView extends JPanel {
 
     }
 
-    private HashMap<String, Integer> getCurrentPreset() {
-        for (Map.Entry<String, HashMap<String, Integer>> entry : presets.entrySet()) {
+    private Map<String, Integer> getCurrentPreset() {
+        for (Map.Entry<String, Map<String, Integer>> entry : presets.entrySet()) {
             String presetName = entry.getKey();
             if (presetName.equals(chosenPreset)) return entry.getValue();
         }
@@ -221,6 +221,7 @@ public class PresetsView extends JPanel {
 
         JTextField nameField = new JTextField();
         nameField.setText("(1-20 characters)");
+        nameField.selectAll();
         dialog.add(new JLabel("   Recruitment name:"));
         dialog.add(nameField);
 

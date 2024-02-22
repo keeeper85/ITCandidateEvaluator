@@ -5,7 +5,7 @@ public class Question {
     private String sourceFileName;
     private String snippet;
     private String questionBody;
-    private final int SNIPPET_MAX_LENGTH_WORDS = 5;
+    private static final int SNIPPET_MAX_LENGTH_WORDS = 5;
 
     public Question(String sourceFileName, String questionBody) {
         this.sourceFileName = sourceFileName;
@@ -13,7 +13,7 @@ public class Question {
         snippet = createSnippet(questionBody);
     }
 
-    private String createSnippet(String questionBody){
+    public static String createSnippet(String questionBody){
         String[] allWords = questionBody.split(" ");
         StringBuilder snippetBuilder = new StringBuilder();
 
@@ -27,18 +27,13 @@ public class Question {
         return snippetBuilder.toString();
     }
 
+    public String getSnippet() { return snippet; }
     public String getSourceFileName() {
         return sourceFileName;
     }
-
-    public String getSnippet() {
-        return snippet;
-    }
-
     public String getQuestionBody() {
         return questionBody;
     }
-
     @Override
     public String toString() {
         return questionBody;

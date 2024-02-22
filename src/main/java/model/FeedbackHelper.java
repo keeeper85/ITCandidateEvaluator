@@ -60,7 +60,7 @@ final class FeedbackHelper {
 
     private static boolean stagePresent(Stages stage, Recruitment recruitment) {
         Presets presets = recruitment.getPresets();
-        HashMap<Stages, Integer> stages = presets.getPresetsValues();
+        Map<Stages, Integer> stages = presets.getPresetsValues();
         List<Stages> presentStages = new ArrayList<>();
 
         for (Map.Entry<Stages, Integer> entry : stages.entrySet()) {
@@ -87,9 +87,9 @@ final class FeedbackHelper {
         StringBuilder questionFeedbackBuilder = new StringBuilder();
 
         for (Map.Entry<Question, Integer> question : evaluatedQuestion.entrySet()) {
-            String questionBody = question.getKey().getQuestionBody();
+            String snippet = question.getKey().getSnippet();
             int score = question.getValue();
-            questionFeedbackBuilder.append("   -").append(questionBody).append(" : ").append(score).append("%.\n");
+            questionFeedbackBuilder.append("   -").append(snippet).append(" : ").append(score).append("%.\n");
         }
 
         return questionFeedbackBuilder.toString();

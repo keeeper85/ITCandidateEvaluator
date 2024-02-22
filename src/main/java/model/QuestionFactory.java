@@ -10,17 +10,16 @@ import java.util.stream.Stream;
 public class QuestionFactory implements Runnable{
 
     private List<Question> preparedList = new ArrayList<>();
-
     private static final Path QUESTION_FILES_DIRECTORY = Paths.get("src/main/resources/questions");
 
     private void prepareQuestionList(){
-        HashSet<Path> questionFiles = findQuestionFiles(QUESTION_FILES_DIRECTORY);
-        HashMap<String, HashSet<String>> questionsFromFiles = readQuestionFiles(questionFiles);
+        Set<Path> questionFiles = findQuestionFiles(QUESTION_FILES_DIRECTORY);
+        Map<String, Set<String>> questionsFromFiles = readQuestionFiles(questionFiles);
         preparedList = createQuestions(questionsFromFiles);
     }
 
-    private HashSet<Path> findQuestionFiles(Path questionFilesDirectory) {
-        HashSet<Path> files = new HashSet<>();
+    private Set<Path> findQuestionFiles(Path questionFilesDirectory) {
+        Set<Path> files = new HashSet<>();
 
         try (Stream<Path> paths = Files.list(questionFilesDirectory)) {
             paths.filter(file -> file.getFileName().toString().contains("question") && file.toString().endsWith(".txt"))
@@ -34,20 +33,20 @@ public class QuestionFactory implements Runnable{
         return files;
     }
 
-    private HashMap<String, HashSet<String>> readQuestionFiles(HashSet<Path> questionFiles) {
-        HashMap<String, HashSet<String>> filedQuestions = new HashMap<>();
+    private Map<String, Set<String>> readQuestionFiles(Set<Path> questionFiles) {
+        Map<String, Set<String>> filedQuestions = new HashMap<>();
 
         for (Path questionFile : questionFiles) {
             String fileName = questionFile.getFileName().toString();
-            HashSet<String> questions = readFile(questionFile);
+            Set<String> questions = readFile(questionFile);
             filedQuestions.put(fileName,questions);
         }
 
         return filedQuestions;
     }
 
-    private HashSet<String> readFile(Path path){
-        HashSet<String> questions;
+    private Set<String> readFile(Path path){
+        Set<String> questions;
         try {
             questions = formatQuestions(Files.readAllLines(path));
         } catch (IOException e) {
@@ -56,8 +55,8 @@ public class QuestionFactory implements Runnable{
         return questions;
     }
 
-    private HashSet<String> formatQuestions(List<String> allLines){
-        HashSet<String> formattedQuestions = new HashSet<>();
+    private Set<String> formatQuestions(List<String> allLines){
+        Set<String> formattedQuestions = new HashSet<>();
         StringBuilder questionsBuilder = new StringBuilder();
 
         for (String line : allLines) {
@@ -70,12 +69,12 @@ public class QuestionFactory implements Runnable{
         return formattedQuestions;
     }
 
-    private List<Question> createQuestions(HashMap<String, HashSet<String>> questionsFromFiles) {
+    private List<Question> createQuestions(Map<String, Set<String>> questionsFromFiles) {
         List<Question> preparedQuestions = new ArrayList<>();
 
-        for (Map.Entry<String, HashSet<String>> entry : questionsFromFiles.entrySet()) {
+        for (Map.Entry<String, Set<String>> entry : questionsFromFiles.entrySet()) {
             String questionFile = entry.getKey();
-            HashSet<String> questions = entry.getValue();
+            Set<String> questions = entry.getValue();
 
             for (String question : questions) {
                 Question preparedQuestion = new Question(questionFile, question);
@@ -85,16 +84,11 @@ public class QuestionFactory implements Runnable{
         return preparedQuestions;
     }
 
-    public List<Question> getPreparedList() {
-        return preparedList;
-    }
+    public List<Question> getPreparedList() { return preparedList; }
 
     @Override
     public void run() {
-        System.out.println("Thread started");
-        long dateStart = new Date().getTime();
+        //todo logger
         prepareQuestionList();
-        long dateEnd = new Date().getTime();
-        System.out.println("List prepared. Thread finished. Time elapsed: " + (dateEnd - dateStart));
     }
 }

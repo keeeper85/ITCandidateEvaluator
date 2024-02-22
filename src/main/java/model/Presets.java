@@ -12,10 +12,10 @@ import java.util.stream.Stream;
 
 public class Presets {
     private String name;
-    private HashMap<Stages, Integer> presetsValues;
-    private static HashSet<Presets> defaultPresets;
+    private Map<Stages, Integer> presetsValues;
+    private static Set<Presets> defaultPresets;
     private static final Path PRESETS_FILES_DIRECTORY = Paths.get("src/main/resources/presets");
-    private static final String[] stagesNames = {"Resume and social media evaluation","Own projects","English language assessment","Live coding","Salary expectations","Technical questions","Soft skills","Previous work experience"};
+    private static final String[] STAGES_NAMES = {"Resume and social media evaluation","Own projects","English language assessment","Live coding","Salary expectations","Technical questions","Soft skills","Previous work experience"};
 
     public Presets(String name, HashMap<String, Integer> modifiersValues) {
         this.name = name;
@@ -23,25 +23,25 @@ public class Presets {
         setPresetsValues(modifiersValues);
     }
 
-    public static Presets createRandomPresetsForTesting(){
-        HashMap<String, Integer> testMap = new HashMap<>();
-        testMap.put("Resume and social media evaluation", getRandomValueForTesting());
-        testMap.put("English language assessment", getRandomValueForTesting());
-        testMap.put("Previous work experience", getRandomValueForTesting());
-        testMap.put("Own projects", getRandomValueForTesting());
-        testMap.put("Live coding", getRandomValueForTesting());
-        testMap.put("Technical questions", getRandomValueForTesting());
-        testMap.put("Salary expectations", getRandomValueForTesting());
-        testMap.put("Soft skills", getRandomValueForTesting());
+//    public static Presets createRandomPresetsForTesting(){
+//        HashMap<String, Integer> testMap = new HashMap<>();
+//        testMap.put("Resume and social media evaluation", getRandomValueForTesting());
+//        testMap.put("English language assessment", getRandomValueForTesting());
+//        testMap.put("Previous work experience", getRandomValueForTesting());
+//        testMap.put("Own projects", getRandomValueForTesting());
+//        testMap.put("Live coding", getRandomValueForTesting());
+//        testMap.put("Technical questions", getRandomValueForTesting());
+//        testMap.put("Salary expectations", getRandomValueForTesting());
+//        testMap.put("Soft skills", getRandomValueForTesting());
+//
+//        return new Presets("testPresets", testMap);
+//    }
 
-        return new Presets("testPresets", testMap);
-    }
+//    private static int getRandomValueForTesting(){
+//        return ThreadLocalRandom.current().nextInt(1,10);
+//    }
 
-    private static int getRandomValueForTesting(){
-        return ThreadLocalRandom.current().nextInt(1,10);
-    }
-
-    public static HashSet<Presets> loadPresetsFromDirectory() {
+    public static Set<Presets> loadPresetsFromDirectory() {
         final String[] fileName = new String[1];
         defaultPresets = new HashSet<>();
 
@@ -67,10 +67,10 @@ public class Presets {
         return defaultPresets;
     }
 
-    private static boolean isMapValid(HashMap<String, Integer> map) {
+    private static boolean isMapValid(Map<String, Integer> map) {
         for (Map.Entry<String, Integer> entry : map.entrySet()) {
             String stageName = entry.getKey();
-            boolean isMatch = Arrays.asList(stagesNames).contains(stageName);
+            boolean isMatch = Arrays.asList(STAGES_NAMES).contains(stageName);
             if (!isMatch) return false;
 
             int value = entry.getValue();
@@ -79,7 +79,7 @@ public class Presets {
         return true;
     }
 
-    public static boolean saveNewPresetsToFile(String fileName, HashMap<String, Integer> newDefaultPresets){
+    static boolean saveNewPresetsToFile(String fileName, Map<String, Integer> newDefaultPresets){
         String filePath;
         if (fileName.contains("presets")) filePath = PRESETS_FILES_DIRECTORY.toString() + "\\" + fileName + ".json";
         else filePath = PRESETS_FILES_DIRECTORY.toString() + "\\" + fileName + "_presets.json";
@@ -93,7 +93,7 @@ public class Presets {
         return true;
     }
 
-    public void setPresetsValues(HashMap<String, Integer> modifiersValues){
+    private void setPresetsValues(HashMap<String, Integer> modifiersValues){
         for (Map.Entry<String, Integer> entry : modifiersValues.entrySet()) {
             String modifierName = entry.getKey().toLowerCase();
             Integer modifierValue = entry.getValue();
@@ -106,7 +106,7 @@ public class Presets {
         }
     }
 
-    public HashMap<Stages, Integer> getPresetsValues() {
+    public Map<Stages, Integer> getPresetsValues() {
         return presetsValues;
     }
 
@@ -114,7 +114,7 @@ public class Presets {
         return name;
     }
 
-    private String preparePresetsDescription(Presets presets){
+    private String preparePresetsDescription(){
         StringBuilder descriptionBuilder = new StringBuilder();
         for (Map.Entry<Stages, Integer> entry : presetsValues.entrySet()) {
             String stageName = entry.getKey().getStageName();
@@ -126,6 +126,6 @@ public class Presets {
 
     @Override
     public String toString() {
-        return preparePresetsDescription(this);
+        return preparePresetsDescription();
     }
 }

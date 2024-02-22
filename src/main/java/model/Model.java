@@ -15,16 +15,16 @@ public class Model extends Observable {
 
     private void createTestingRecruitments(){
         openRecruitmentProcesses = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            String name = "Rec_" + i;
-            Recruitment recruitment = new Recruitment(this,name, Presets.createRandomPresetsForTesting());
-            if (i == 0) {
-                recruitment.addCandidates(CandidateFactory.getCandidatesFromResumes("src/main/resources/resumeTest", recruitment));
-                recruitment.addSingleCandidate(new Candidate(recruitment, "Ben", "Filler"));
-            }
-            if (i == 1) recruitment.getCandidateList().add(new Candidate(recruitment, "Ben", "Filler"));
-            openRecruitmentProcesses.add(recruitment);
-        }
+//        for (int i = 0; i < 10; i++) {
+//            String name = "Rec_" + i;
+//            Recruitment recruitment = new Recruitment(this,name, Presets.createRandomPresetsForTesting());
+//            if (i == 0) {
+//                recruitment.addCandidates(CandidateFactory.getCandidatesFromResumes("src/main/resources/resumeTest", recruitment));
+//                recruitment.addSingleCandidate(new Candidate(recruitment, "Ben", "Filler"));
+//            }
+//            if (i == 1) recruitment.getCandidateList().add(new Candidate(recruitment, "Ben", "Filler"));
+//            openRecruitmentProcesses.add(recruitment);
+//        }
     }
 
     private void loadQuestionsFromFiles(QuestionFactory questionFactory){
@@ -64,13 +64,13 @@ public class Model extends Observable {
         return openRecruitmentProcesses;
     }
 
-    public Map<String,HashMap<String, Integer>> getListOfPresets(){
-        Map<String,HashMap<String, Integer>> listOfPresets = new HashMap<>();
+    public Map<String,Map<String, Integer>> getListOfPresets(){
+        Map<String,Map<String, Integer>> listOfPresets = new HashMap<>();
 
         Set<Presets> presets = Presets.loadPresetsFromDirectory();
         for (Presets preset : presets) {
-            HashMap<Stages, Integer> presetsValues = preset.getPresetsValues();
-            HashMap<String, Integer> singlePreset = new HashMap<>();
+            Map<Stages, Integer> presetsValues = preset.getPresetsValues();
+            Map<String, Integer> singlePreset = new HashMap<>();
             for (Map.Entry<Stages, Integer> entry : presetsValues.entrySet()) {
                 String stageName = entry.getKey().getStageName();
                 Integer presetValue = entry.getValue();

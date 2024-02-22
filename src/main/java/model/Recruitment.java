@@ -8,39 +8,36 @@ import java.util.List;
 import java.util.Map;
 
 public class Recruitment {
-
-    private final int STAGE_MAX_SCORE = 100;
+    private final int SINGLE_STAGE_MAX_SCORE = 100;
     private final double PERCENTAGE = 100.0;
     private final double DECIMAL = 10.0;
     private final double SOFT_SKILLS_FACTOR = 3.0; //higher value = less impact soft skills have on the other scores
     private Model model;
     private String name;
     private Presets presets;
-    private List<Candidate> candidateList;
+    private List<Candidate> candidateList = new ArrayList<>();
     private LocalDateTime dateOfCreation;
     private int maxPossibleScore;
-    private boolean isFinished;
-    private boolean areSoftSkillsIncluded = false;
     private int nextCandidateID;
+    private boolean isFinished = false;
+    private boolean areSoftSkillsIncluded = false;
 
     public Recruitment(Model model, String name, Presets presets) {
         this.model = model;
         this.name = name;
         this.presets = presets;
-        candidateList = new ArrayList<>();
         nextCandidateID = candidateList.size() + 1;
         dateOfCreation = LocalDateTime.now();
         maxPossibleScore = calculateMaxPossibleScore();
-        isFinished = false;
     }
 
-    public int calculateMaxPossibleScore(){
-        HashMap<Stages, Integer> stagesModifiers = presets.getPresetsValues();
+    private int calculateMaxPossibleScore(){
+        Map<Stages, Integer> stagesModifiers = presets.getPresetsValues();
         int maxPossibleScore = 0;
 
         for (Stages stage : stagesModifiers.keySet()) {
             if (!stage.equals(Stages.SALARY) && !stage.equals(Stages.SOFT_SKILLS)){
-                maxPossibleScore += STAGE_MAX_SCORE * getStageModifier(stage);
+                maxPossibleScore += SINGLE_STAGE_MAX_SCORE * getStageModifier(stage);
             }
             if (stage.equals(Stages.SOFT_SKILLS)) areSoftSkillsIncluded = true;
         }
@@ -52,8 +49,8 @@ public class Recruitment {
         return maxPossibleScore;
     }
 
-    public double getStageModifier(Stages stage){
-        HashMap<Stages, Integer> stagesModifiers = presets.getPresetsValues();
+    private double getStageModifier(Stages stage){
+        Map<Stages, Integer> stagesModifiers = presets.getPresetsValues();
         Integer presetsModifier = stagesModifiers.entrySet().stream()
                 .filter(entry -> entry.getKey() == stage)
                 .map(Map.Entry::getValue)
@@ -63,7 +60,7 @@ public class Recruitment {
         return presetsModifier / DECIMAL;
     }
 
-    public int calculateCandidateScore(Candidate candidate){
+    private int calculateCandidateScore(Candidate candidate){
         Map<Stages, Integer> stagesModifiers = presets.getPresetsValues();
         Map<Stages, Integer> candidateResults = candidate.getScores();
         int finalScore = 0;
@@ -85,8 +82,8 @@ public class Recruitment {
         return finalScore;
     }
 
-    public HashMap<Stages, Double> calculateModifiedScore(Map<Stages, Integer> stagesModifiers, Map<Stages, Integer> candidateResults){
-        HashMap<Stages, Double> modifiedScores = new HashMap<>();
+    private Map<Stages, Double> calculateModifiedScore(Map<Stages, Integer> stagesModifiers, Map<Stages, Integer> candidateResults){
+        Map<Stages, Double> modifiedScores = new HashMap<>();
 
         for (Map.Entry<Stages, Integer> stageModifier : stagesModifiers.entrySet()) {
             Stages stage = stageModifier.getKey();
@@ -105,7 +102,7 @@ public class Recruitment {
         return modifiedScores;
     }
 
-    public double getSoftSkillsModifier(Candidate candidate){
+    private double getSoftSkillsModifier(Candidate candidate){
         Map<Stages, Integer> stagesModifiers = presets.getPresetsValues();
         Integer presetsModifier = stagesModifiers.entrySet().stream()
                 .filter(entry -> entry.getKey() == Stages.SOFT_SKILLS)
@@ -162,13 +159,9 @@ public class Recruitment {
         nextCandidateID++;
     }
 
-    public Presets getPresets() {
-        return presets;
-    }
-
     public List<String> getStagesForEvaluation(){
         List<String> stagesForEvaluation = new ArrayList<>();
-        HashMap<Stages,Integer> presetsValues = presets.getPresetsValues();
+        Map<Stages,Integer> presetsValues = presets.getPresetsValues();
 
         for (Map.Entry<Stages, Integer> entry : presetsValues.entrySet()) {
             if (entry.getValue() > 0) stagesForEvaluation.add(entry.getKey().getStageName());
@@ -180,19 +173,18 @@ public class Recruitment {
     public String getName() {
         return name;
     }
-
+    public Presets getPresets() {
+        return presets;
+    }
     public boolean isFinished() {
         return isFinished;
     }
-
     public List<Candidate> getCandidateList() {
         return candidateList;
     }
-
     public LocalDateTime getDateOfCreation() {
         return dateOfCreation;
     }
-
 
     @Override
     public String toString() {
