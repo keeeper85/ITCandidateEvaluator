@@ -4,6 +4,6 @@ import java.util.HashMap;
 
 public interface Collectable {
 
-    HashMap<String, String> collectData();
+    boolean collectData();
     int getOrdinal();
 }

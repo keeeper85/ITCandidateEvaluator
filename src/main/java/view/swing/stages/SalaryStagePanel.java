@@ -1,14 +1,12 @@
 package view.swing.stages;
 
 import controller.CandidateDTO;
-import model.Candidate;
 import model.Stages;
 import view.swing.ViewConstants;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.util.HashMap;
 
 public class SalaryStagePanel extends AbstractStage { ;
     private final int TEXT_FIELDS_Y = 640;
@@ -20,9 +18,9 @@ public class SalaryStagePanel extends AbstractStage { ;
     private final int PERCENT = 100;
     private JTextField fromField;
     private JTextField toField;
-    private int from = 5000;
-    private int to = 10000;
-    private int expectedSalary = 7500;
+    private int from;
+    private int to;
+    private int expectedSalary;
 
     public SalaryStagePanel(StageView stageView) {
         super(stageView);
@@ -124,22 +122,19 @@ public class SalaryStagePanel extends AbstractStage { ;
     }
 
     @Override
-    public HashMap<String, String> collectData() {
-        updateScoreSlider();
+    public boolean collectData() {
+        boolean areNumbersOK = updateScoreSlider();
 
-        CandidateDTO temporaryCandidate = stageView.getCandidate();
+        CandidateDTO temporaryCandidate = stageView.getTemporaryCandidate();
         temporaryCandidate.setMinOfferedSalary(from);
         temporaryCandidate.setMaxOfferedSalary(to);
         temporaryCandidate.setExpectedSalary(scoreSlider.getValue());
 
-        HashMap<String, String> score = new HashMap<>();
         double expectedSalary = scoreSlider.getValue();
         double average = (to + from) / AVERAGE_FACTOR;
         int ratio = (int) (expectedSalary / average * PERCENT);
-        score.put(scoreSlider.getName(), String.valueOf(ratio));
         temporaryCandidate.getRawScores().put(scoreSlider.getName(), ratio);
-        score.put("money", String.valueOf(expectedSalary));
 
-        return score;
+        return areNumbersOK;
     }
 }

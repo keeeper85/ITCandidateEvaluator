@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
 public class CandidateView extends JPanel implements Collectable {
@@ -44,7 +43,7 @@ public class CandidateView extends JPanel implements Collectable {
     public CandidateView(StageView stageView, CandidateDTO temporaryCandidate) {
         this.stageView = stageView;
         this.temporaryCandidate = temporaryCandidate;
-        temporaryCandidate = stageView.getCandidate();
+        temporaryCandidate = stageView.getTemporaryCandidate();
         initCandidateView();
         if (temporaryCandidate != null) copyCandidateData();
     }
@@ -180,18 +179,15 @@ public class CandidateView extends JPanel implements Collectable {
         add(pickResumeFileButton);
     }
 
-    public void setTemporaryCandidate(CandidateDTO temporaryCandidate) {
-        this.temporaryCandidate = temporaryCandidate;
-    }
-
     @Override
-    public HashMap<String, String> collectData() {
+    public boolean collectData() {
         String firstName = this.firstName.getText();
         String lastName = this.lastName.getText();
         String year = this.yearOfBirth.getText();
 
         if (firstName.isEmpty() || lastName.isEmpty()){
             JOptionPane.showMessageDialog(null, ViewConstants.INPUT_ERROR_MESSAGE, "Text input error", JOptionPane.WARNING_MESSAGE);
+            return false;
         }
         else{
             temporaryCandidate.setFirstName(firstName);
@@ -205,17 +201,13 @@ public class CandidateView extends JPanel implements Collectable {
                 int tooOld = 1900;
                 int currentYear = Calendar.getInstance().get(Calendar.YEAR);
                 if (yearOfBirth > tooOld && yearOfBirth < currentYear) temporaryCandidate.setYearOfBirth(yearOfBirth);
+                else throw new NumberFormatException();
             } catch (NumberFormatException ignored){
                 JOptionPane.showMessageDialog(null, ViewConstants.INPUT_ERROR_MESSAGE, "Text input error", JOptionPane.WARNING_MESSAGE);
+                return false;
             }
         }
-
-        HashMap<String, String> candidateData = new HashMap<>();
-        for (JTextField textField : textFields) {
-            candidateData.put(textField.getName(), textField.getText());
-        }
-        candidateData.put(notes.getName(), notes.getText());
-        return candidateData;
+        return true;
     }
 
     @Override

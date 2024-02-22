@@ -163,10 +163,8 @@ public class CandidateListView extends JPanel {
             if (selectedCandidate != null) {
                 if (selectedCandidate.isFinished()) JOptionPane.showMessageDialog(null, "This candidate has finished evaluation. You can't edit data anymore.", "Information", JOptionPane.INFORMATION_MESSAGE);
                 else{
-                    CandidateListView candidateListView = new CandidateListView(view);
                     CandidateDTO temporaryCandidate = controller.createTemporaryCandidate(selectedCandidate, recruitment);
                     StageView stageView = new StageView(view, temporaryCandidate, recruitment);
-                    stageView.setCandidate(temporaryCandidate);
                     view.setCurrentPanel(stageView);
                 }
             }

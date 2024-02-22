@@ -6,8 +6,6 @@ import model.Stages;
 import view.swing.ViewConstants;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
@@ -25,8 +23,8 @@ public class QuestionsStagePanel extends AbstractStage {
     private List<Question> questions;
     private List<String> filesList;
     private List<Question> questionsDisplayedInChooser;
-    private Map<Question, Integer> questionsEvaluatedForCollection = new HashMap<>();
-    private List<String> questionsEvaluatedForDisplay = new ArrayList<>();
+    private Map<Question, Integer> questionsEvaluatedForCollection;
+    private List<String> questionsEvaluatedForDisplay;
     private String selectedFile = chooseFile;
     private String selectedQuestion = "";
     private JTextField questionNameField;
@@ -35,7 +33,7 @@ public class QuestionsStagePanel extends AbstractStage {
     public QuestionsStagePanel(StageView stageView) {
         super(stageView);
 
-        CandidateDTO temporaryCandidate = stageView.getCandidate();
+        CandidateDTO temporaryCandidate = stageView.getTemporaryCandidate();
         questionsEvaluatedForCollection = temporaryCandidate.getEvaluatedQuestions();
         questionsEvaluatedForDisplay = temporaryCandidate.getQuestionsEvaluatedForDisplay();
         if (questionsEvaluatedForDisplay.size() > 0) isQuestionAsked = true;
@@ -187,8 +185,7 @@ public class QuestionsStagePanel extends AbstractStage {
         String errorMessage = "The question must have a name! Pick one from the list or type in your question.";
         if (currentQuestion.isEmpty()) JOptionPane.showMessageDialog(null, errorMessage, "Saving score: failure.", JOptionPane.ERROR_MESSAGE);
         else if (!questionsEvaluatedForCollection.containsKey(currentQuestion)){
-            String stringFromScoreSliderValue = String.valueOf(scoreSlider.getValue());
-            questionsEvaluatedForCollection.put(new Question("", currentQuestion), scoreSlider.getValue()); //todo
+            questionsEvaluatedForCollection.put(new Question("", currentQuestion), scoreSlider.getValue());
             questionsEvaluatedForDisplay.add(currentQuestion);
             scoreSlider.setValue(SLIDER_DEFAULT_VALUE);
             updateTextFields(selectedQuestion);
@@ -203,18 +200,16 @@ public class QuestionsStagePanel extends AbstractStage {
         return questionsEvaluatedForCollection.size();
     }
 
-    public boolean isQuestionAsked() {
-        return isQuestionAsked;
-    }
-
     @Override
-    public HashMap<String, String> collectData() {
-        CandidateDTO temporaryCandidate = stageView.getCandidate();
+    public boolean collectData() {
+        CandidateDTO temporaryCandidate = stageView.getTemporaryCandidate();
         temporaryCandidate.getEvaluatedQuestions().putAll(questionsEvaluatedForCollection);
         temporaryCandidate.setQuestionsEvaluatedForDisplay(questionsEvaluatedForDisplay);
         int averageScore = temporaryCandidate.calculateQuestionsAverageScore();
         temporaryCandidate.getRawScores().put(scoreSlider.getName(), averageScore);
-        selectedQuestion = questionNameField.getText();
-        return new HashMap<>();
+
+        if (!isQuestionAsked) JOptionPane.showMessageDialog(null, "Ask at least one questions to proceed.", "No questions asked", JOptionPane.WARNING_MESSAGE);
+
+        return isQuestionAsked;
     }
 }

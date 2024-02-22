@@ -1,14 +1,12 @@
 package view.swing.stages;
 
 import controller.CandidateDTO;
-import model.AbstractCandidate;
-import model.Candidate;
 import model.Model;
 import model.Recruitment;
+import model.Stages;
 import view.swing.View;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +19,7 @@ public class StageView extends JPanel {
     private Collectable previousStagePanel;
     private List<Collectable> chosenStages = new ArrayList<>();
     private Sidepanel sidepanel;
-    private CandidateDTO candidate;
+    private CandidateDTO temporaryCandidate;
     private Recruitment recruitment;
     private final int MAIN_PANEL_POSITION_X = 0;
     private final int MAIN_PANEL_POSITION_Y = 0;
@@ -35,11 +33,11 @@ public class StageView extends JPanel {
     public StageView(View view, CandidateDTO temporaryCandidate, Recruitment recruitment) {
         this.view = view;
         this.model = view.getModel();
-        this.candidate = temporaryCandidate;
+        this.temporaryCandidate = temporaryCandidate;
         this.recruitment = recruitment;
 
         sidepanel = new Sidepanel(this);
-        initialPanel = new CandidateView(this, candidate);
+        initialPanel = new CandidateView(this, temporaryCandidate);
         currentStagePanel = initialPanel;
         initStageView();
     }
@@ -63,14 +61,14 @@ public class StageView extends JPanel {
         List<String> stagesForEvaluation = recruitment.getStagesForEvaluation();
 
         for (String stageName : stagesForEvaluation) {
-            if (stageName.equals("resume")) chosenStages.add(new ResumeStagePanel(this));
-            if (stageName.equals("language")) chosenStages.add(new LanguageStagePanel(this));
-            if (stageName.equals("experience")) chosenStages.add(new ExperienceStagePanel(this));
-            if (stageName.equals("projects")) chosenStages.add(new ProjectsStagePanel(this));
-            if (stageName.equals("coding")) chosenStages.add(new LiveCodingStagePanel(this));
-            if (stageName.equals("questions")) chosenStages.add(new QuestionsStagePanel(this));
-            if (stageName.equals("salary")) chosenStages.add(new SalaryStagePanel(this));
-            if (stageName.equals("soft")) chosenStages.add(new SoftSkillsStagePanel(this));
+            if (stageName.equals(Stages.RESUME.getStageName())) chosenStages.add(new ResumeStagePanel(this));
+            if (stageName.equals(Stages.LANGUAGE.getStageName())) chosenStages.add(new LanguageStagePanel(this));
+            if (stageName.equals(Stages.EXPERIENCE.getStageName())) chosenStages.add(new ExperienceStagePanel(this));
+            if (stageName.equals(Stages.PROJECTS.getStageName())) chosenStages.add(new ProjectsStagePanel(this));
+            if (stageName.equals(Stages.LIVE_CODING.getStageName())) chosenStages.add(new LiveCodingStagePanel(this));
+            if (stageName.equals(Stages.QUESTIONS.getStageName())) chosenStages.add(new QuestionsStagePanel(this));
+            if (stageName.equals(Stages.SALARY.getStageName())) chosenStages.add(new SalaryStagePanel(this));
+            if (stageName.equals(Stages.SOFT_SKILLS.getStageName())) chosenStages.add(new SoftSkillsStagePanel(this));
         }
         Collections.sort(chosenStages, (c1, c2) -> c1.getOrdinal() - c2.getOrdinal());
     }
@@ -88,28 +86,9 @@ public class StageView extends JPanel {
         repaint();
     }
 
-    public List<Collectable> getChosenStages() {
-//        List<JPanel> stages = new ArrayList<>();
-//        for (Collectable chosenStage : chosenStages) {
-//            stages.add((JPanel) chosenStage);
-//        }
+    public List<Collectable> getChosenStages() { return chosenStages; }
+    public Collectable getCurrentStagePanel() { return currentStagePanel; }
+    public View getView() { return view; }
+    public CandidateDTO getTemporaryCandidate() { return temporaryCandidate; }
 
-        return chosenStages;
-    }
-
-    public Collectable getCurrentStagePanel() {
-        return currentStagePanel;
-    }
-
-    public View getView() {
-        return view;
-    }
-
-    public void setCandidate(CandidateDTO candidate) {
-        this.candidate = candidate;
-    }
-
-    public CandidateDTO getCandidate() {
-        return candidate;
-    }
 }

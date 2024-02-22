@@ -12,15 +12,18 @@ import java.util.*;
 
 public class Sidepanel extends JPanel {
     private View view;
-    private List<Collectable> stagesToComplete = new ArrayList<>();
-    private HashMap<String, String> allStagesScore = new HashMap<>();
-    private Collectable currentStage = null;
+    private StageView stageView;
+    private Collectable currentStage;
     private CandidateDTO temporaryCandidate;
     private JButton saveScoreButton;
     private JButton finishButton;
     private JButton continueButton;
     private JButton backButton;
     private TimerPanel timerPanel;
+    private boolean isTheLastStep = false;
+    private boolean isTheFirstStep = true;
+    private boolean isQuestionStage = false;
+    private List<JButton> buttons = new ArrayList<>();
     private final int TIMER_LABEL_POSITION_X = 85;
     private final int TIMER_LABEL_POSITION_Y = 5;
     private final int TIMER_PANEL_POSITION_Y = 25;
@@ -31,19 +34,11 @@ public class Sidepanel extends JPanel {
     private final int SPACING = 90;
     private final int BUTTON_WIDTH = 200;
     private final int BUTTON_HEIGHT = 40;
-    private final int TEXT_FIELD_CHAR_LIMIT = 20;
-    private final int NOTES_FIELD_CHAR_LIMIT = 200;
-    private boolean isTheLastStep = false;
-    private boolean isTheFirstStep = true;
-    private boolean isQuestionStage = false;
-    private boolean areStagesPrepared = false;
-    private StageView stageView;
-    private List<JButton> buttons = new ArrayList<>();
 
     public Sidepanel(StageView stageView) {
         this.stageView = stageView;
         view = stageView.getView();
-        temporaryCandidate = stageView.getCandidate();
+        temporaryCandidate = stageView.getTemporaryCandidate();
 
         initSidepanel();
     }
@@ -78,12 +73,8 @@ public class Sidepanel extends JPanel {
         continueButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                currentStage = (Collectable) stageView.getCurrentStagePanel();
-                if (areFieldInputsCorrect()){
-                    HashMap<String, String> collectedData = currentStage.collectData();
-                    allStagesScore.putAll(collectedData);
-
-
+                currentStage = stageView.getCurrentStagePanel();
+                if (currentStage.collectData()){
                     Collectable nextStage = getNextStage();
                     if (nextStage != null) {
                         currentStage = nextStage;
@@ -91,58 +82,10 @@ public class Sidepanel extends JPanel {
                     }
                     updateButtons();
                 }
-                else{
-                    if (currentStage instanceof QuestionsStagePanel) JOptionPane.showMessageDialog(null, ViewConstants.QUESTION_INPUT_ERROR_MESSAGE, "No questions asked error", JOptionPane.WARNING_MESSAGE);
-                    else JOptionPane.showMessageDialog(null, ViewConstants.INPUT_ERROR_MESSAGE, "Text input error", JOptionPane.WARNING_MESSAGE);
-                }
-
             }
         });
         buttons.add(continueButton);
         return continueButton;
-    }
-
-    private boolean areFieldInputsCorrect() {
-        currentStage = stageView.getCurrentStagePanel();
-        if (currentStage instanceof CandidateView){
-            CandidateView candidateView = (CandidateView) currentStage;
-            HashMap<String, String> candidateData = candidateView.collectData();
-            for (Map.Entry<String, String> entry : candidateData.entrySet()) {
-                String key = entry.getKey();
-                String value = entry.getValue();
-                if (key.contains("Name")) {
-                    if (value == null || value.length() == 0 || value.length() > TEXT_FIELD_CHAR_LIMIT) return false;
-                }
-                else if (key.contains("nationality")){
-                    if (value.length() > TEXT_FIELD_CHAR_LIMIT) return false;
-                }
-                else if (key.contains("notes")){
-                    if (value.length() > NOTES_FIELD_CHAR_LIMIT) return false;
-                }
-                else if (key.contains("year")){
-                    if (value.length() == 0) return true;
-                    try{
-                        int yearOfBirth = Integer.parseInt(value);
-                        int tooOld = 1900;
-                        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-                        if (yearOfBirth < tooOld || yearOfBirth >= currentYear) return false;
-                    } catch (NumberFormatException e){
-                        return false;
-                    }
-                }
-            }
-        }
-        if (currentStage instanceof QuestionsStagePanel){
-            QuestionsStagePanel questionsStage = (QuestionsStagePanel) currentStage;
-            return questionsStage.isQuestionAsked();
-        }
-
-        if (currentStage instanceof SalaryStagePanel){
-            SalaryStagePanel salaryStagePanel = (SalaryStagePanel) currentStage;
-            return salaryStagePanel.updateScoreSlider();
-        }
-
-        return true;
     }
 
     private Collectable getNextStage(){
@@ -212,19 +155,18 @@ public class Sidepanel extends JPanel {
         saveExitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                currentStage = stageView.getCurrentStagePanel();
-                if (!areFieldInputsCorrect()){}
-                else {
-                    HashMap<String, String> collectedData = currentStage.collectData();
-                    temporaryCandidate.setEvaluationTimeSeconds(timerPanel.getSecondsElapsed());
-                    temporaryCandidate.saveData();
-                    String timePassed = String.valueOf(timerPanel.getSecondsElapsed());
-                    collectedData.put("evaluationTimeSeconds", timePassed);
+                    try {
+                        if (currentStage.collectData()){
+                            temporaryCandidate.setEvaluationTimeSeconds(timerPanel.getSecondsElapsed());
+                            temporaryCandidate.saveData();
 
-                    View view = stageView.getView();
-                    view.setCurrentPanel(new RecruitmentsListView(view));
-                    view.resetPreviousPanels();
-                }
+                            View view = stageView.getView();
+                            view.setCurrentPanel(new RecruitmentsListView(view));
+                            view.resetPreviousPanels();
+                        }
+                    } catch (NullPointerException ignored){
+                        JOptionPane.showMessageDialog(null, ViewConstants.INPUT_ERROR_MESSAGE, "Text input error", JOptionPane.WARNING_MESSAGE);
+                    }
             }
         });
 
@@ -257,7 +199,7 @@ public class Sidepanel extends JPanel {
         saveScoreButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                currentStage = (Collectable) stageView.getCurrentStagePanel();
+                currentStage = stageView.getCurrentStagePanel();
                 if (currentStage instanceof QuestionsStagePanel){
                     QuestionsStagePanel questionStage = ((QuestionsStagePanel) currentStage);
                     String title = "You've asked " + questionStage.getNumberOfQuestionsEvaluated() + " questions so far.";
@@ -320,9 +262,5 @@ public class Sidepanel extends JPanel {
         timerPanel = new TimerPanel(temporaryCandidate.getEvaluationTimeSeconds());
         timerPanel.setBounds(BUTTON_POSITION_X, TIMER_PANEL_POSITION_Y, BUTTON_WIDTH, BUTTON_HEIGHT);
         add(timerPanel);
-    }
-
-    public void addStages(Collectable collectable){
-        stagesToComplete.add(collectable);
     }
 }

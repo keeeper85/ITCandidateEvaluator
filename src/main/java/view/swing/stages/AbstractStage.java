@@ -8,16 +8,15 @@ import view.swing.ViewConstants;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.util.HashMap;
 import java.util.Map;
 
 public abstract class AbstractStage extends JPanel implements Collectable {
     protected StageView stageView;
     protected Stages stage;
+    protected Model model;
     protected CandidateDTO temporaryCandidate;
     protected int ordinal;
     protected String chooseFile = "Choose file:";
-    protected Model model;
     protected JLabel infoLabel;
     protected JLabel scoreLabel;
     protected JSlider scoreSlider;
@@ -36,7 +35,7 @@ public abstract class AbstractStage extends JPanel implements Collectable {
     public AbstractStage(StageView stageView) {
         this.stageView = stageView;
         this.model = stageView.getView().getModel();
-        temporaryCandidate =  stageView.getCandidate();
+        temporaryCandidate =  stageView.getTemporaryCandidate();
         setLayout(null);
         initTemplate();
     }
@@ -90,10 +89,8 @@ public abstract class AbstractStage extends JPanel implements Collectable {
         return scrollPane;
     }
 
-
-
     protected void adjustScoreSliderValue(){
-        CandidateDTO temporaryCandidate = stageView.getCandidate();
+        CandidateDTO temporaryCandidate = stageView.getTemporaryCandidate();
         Map<String, Integer> rawScores = temporaryCandidate.getRawScores();
         String sliderName = scoreSlider.getName();
 
@@ -126,13 +123,9 @@ public abstract class AbstractStage extends JPanel implements Collectable {
     }
 
     @Override
-    public HashMap<String, String> collectData() {
-        HashMap<String, String> score = new HashMap<>();
-        String value = String.valueOf(scoreSlider.getValue());
-        score.put(scoreSlider.getName(), value);
-        stageView.getCandidate().getRawScores().put(scoreSlider.getName(), scoreSlider.getValue());
-
-        return score;
+    public boolean collectData() {
+        stageView.getTemporaryCandidate().getRawScores().put(scoreSlider.getName(), scoreSlider.getValue());
+        return true;
     }
     @Override
     public int getOrdinal() {
