@@ -2,6 +2,7 @@ package view.swing;
 
 import model.Model;
 import model.Recruitment;
+import model.Stages;
 import view.swing.stages.CandidateView;
 
 import javax.swing.*;
@@ -139,9 +140,9 @@ public class PresetsView extends JPanel {
     private void addSliders(){
         int sliderPositionY = SLIDER_ROW_Y;
 
-        for (String label : ViewConstants.PRESETS_ITEMS_LABELS) {
-            add(createSliderLabel(label, sliderPositionY));
-            add(createSlider(label, sliderPositionY));
+        for (Stages label : Stages.values()) {
+            add(createSliderLabel(label.getStageTitle(), sliderPositionY));
+            add(createSlider(label.getStageTitle(), sliderPositionY));
             sliderPositionY += SLIDER_HEIGHT + SMALL_SPACING;
         }
     }

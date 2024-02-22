@@ -1,16 +1,16 @@
 package view.swing.stages;
 
+import model.Stages;
 import view.swing.ViewConstants;
 
 public class LanguageStagePanel extends AbstractStage{
     public LanguageStagePanel(StageView stageView) {
         super(stageView);
-        ordinal = 2;
     }
     @Override
-    protected void init() {
-        add(createTitleLabel("English Language Fluency Evaluation Stage"));
+    protected void startingHook() {
+        stage = Stages.LANGUAGE;
+        ordinal = stage.getStageOrdinal();
         add(createScrollableInfoLabel(ViewConstants.LANGUAGE_STAGE_INFO));
-        add(createScoreSlider("language"));
     }
 }

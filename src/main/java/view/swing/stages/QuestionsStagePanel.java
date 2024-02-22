@@ -2,6 +2,7 @@ package view.swing.stages;
 
 import controller.CandidateDTO;
 import model.Question;
+import model.Stages;
 import view.swing.ViewConstants;
 
 import javax.swing.*;
@@ -33,18 +34,18 @@ public class QuestionsStagePanel extends AbstractStage {
 
     public QuestionsStagePanel(StageView stageView) {
         super(stageView);
+
         CandidateDTO temporaryCandidate = stageView.getCandidate();
         questionsEvaluatedForCollection = temporaryCandidate.getEvaluatedQuestions();
         questionsEvaluatedForDisplay = temporaryCandidate.getQuestionsEvaluatedForDisplay();
         if (questionsEvaluatedForDisplay.size() > 0) isQuestionAsked = true;
-        ordinal = 6;
     }
 
     @Override
-    protected void init() {
-        add(createTitleLabel("Technical Questions Evaluation Stage"));
+    protected void startingHook() {
+        stage = Stages.QUESTIONS;
+        ordinal = stage.getStageOrdinal();
         add(createScrollableInfoLabel(ViewConstants.QUESTIONS_STAGE_INFO));
-        add(createScoreSlider("questions"));
 
         add(createQuestionNameField());
         initQuestions();

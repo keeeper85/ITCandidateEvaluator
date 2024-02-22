@@ -1,8 +1,8 @@
 package view.swing.stages;
 
 import controller.CandidateDTO;
-import model.Candidate;
 import model.Model;
+import model.Stages;
 import view.swing.ViewConstants;
 
 import javax.swing.*;
@@ -13,6 +13,7 @@ import java.util.Map;
 
 public abstract class AbstractStage extends JPanel implements Collectable {
     protected StageView stageView;
+    protected Stages stage;
     protected CandidateDTO temporaryCandidate;
     protected int ordinal;
     protected String chooseFile = "Choose file:";
@@ -37,11 +38,16 @@ public abstract class AbstractStage extends JPanel implements Collectable {
         this.model = stageView.getView().getModel();
         temporaryCandidate =  stageView.getCandidate();
         setLayout(null);
-        init();
-        adjustScoreSliderValue();
+        initTemplate();
     }
 
-    protected abstract void init();
+    protected void initTemplate(){
+        startingHook();
+        add(createTitleLabel(stage.getStageTitle()));
+        add(createScoreSlider(stage.getStageName()));
+        adjustScoreSliderValue();
+        finishingHook();
+    };
 
     protected JLabel createTitleLabel(String stageTitle){
         JLabel title = new JLabel(stageTitle);
@@ -49,20 +55,6 @@ public abstract class AbstractStage extends JPanel implements Collectable {
         title.setBounds(POSITION_X,INITIAL_POSITION_Y,TITLE_WIDTH,TITLE_HEIGHT);
 
         return title;
-    }
-
-    protected JScrollPane createScrollableInfoLabel(String stageInfo){
-        infoLabel = new JLabel(stageInfo);
-        infoLabel.setFont(ViewConstants.FONT_STAGE_INFO);
-
-        int positionY = INITIAL_POSITION_Y + TITLE_HEIGHT + SPACING;
-
-        JScrollPane scrollPane = new JScrollPane(infoLabel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setBorder(null);
-        scrollPane.setBounds(POSITION_X,positionY,INFO_WIDTH,INFO_HEIGHT);
-
-        return scrollPane;
     }
 
     protected JSlider createScoreSlider(String sliderName){
@@ -81,6 +73,24 @@ public abstract class AbstractStage extends JPanel implements Collectable {
 
         return scoreSlider;
     }
+    protected void startingHook(){}
+    protected void finishingHook(){}
+
+    protected JScrollPane createScrollableInfoLabel(String stageInfo){
+        infoLabel = new JLabel(stageInfo);
+        infoLabel.setFont(ViewConstants.FONT_STAGE_INFO);
+
+        int positionY = INITIAL_POSITION_Y + TITLE_HEIGHT + SPACING;
+
+        JScrollPane scrollPane = new JScrollPane(infoLabel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setBorder(null);
+        scrollPane.setBounds(POSITION_X,positionY,INFO_WIDTH,INFO_HEIGHT);
+
+        return scrollPane;
+    }
+
+
 
     protected void adjustScoreSliderValue(){
         CandidateDTO temporaryCandidate = stageView.getCandidate();

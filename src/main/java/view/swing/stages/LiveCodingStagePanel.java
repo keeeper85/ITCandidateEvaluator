@@ -1,5 +1,6 @@
 package view.swing.stages;
 
+import model.Stages;
 import view.swing.ViewConstants;
 
 import javax.swing.*;
@@ -25,16 +26,16 @@ public class LiveCodingStagePanel extends AbstractStage {
 
     public LiveCodingStagePanel(StageView stageView) {
         super(stageView);
-        ordinal = 5;
     }
 
     @Override
-    protected void init() {
-        add(createTitleLabel("Live Coding Evaluation Stage"));
+    protected void startingHook() {
+        stage = Stages.LIVE_CODING;
+        ordinal = stage.getStageOrdinal();
+        add(createScrollableInfoLabel(ViewConstants.LIVE_CODING_STAGE_INFO));
+
         add(createTaskPickMenu());
         add(createCopyToClipboardButton());
-        add(createScrollableInfoLabel(ViewConstants.LIVE_CODING_STAGE_INFO));
-        add(createScoreSlider("coding"));
     }
 
     private JComboBox<String> createTaskPickMenu(){

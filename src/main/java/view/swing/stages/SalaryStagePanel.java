@@ -2,6 +2,7 @@ package view.swing.stages;
 
 import controller.CandidateDTO;
 import model.Candidate;
+import model.Stages;
 import view.swing.ViewConstants;
 
 import javax.swing.*;
@@ -25,6 +26,7 @@ public class SalaryStagePanel extends AbstractStage { ;
 
     public SalaryStagePanel(StageView stageView) {
         super(stageView);
+
         from = temporaryCandidate.getMinOfferedSalary();
         to = temporaryCandidate.getMaxOfferedSalary();
         expectedSalary = temporaryCandidate.getExpectedSalary();
@@ -33,20 +35,25 @@ public class SalaryStagePanel extends AbstractStage { ;
         toField.setText(String.valueOf(to));
         updateScoreSlider();
         scoreSlider.setValue(expectedSalary);
-
-        ordinal = 7;
     }
 
     @Override
-    protected void init() {
-        add(createTitleLabel("Salary Expectations Evaluation Stage"));
+    protected void startingHook() {
+        stage = Stages.SALARY;
+        ordinal = stage.getStageOrdinal();
         add(createScrollableInfoLabel(ViewConstants.SALARY_STAGE_INFO));
+
         add(createScoreLabel());
         scoreLabel.setText("Move the slider to match (roughly) the candidate's salary expectations:");
 
         add(createFromField());
         add(createToField());
-        add(createScoreSlider("salary"));
+    }
+
+    @Override
+    protected void finishingHook() {
+        remove(scoreSlider);
+        add(createScoreSlider(stage.getStageName()));
     }
 
     private JTextField createFromField(){
