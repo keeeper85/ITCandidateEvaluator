@@ -4,15 +4,20 @@ import model.Recruitment;
 
 import java.util.List;
 
-public class MySqlStrategy implements StorageStrategy{
+public class MySqlStrategy extends AbstractStrategy{
+
     @Override
-    public List<Recruitment> getRecruitmentList() {
-        return null;
+    protected boolean addRecords() {
+        return false;
     }
 
     @Override
-    public boolean updateRecruitmentList(List<Recruitment> recruitmentList) {
+    protected boolean replaceRecords() {
+        return false;
+    }
 
-        return true;
+    @Override
+    protected boolean deleteRecords() {
+        return false;
     }
 }

@@ -5,12 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
-public class Presets {
+public class Presets implements Serializable {
     private String name;
     private Map<Stages, Integer> presetsValues;
     private static Set<Presets> defaultPresets;

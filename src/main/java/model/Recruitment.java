@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -7,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Recruitment {
+public class Recruitment implements Serializable {
     private final int SINGLE_STAGE_MAX_SCORE = 100;
     private final double PERCENTAGE = 100.0;
     private final double DECIMAL = 10.0;
@@ -19,6 +20,7 @@ public class Recruitment {
     private LocalDateTime dateOfCreation;
     private int maxPossibleScore;
     private int nextCandidateID;
+    private boolean isModified = false;
     private boolean isFinished = false;
     private boolean areSoftSkillsIncluded = false;
 
@@ -183,9 +185,9 @@ public class Recruitment {
     public List<Candidate> getCandidateList() {
         return candidateList;
     }
-    public LocalDateTime getDateOfCreation() {
-        return dateOfCreation;
-    }
+    public LocalDateTime getDateOfCreation() { return dateOfCreation; }
+    public boolean isModified() { return isModified; }
+    public void setModified(boolean modified) { isModified = modified; }
 
     @Override
     public String toString() {

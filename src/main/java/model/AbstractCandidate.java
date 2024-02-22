@@ -1,12 +1,13 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AbstractCandidate {
+public class AbstractCandidate implements Serializable {
 
     protected final Recruitment recruitment;
     protected Map<Stages, Integer> scores = new HashMap<>();

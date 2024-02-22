@@ -109,6 +109,7 @@ public class CandidateDTO {
         candidate.setQuestionsEvaluatedForDisplay(questionsEvaluatedForDisplay);
         candidate.setFinished(isFinished);
 
+        candidate.getRecruitment().setModified(true);
         candidate.getRecruitment().getModel().updateRecruitmentList();
     }
 

@@ -1,13 +1,14 @@
 package model;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class QuestionFactory implements Runnable{
+public class QuestionFactory implements Runnable, Serializable {
 
     private List<Question> preparedList = new ArrayList<>();
     private static final Path QUESTION_FILES_DIRECTORY = Paths.get("src/main/resources/questions");

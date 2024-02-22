@@ -2,9 +2,10 @@ package model;
 
 import model.storage.StorageStrategy;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Model extends Observable {
+public class Model extends Observable implements Serializable {
     private StorageStrategy storageStrategy;
     private List<Recruitment> openRecruitmentProcesses; //todo SQL
     private QuestionFactory questionFactory;
@@ -19,9 +20,12 @@ public class Model extends Observable {
 
     private void loadRecruitmentList(){
         openRecruitmentProcesses = storageStrategy.getRecruitmentList();
+        for (Recruitment openRecruitmentProcess : openRecruitmentProcesses) {
+            openRecruitmentProcess.setModified(false);
+        }
     }
 
-    public boolean updateRecruitmentList(){
+    public synchronized boolean updateRecruitmentList(){
         return storageStrategy.updateRecruitmentList(openRecruitmentProcesses);
     }
 
