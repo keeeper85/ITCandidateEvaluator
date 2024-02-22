@@ -137,6 +137,11 @@ public class Sidepanel extends JPanel {
             return questionsStage.isQuestionAsked();
         }
 
+        if (currentStage instanceof SalaryStagePanel){
+            SalaryStagePanel salaryStagePanel = (SalaryStagePanel) currentStage;
+            return salaryStagePanel.updateScoreSlider();
+        }
+
         return true;
     }
 
@@ -208,7 +213,7 @@ public class Sidepanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 currentStage = stageView.getCurrentStagePanel();
-                if (currentStage instanceof CandidateView && !areFieldInputsCorrect()){}
+                if (!areFieldInputsCorrect()){}
                 else {
                     HashMap<String, String> collectedData = currentStage.collectData();
                     temporaryCandidate.setEvaluationTimeSeconds(timerPanel.getSecondsElapsed());

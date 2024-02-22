@@ -103,19 +103,24 @@ public class SalaryStagePanel extends AbstractStage { ;
         return toField;
     }
 
-    private void updateScoreSlider(){
+    public boolean updateScoreSlider(){
         try{
             from = Integer.parseInt(fromField.getText());
             to = Integer.parseInt(toField.getText());
         } catch (NumberFormatException e){
             JOptionPane.showMessageDialog(null, ViewConstants.SALARY_INPUT_ERROR_MESSAGE, "Salary input error", JOptionPane.WARNING_MESSAGE);
+            return false;
         }
 
-        if (from >= to) JOptionPane.showMessageDialog(null, ViewConstants.SALARY_INPUT_ERROR_MESSAGE, "Salary input error", JOptionPane.WARNING_MESSAGE);
+        if (from >= to) {
+            JOptionPane.showMessageDialog(null, ViewConstants.SALARY_INPUT_ERROR_MESSAGE, "Salary input error", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
         else{
             scoreSlider.setMinimum(from);
             scoreSlider.setMaximum(to);
         }
+        return true;
     }
 
     @Override

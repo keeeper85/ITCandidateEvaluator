@@ -293,7 +293,7 @@ public class CandidateListView extends JPanel {
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedDirectory = fileChooser.getSelectedFile();
             resumesDirectoryPath = selectedDirectory.getAbsolutePath();
-//            JOptionPane.showMessageDialog(this, "Selected directory: " + resumesDirectoryPath);
+
             remove(scrollPane);
             recruitment.addCandidates(CandidateFactory.getCandidatesFromResumes(resumesDirectoryPath, recruitment));
             populateCandidateList();
@@ -303,7 +303,7 @@ public class CandidateListView extends JPanel {
         }
     }
 
-    private JComboBox<SortingOptions> createSortingMenu(){ //todo
+    private JComboBox<SortingOptions> createSortingMenu(){
 
         JComboBox<SortingOptions> choiceMenu = new JComboBox<>(SortingOptions.values());
         choiceMenu.setBounds(LIST_X, TOP_ROW_Y, BUTTON_WIDTH, SORTING_MENU_HEIGHT);

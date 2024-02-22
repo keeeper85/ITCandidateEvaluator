@@ -3,7 +3,6 @@ package view.swing;
 import model.Model;
 import model.Recruitment;
 import model.Stages;
-import view.swing.stages.CandidateView;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -34,10 +33,19 @@ public class PresetsView extends JPanel {
     private final int SMALL_SPACING = 5;
     private final int SLIDER_ROW_Y = TOP_ROW_Y + SMALL_ITEM_HEIGHT + LARGE_SPACING;
     private final int SLIDER_ROW_X = 600;
-    private final int SLIDER_ROW_LABLE_X = 100;
-    private final int SLIDER_LABLE_WIDTH = 450;
+    private final int SLIDER_ROW_LABEL_X = 100;
+    private final int SLIDER_LABEL_WIDTH = 450;
+    private final int PRESET_SPACING = 450;
     private final int SLIDER_WIDTH = 500;
     private final int SLIDER_HEIGHT = 50;
+    private final int SLIDER_MIN_VALUE = 0;
+    private final int SLIDER_MAX_VALUE = 10;
+    private final int SLIDER_DEFAULT_VALUE = 5;
+    private final int SLIDER_MAJOR_SPACING = 2;
+    private final int SLIDER_MINOR_SPACING = 1;
+    private final int RECRUITMENT_NAME_DIALOG_WIDTH = 300;
+    private final int RECRUITMENT_NAME_DIALOG_HEIGHT = 150;
+    private final int RECRUITMENT_NAME_MAX_LENGTH_LETTERS = 20;
     private final int BOTTOM_ROW_X = 200;
     private final int BOTTOM_ROW_Y = 620;
 
@@ -83,19 +91,24 @@ public class PresetsView extends JPanel {
     private void applyLoadedPresets(){
         Map<String, Integer> slidersWithValues = getCurrentPreset();
 
-        for (JSlider slider : sliders) {
-            String sliderName = slider.getName().toLowerCase();
-            int count = 0;
+        try{
+            for (JSlider slider : sliders) {
+                String sliderName = slider.getName().toLowerCase();
+                int count = 0;
 
-            for (Map.Entry<String, Integer> entry : slidersWithValues.entrySet()) {
-                String entryName = entry.getKey();
-                if (sliderName.contains(entryName)){
-                    slider.setValue(entry.getValue());
-                    break;
+                for (Map.Entry<String, Integer> entry : slidersWithValues.entrySet()) {
+                    String entryName = entry.getKey();
+                    if (sliderName.contains(entryName)){
+                        slider.setValue(entry.getValue());
+                        break;
+                    }
+                    if (count == slidersWithValues.size() - 1) slider.setValue(0);
+                    count++;
                 }
-                if (count == slidersWithValues.size() - 1) slider.setValue(0);
-                count++;
             }
+        } catch (NullPointerException nullPreset){
+            //todo logger
+            throw new RuntimeException();
         }
 
     }
@@ -132,7 +145,7 @@ public class PresetsView extends JPanel {
     private void addPresetNameField(){
         presetName = new JTextField(chosenPreset);
         presetName.setFont(ViewConstants.FONT_LARGE);
-        int presetNameX = TOP_ROW_X + (2 * SMALL_ITEM_WIDTH) + LARGE_SPACING;
+        int presetNameX = TOP_ROW_X + PRESET_SPACING;
         presetName.setBounds(presetNameX, TOP_ROW_Y, SMALL_ITEM_WIDTH, SMALL_ITEM_HEIGHT);
         add(presetName);
     }
@@ -148,11 +161,11 @@ public class PresetsView extends JPanel {
     }
 
     private JSlider createSlider(String name, int sliderPositionY) {
-        JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 10, 5);
+        JSlider slider = new JSlider(JSlider.HORIZONTAL, SLIDER_MIN_VALUE, SLIDER_MAX_VALUE, SLIDER_DEFAULT_VALUE);
         slider.setName(name);
         slider.setBounds(SLIDER_ROW_X, sliderPositionY, SLIDER_WIDTH, SLIDER_HEIGHT);
-        slider.setMajorTickSpacing(2);
-        slider.setMinorTickSpacing(1);
+        slider.setMajorTickSpacing(SLIDER_MAJOR_SPACING);
+        slider.setMinorTickSpacing(SLIDER_MINOR_SPACING);
         slider.setPaintTicks(true);
         slider.setPaintLabels(true);
         currentSliderSettings.put(slider.getName(), slider.getValue());
@@ -170,7 +183,7 @@ public class PresetsView extends JPanel {
 
     private JLabel createSliderLabel(String labelText, int sliderPositionY){
         JLabel label = new JLabel(labelText);
-        label.setBounds(SLIDER_ROW_LABLE_X, sliderPositionY, SLIDER_LABLE_WIDTH, SMALL_ITEM_HEIGHT);
+        label.setBounds(SLIDER_ROW_LABEL_X, sliderPositionY, SLIDER_LABEL_WIDTH, SMALL_ITEM_HEIGHT);
         label.setFont(ViewConstants.FONT_LARGE);
         return label;
     }
@@ -239,7 +252,7 @@ public class PresetsView extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String name = nameField.getText();
-                if (name.equals("") || name == null || name.length() > 20){}
+                if (name.equals("") || name == null || name.length() > RECRUITMENT_NAME_MAX_LENGTH_LETTERS){}
                 else{
                     CandidateListView candidateListView = new CandidateListView(view);
                     Recruitment recruitment = model.startNewRecruitment(name, presetName.getText(), currentSliderSettings);
@@ -259,7 +272,7 @@ public class PresetsView extends JPanel {
         dialog.add(backButton);
         dialog.add(continueButton);
 
-        dialog.setSize(300, 150);
+        dialog.setSize(RECRUITMENT_NAME_DIALOG_WIDTH, RECRUITMENT_NAME_DIALOG_HEIGHT);
         dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
@@ -274,7 +287,7 @@ public class PresetsView extends JPanel {
         }
 
         if (model.savePresetsToFile(presetName.getText(),presets)){
-            result = "Presets file saved succesfully.";
+            result = "Presets file saved successfully.";
             loadPresetsFromModel();
         }
         else result = "There was a problem saving presets to file. Check the log.";

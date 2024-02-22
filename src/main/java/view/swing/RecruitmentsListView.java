@@ -1,13 +1,11 @@
 package view.swing;
 
 import model.Model;
-import model.Presets;
 import model.Recruitment;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +14,7 @@ public class RecruitmentsListView extends JPanel {
 
     private View view;
     private Model model;
-    private JList<Recruitment> recrutationsList;
+    private JList<Recruitment> recruitmentJList;
     private List<Recruitment> listForSorting;
     private List<Recruitment> listForSortingUnfinished;
     private DefaultListModel<Recruitment> listModel;
@@ -106,14 +104,14 @@ public class RecruitmentsListView extends JPanel {
     }
 
     private JScrollPane createScrollPane(){
-        recrutationsList = new JList<>(listModel);
-        recrutationsList.setFont(ViewConstants.FONT_LARGE);
-        recrutationsList.addListSelectionListener(e -> {
-            selectedRecruitment = recrutationsList.getSelectedValue();
+        recruitmentJList = new JList<>(listModel);
+        recruitmentJList.setFont(ViewConstants.FONT_LARGE);
+        recruitmentJList.addListSelectionListener(e -> {
+            selectedRecruitment = recruitmentJList.getSelectedValue();
             openButton.setEnabled(true);
             deleteButton.setEnabled(true);});
 
-        scrollPane = new JScrollPane(recrutationsList);
+        scrollPane = new JScrollPane(recruitmentJList);
         scrollPane.setBounds(LIST_X,LIST_Y,LIST_WIDTH,LIST_HEIGHT);
         return scrollPane;
     }
@@ -147,7 +145,7 @@ public class RecruitmentsListView extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 String warning = "This operation can not be undone!\nType 'delete' to remove the entire recruitment process.";
                 String userInput = JOptionPane.showInputDialog(null, warning, "Confirm:", JOptionPane.WARNING_MESSAGE);
-                int selectedRecrutationIndex = recrutationsList.getSelectedIndex();
+                int selectedRecrutationIndex = recruitmentJList.getSelectedIndex();
                 Recruitment recrutationForRemoval = listModel.get(selectedRecrutationIndex);
 
                 if (userInput != null
@@ -158,7 +156,7 @@ public class RecruitmentsListView extends JPanel {
                     listModel.remove(selectedRecrutationIndex);
                     listForSorting.remove(recrutationForRemoval);
                     listForSortingUnfinished.remove(recrutationForRemoval);
-                    recrutationsList.repaint();
+                    recruitmentJList.repaint();
                     JOptionPane.showMessageDialog(null, "Recruitment process deleted!");
 
                 } else {
