@@ -13,7 +13,6 @@ public class View extends JFrame implements Observer {
 
     private Model model;
     private Controller controller;
-    private Recruitment newRecruitment;
     private JPanel currentPanel;
     private Stack<JPanel> previousPanels = new Stack<>();
 
@@ -66,7 +65,6 @@ public class View extends JFrame implements Observer {
         revalidate();
         repaint();
     }
-
     public Model getModel() {
         return model;
     }
@@ -77,6 +75,5 @@ public class View extends JFrame implements Observer {
             RecruitmentsListView recruitmentsListView = (RecruitmentsListView) currentPanel;
             recruitmentsListView.populateRecruitmentList();
         }
-        System.out.println("recruitment has been created");
     }
 }

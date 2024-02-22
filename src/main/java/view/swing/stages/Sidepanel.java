@@ -103,10 +103,8 @@ public class Sidepanel extends JPanel {
     }
 
     private boolean areFieldInputsCorrect() {
-        //comment for testing
         currentStage = stageView.getCurrentStagePanel();
         if (currentStage instanceof CandidateView){
-            System.out.println("test");
             CandidateView candidateView = (CandidateView) currentStage;
             HashMap<String, String> candidateData = candidateView.collectData();
             for (Map.Entry<String, String> entry : candidateData.entrySet()) {
@@ -209,16 +207,19 @@ public class Sidepanel extends JPanel {
         saveExitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                currentStage = (Collectable) stageView.getCurrentStagePanel();
-                HashMap<String, String> collectedData = currentStage.collectData();
-                temporaryCandidate.setEvaluationTimeSeconds(timerPanel.getSecondsElapsed());
-                temporaryCandidate.saveData();
-                String timePassed = String.valueOf(timerPanel.getSecondsElapsed());
-                collectedData.put("evaluationTimeSeconds", timePassed);
+                currentStage = stageView.getCurrentStagePanel();
+                if (currentStage instanceof CandidateView && !areFieldInputsCorrect()){}
+                else {
+                    HashMap<String, String> collectedData = currentStage.collectData();
+                    temporaryCandidate.setEvaluationTimeSeconds(timerPanel.getSecondsElapsed());
+                    temporaryCandidate.saveData();
+                    String timePassed = String.valueOf(timerPanel.getSecondsElapsed());
+                    collectedData.put("evaluationTimeSeconds", timePassed);
 
-                View view = stageView.getView();
-                view.setCurrentPanel(new RecruitmentsListView(view));
-                view.resetPreviousPanels();
+                    View view = stageView.getView();
+                    view.setCurrentPanel(new RecruitmentsListView(view));
+                    view.resetPreviousPanels();
+                }
             }
         });
 
