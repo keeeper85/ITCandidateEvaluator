@@ -8,4 +8,6 @@ import java.util.List;
 public interface StorageStrategy {
     List<Recruitment> getRecruitmentList(Model model);
     boolean updateRecruitmentList(List<Recruitment> recruitmentList, Model model);
+    void closeConnection();
+
 }

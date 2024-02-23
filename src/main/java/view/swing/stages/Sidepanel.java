@@ -155,18 +155,15 @@ public class Sidepanel extends JPanel {
         saveExitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                    try {
-                        if (currentStage.collectData()){
-                            temporaryCandidate.setEvaluationTimeSeconds(timerPanel.getSecondsElapsed());
-                            temporaryCandidate.saveData();
+                currentStage = stageView.getCurrentStagePanel();
+                if (currentStage.collectData()){
+                    temporaryCandidate.setEvaluationTimeSeconds(timerPanel.getSecondsElapsed());
+                    temporaryCandidate.saveData();
 
-                            View view = stageView.getView();
-                            view.setCurrentPanel(new RecruitmentsListView(view));
-                            view.resetPreviousPanels();
-                        }
-                    } catch (NullPointerException ignored){
-                        JOptionPane.showMessageDialog(null, ViewConstants.INPUT_ERROR_MESSAGE, "Text input error", JOptionPane.WARNING_MESSAGE);
-                    }
+                    View view = stageView.getView();
+                    view.setCurrentPanel(new RecruitmentsListView(view));
+                    view.resetPreviousPanels();
+                }
             }
         });
 

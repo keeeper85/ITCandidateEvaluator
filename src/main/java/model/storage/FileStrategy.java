@@ -66,7 +66,6 @@ public class FileStrategy extends AbstractStrategy{
     protected boolean replaceRecords() {
         List<String> fileNamesForRemoval = getRecruitmentNames(toReplace);
         boolean allReplaced = true;
-        System.out.println("replacing");
 
         for (String recruitmentName : fileNamesForRemoval) {
             String filePath = RECRUITMENT_STORAGE_DIRECTORY + File.separator + recruitmentName + ".ser";
@@ -109,5 +108,10 @@ public class FileStrategy extends AbstractStrategy{
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void closeConnection() {
+
     }
 }

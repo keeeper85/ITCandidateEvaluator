@@ -62,7 +62,9 @@ public class InitialView extends JPanel {
 
     private JButton createExitButton(){
         JButton exit = new JButton("Exit");
-        exit.addActionListener((e -> {System.exit(0);}));
+        exit.addActionListener((e -> {
+            view.getModel().closeDatabaseConnection();
+            System.exit(0);}));
         buttons.add(exit);
         return exit;
     }

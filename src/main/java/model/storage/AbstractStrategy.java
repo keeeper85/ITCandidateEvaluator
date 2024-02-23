@@ -4,6 +4,7 @@ import model.Model;
 import model.Recruitment;
 
 import java.io.Serializable;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,7 @@ public abstract class AbstractStrategy implements StorageStrategy, Serializable 
     protected List<Recruitment> toAdd = new ArrayList<>();
     protected List<Recruitment> toDelete = new ArrayList<>();
     protected List<Recruitment> toReplace = new ArrayList<>();
+    protected Connection connection;
 
 
     @Override

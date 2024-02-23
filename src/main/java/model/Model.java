@@ -22,6 +22,7 @@ public class Model extends Observable {
         openRecruitmentProcesses = storageStrategy.getRecruitmentList(this);
         for (Recruitment openRecruitmentProcess : openRecruitmentProcesses) {
             openRecruitmentProcess.setModified(false);
+            openRecruitmentProcess.setModel(this);
         }
     }
 
@@ -86,6 +87,10 @@ public class Model extends Observable {
         }
 
         return listOfPresets;
+    }
+
+    public void closeDatabaseConnection(){
+        storageStrategy.closeConnection();
     }
 
     public boolean savePresetsToFile(String fileName, HashMap<String, Integer> newDefaultPresets){
