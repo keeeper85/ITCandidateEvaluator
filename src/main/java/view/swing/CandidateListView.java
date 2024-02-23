@@ -146,7 +146,7 @@ public class CandidateListView extends JPanel {
             openButton.setEnabled(true);
             deleteButton.setEnabled(true);
             feedbackButton.setEnabled(true);
-            if (selectedCandidate.getPathToResumeFile() == null || selectedCandidate.getPathToResumeFile().length() < 5) cvButton.setEnabled(false);
+            if (selectedCandidate != null && (selectedCandidate.getPathToResumeFile() == null || selectedCandidate.getPathToResumeFile().length() < 5)) cvButton.setEnabled(false);
             else cvButton.setEnabled(true);});
 
         scrollPane = new JScrollPane(candidatesList);
@@ -183,11 +183,16 @@ public class CandidateListView extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String warning = "This operation can not be undone!\nType 'delete' to remove the candidate.";
-                String userInput = (String) JOptionPane.showInputDialog(null, warning, "Confirm:", JOptionPane.WARNING_MESSAGE);
-                int selectedRecrutationIndex = candidatesList.getSelectedIndex();
-                if (userInput != null && userInput.equals("delete") && selectedRecrutationIndex >= 0) {
+                String userInput = JOptionPane.showInputDialog(null, warning, "Confirm:", JOptionPane.WARNING_MESSAGE);
+                int selectedCandidateIndex = candidatesList.getSelectedIndex();
+                if (userInput != null && userInput.equals("delete") && selectedCandidateIndex >= 0) {
                     JOptionPane.showMessageDialog(null, "Candidate removed!");
-                    listModel.remove(selectedRecrutationIndex);
+                    Candidate candidate = listModel.get(selectedCandidateIndex);
+                    listModel.remove(selectedCandidateIndex);
+                    listForSorting.remove(candidate);
+                    listForSortingUnfinished.remove(candidate);
+                    recruitment.getCandidateList().remove(candidate);
+                    updateButtons();
                     candidatesList.repaint();
                 } else {
                     JOptionPane.showMessageDialog(null, "Deletion canceled or invalid input.");
@@ -275,7 +280,9 @@ public class CandidateListView extends JPanel {
         addManyButton.setFont(ViewConstants.FONT_LARGE);
         int addManyButtonY = BUTTON_Y + SPACING + SPACING;
         addManyButton.setBounds(BUTTON_X, addManyButtonY, BUTTON_WIDTH, BUTTON_HEIGHT);
-        addManyButton.addActionListener((e -> {showDirectoryChooser();}));
+        addManyButton.addActionListener((e -> {
+            showDirectoryChooser();
+            updateButtons();}));
 
         return addManyButton;
     }
@@ -328,6 +335,16 @@ public class CandidateListView extends JPanel {
         });
 
         return showOnlyUnfinishedCandidates;
+    }
+
+    private void updateButtons(){
+        selectedCandidate = null;
+        openButton.setEnabled(false);
+        feedbackButton.setEnabled(false);
+        cvButton.setEnabled(false);
+
+        recruitment.setModified(true);
+        recruitment.getModel().updateRecruitmentList();
     }
 
     private enum SortingOptions{Name_Ascending, Name_Descending, Date_Ascending, Date_Descending, Score_Ascending, Score_Descending, ValueCost_Ascending, ValueCost_Descending}
