@@ -1,10 +1,15 @@
 package model.storage;
 
+import model.Model;
 import model.Recruitment;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public abstract class AbstractStrategy implements StorageStrategy, Serializable {
     protected List<Recruitment> toAdd = new ArrayList<>();
@@ -13,22 +18,25 @@ public abstract class AbstractStrategy implements StorageStrategy, Serializable 
 
 
     @Override
-    public List<Recruitment> getRecruitmentList() {
-        List<Recruitment> recruitmentList = new ArrayList<>();
-
-        return recruitmentList;
-    }
+    public abstract List<Recruitment> getRecruitmentList(Model model);
 
     @Override
-    public boolean updateRecruitmentList(List<Recruitment> recruitmentList) {
+    public boolean updateRecruitmentList(List<Recruitment> recruitmentList, Model model) {
         List<Recruitment> freshRecruitments = recruitmentList;
-        List<Recruitment> oldRecruitments = getRecruitmentList();
+        List<Recruitment> oldRecruitments = getRecruitmentList(model);
+        cleanLists();
 
         addNew(freshRecruitments,oldRecruitments);
         replaceModified(oldRecruitments);
         deleteOld(freshRecruitments,oldRecruitments);
 
         return updateList();
+    }
+
+    private void cleanLists() {
+        toAdd.clear();
+        toReplace.clear();
+        toDelete.clear();
     }
 
     private void addNew(List<Recruitment> freshRecruitments, List<Recruitment> oldRecruitments) {
@@ -61,7 +69,7 @@ public abstract class AbstractStrategy implements StorageStrategy, Serializable 
         toDelete.addAll(getRecruitmentsFromNames(namesToDelete, oldRecruitments));
     }
 
-    private List<String> getRecruitmentNames(List<Recruitment> recruitmentList){
+    protected List<String> getRecruitmentNames(List<Recruitment> recruitmentList){
         List<String> recruitmentNames = new ArrayList<>();
         for (Recruitment recruitment : recruitmentList) {
             recruitmentNames.add(recruitment.getName());

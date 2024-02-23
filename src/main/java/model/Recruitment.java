@@ -13,7 +13,7 @@ public class Recruitment implements Serializable {
     private final double PERCENTAGE = 100.0;
     private final double DECIMAL = 10.0;
     private final double SOFT_SKILLS_FACTOR = 3.0; //higher value = less impact soft skills have on the other scores
-    private Model model;
+    private transient Model model;
     private String name;
     private Presets presets;
     private List<Candidate> candidateList = new ArrayList<>();
@@ -188,6 +188,7 @@ public class Recruitment implements Serializable {
     public LocalDateTime getDateOfCreation() { return dateOfCreation; }
     public boolean isModified() { return isModified; }
     public void setModified(boolean modified) { isModified = modified; }
+    public void setModel(Model model) { this.model = model; }
 
     @Override
     public String toString() {
