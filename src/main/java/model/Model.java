@@ -111,7 +111,7 @@ public class Model extends Observable {
             while (true){
                 int currentNumberOfRecruitments = openRecruitmentProcesses.size();
                 if (currentNumberOfRecruitments != numberOfRecruitments){
-                    model.updateRecruitmentList();
+//                    model.updateRecruitmentList();
                     model.setChanged();
                     model.notifyObservers();
                     numberOfRecruitments = currentNumberOfRecruitments;

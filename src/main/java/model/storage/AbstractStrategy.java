@@ -3,13 +3,9 @@ package model.storage;
 import model.Model;
 import model.Recruitment;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 public abstract class AbstractStrategy implements StorageStrategy, Serializable {
     protected List<Recruitment> toAdd = new ArrayList<>();
@@ -24,10 +20,10 @@ public abstract class AbstractStrategy implements StorageStrategy, Serializable 
     public boolean updateRecruitmentList(List<Recruitment> recruitmentList, Model model) {
         List<Recruitment> freshRecruitments = recruitmentList;
         List<Recruitment> oldRecruitments = getRecruitmentList(model);
-        cleanLists();
+//        cleanLists();
 
         addNew(freshRecruitments,oldRecruitments);
-        replaceModified(oldRecruitments);
+        replaceModified(freshRecruitments);
         deleteOld(freshRecruitments,oldRecruitments);
 
         return updateList();
@@ -51,9 +47,9 @@ public abstract class AbstractStrategy implements StorageStrategy, Serializable 
         toAdd.addAll(getRecruitmentsFromNames(namesToAdd, freshRecruitments));
     }
 
-    private void replaceModified(List<Recruitment> oldRecruitments) {
-        for (Recruitment oldRecruitment : oldRecruitments) {
-            if (oldRecruitment.isModified()) toReplace.add(oldRecruitment);
+    private void replaceModified(List<Recruitment> freshRecruitments) {
+        for (Recruitment freshRecruitment : freshRecruitments) {
+            if (freshRecruitment.isModified()) toReplace.add(freshRecruitment);
         }
     }
 

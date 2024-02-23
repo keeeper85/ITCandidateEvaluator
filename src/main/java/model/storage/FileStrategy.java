@@ -64,7 +64,21 @@ public class FileStrategy extends AbstractStrategy{
 
     @Override
     protected boolean replaceRecords() {
-        return false;
+        List<String> fileNamesForRemoval = getRecruitmentNames(toReplace);
+        boolean allReplaced = true;
+        System.out.println("replacing");
+
+        for (String recruitmentName : fileNamesForRemoval) {
+            String filePath = RECRUITMENT_STORAGE_DIRECTORY + File.separator + recruitmentName + ".ser";
+            File file = new File(filePath);
+
+            boolean deleted = file.delete();
+            if (!deleted) allReplaced = false; //todo Logger
+        }
+        toAdd.clear();
+        toAdd.addAll(toReplace);
+
+        return allReplaced && addRecords();
     }
 
     @Override
@@ -89,7 +103,6 @@ public class FileStrategy extends AbstractStrategy{
              ObjectOutputStream objectOut = new ObjectOutputStream(fileOut)) {
 
             objectOut.writeObject(recruitment);
-            System.out.println("Object serialized successfully.");
 
         } catch (Exception e) {
             e.printStackTrace();
