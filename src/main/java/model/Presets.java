@@ -6,9 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
 public class Presets implements Serializable {
@@ -23,24 +24,6 @@ public class Presets implements Serializable {
         presetsValues = new HashMap<>();
         setPresetsValues(modifiersValues);
     }
-
-//    public static Presets createRandomPresetsForTesting(){
-//        HashMap<String, Integer> testMap = new HashMap<>();
-//        testMap.put("Resume and social media evaluation", getRandomValueForTesting());
-//        testMap.put("English language assessment", getRandomValueForTesting());
-//        testMap.put("Previous work experience", getRandomValueForTesting());
-//        testMap.put("Own projects", getRandomValueForTesting());
-//        testMap.put("Live coding", getRandomValueForTesting());
-//        testMap.put("Technical questions", getRandomValueForTesting());
-//        testMap.put("Salary expectations", getRandomValueForTesting());
-//        testMap.put("Soft skills", getRandomValueForTesting());
-//
-//        return new Presets("testPresets", testMap);
-//    }
-
-//    private static int getRandomValueForTesting(){
-//        return ThreadLocalRandom.current().nextInt(1,10);
-//    }
 
     public static Set<Presets> loadPresetsFromDirectory() {
         final String[] fileName = new String[1];

@@ -22,6 +22,7 @@ public class RecruitmentsListView extends JPanel {
     private JScrollPane scrollPane;
     private JButton openButton;
     private JButton deleteButton;
+    private JButton finishButton;
     private SortingOptions selectedOption = SortingOptions.Name_Ascending;
     private RecruitmentStatus showRecruitments = RecruitmentStatus.All;
     private final int TOP_ROW_Y = 20;
@@ -54,6 +55,7 @@ public class RecruitmentsListView extends JPanel {
         add(createOpenButton());
         add(createNewRecruitmentButton());
         add(createDeleteButton());
+        add(createFinishButton());
         add(createBackButton());
     }
 
@@ -108,12 +110,29 @@ public class RecruitmentsListView extends JPanel {
         recruitmentJList.setFont(ViewConstants.FONT_LARGE);
         recruitmentJList.addListSelectionListener(e -> {
             selectedRecruitment = recruitmentJList.getSelectedValue();
-            openButton.setEnabled(true);
-            deleteButton.setEnabled(true);});
+            updateButtons();});
 
         scrollPane = new JScrollPane(recruitmentJList);
         scrollPane.setBounds(LIST_X,LIST_Y,LIST_WIDTH,LIST_HEIGHT);
         return scrollPane;
+    }
+    private void updateButtons(){
+        if (selectedRecruitment == null){
+            openButton.setEnabled(false);
+            deleteButton.setEnabled(false);
+            finishButton.setEnabled(false);
+            finishButton.setText("Finish");
+        }
+        else{
+            openButton.setEnabled(true);
+            deleteButton.setEnabled(true);
+            finishButton.setEnabled(true);
+            if (selectedRecruitment.isFinished()){
+                openButton.setEnabled(false);
+                finishButton.setText("Re-Open");
+            }
+            else finishButton.setText("Finish");
+        }
     }
 
     private JButton createOpenButton(){
@@ -156,9 +175,13 @@ public class RecruitmentsListView extends JPanel {
                     listModel.remove(selectedRecrutationIndex);
                     listForSorting.remove(recrutationForRemoval);
                     listForSortingUnfinished.remove(recrutationForRemoval);
-                    recruitmentJList.repaint();
+                    populateRecruitmentList();
+                    updateList(model.getOpenRecruitmentProcesses());
                     JOptionPane.showMessageDialog(null, "Recruitment process deleted!");
-
+                    selectedRecruitment = null;
+                    updateButtons();
+                    recruitmentJList.repaint();
+                    recruitmentJList.revalidate();
                 } else {
                     JOptionPane.showMessageDialog(null, "Deletion canceled or invalid input.");
                 }
@@ -168,10 +191,31 @@ public class RecruitmentsListView extends JPanel {
         return deleteButton;
     }
 
+    private JButton createFinishButton(){
+        finishButton = new JButton("Finish");
+        finishButton.setFont(ViewConstants.FONT_LARGE);
+        finishButton.setEnabled(false);
+        int finishButtonY = BUTTON_Y + SPACING + SPACING + SPACING;
+        finishButton.setBounds(BUTTON_X, finishButtonY ,BUTTON_WIDTH ,BUTTON_HEIGHT);
+        finishButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (selectedRecruitment.isFinished()) selectedRecruitment.setFinished(false);
+                else selectedRecruitment.setFinished(true);
+                selectedRecruitment.setModified(true);
+                model.updateRecruitmentList();
+
+                repaint();
+                revalidate();
+            }
+        });
+        return finishButton;
+    }
+
     private JButton createBackButton(){
         JButton backButton = new JButton("Back");
         backButton.setFont(ViewConstants.FONT_LARGE);
-        int backButtonY = BUTTON_Y + SPACING + SPACING + SPACING;
+        int backButtonY = BUTTON_Y + SPACING + SPACING + SPACING + SPACING;
         backButton.setBounds(BUTTON_X, backButtonY ,BUTTON_WIDTH ,BUTTON_HEIGHT);
         backButton.addActionListener((e -> {view.returnToPreviousPanel();}));
         return backButton;

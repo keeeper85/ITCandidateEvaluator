@@ -75,5 +75,7 @@ public class View extends JFrame implements Observer {
             RecruitmentsListView recruitmentsListView = (RecruitmentsListView) currentPanel;
             recruitmentsListView.populateRecruitmentList();
         }
+        currentPanel.repaint();
+        currentPanel.revalidate();
     }
 }

@@ -20,19 +20,12 @@ public abstract class AbstractStrategy implements StorageStrategy, Serializable 
     public boolean updateRecruitmentList(List<Recruitment> recruitmentList, Model model) {
         List<Recruitment> freshRecruitments = recruitmentList;
         List<Recruitment> oldRecruitments = getRecruitmentList(model);
-//        cleanLists();
 
         addNew(freshRecruitments,oldRecruitments);
         replaceModified(freshRecruitments);
         deleteOld(freshRecruitments,oldRecruitments);
 
         return updateList();
-    }
-
-    private void cleanLists() {
-        toAdd.clear();
-        toReplace.clear();
-        toDelete.clear();
     }
 
     private void addNew(List<Recruitment> freshRecruitments, List<Recruitment> oldRecruitments) {
@@ -96,7 +89,14 @@ public abstract class AbstractStrategy implements StorageStrategy, Serializable 
         if (toReplace.size() > 0) isReplaced = replaceRecords();
         if (toDelete.size() > 0) isDeleted = deleteRecords();
 
+        cleanLists();
+
         return (isAdded && isReplaced && isDeleted);
+    }
+    private void cleanLists() {
+        toAdd.clear();
+        toReplace.clear();
+        toDelete.clear();
     }
 
     protected abstract boolean addRecords();

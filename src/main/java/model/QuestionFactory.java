@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class QuestionFactory implements Runnable, Serializable {
+public class QuestionFactory implements Runnable {
 
     private List<Question> preparedList = new ArrayList<>();
     private static final Path QUESTION_FILES_DIRECTORY = Paths.get("src/main/resources/questions");

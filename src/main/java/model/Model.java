@@ -111,13 +111,13 @@ public class Model extends Observable {
             while (true){
                 int currentNumberOfRecruitments = openRecruitmentProcesses.size();
                 if (currentNumberOfRecruitments != numberOfRecruitments){
-//                    model.updateRecruitmentList();
+                    model.updateRecruitmentList();
                     model.setChanged();
                     model.notifyObservers();
                     numberOfRecruitments = currentNumberOfRecruitments;
                 }
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

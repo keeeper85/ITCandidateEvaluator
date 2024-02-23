@@ -182,6 +182,7 @@ public class Recruitment implements Serializable {
     public boolean isFinished() {
         return isFinished;
     }
+    public void setFinished(boolean finished) { isFinished = finished; }
     public List<Candidate> getCandidateList() {
         return candidateList;
     }

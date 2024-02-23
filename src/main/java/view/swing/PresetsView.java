@@ -263,7 +263,7 @@ public class PresetsView extends JPanel {
                     else{
                         candidateListView.setRecruitment(recruitment);
                         dialog.dispose();
-                        view.setCurrentPanel(candidateListView);
+                        view.setCurrentPanel(new RecruitmentsListView(view));
                     }
                 }
             }
