@@ -4,6 +4,8 @@ import model.*;
 import model.storage.FileStrategy;
 import model.storage.MySqlStrategy;
 import model.storage.StorageStrategy;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import view.swing.View;
 
 import javax.swing.*;
@@ -16,7 +18,9 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class ITCandidateEvaluator {
+    private static final Logger logger = LogManager.getLogger();
     public static void main(String[] args) {
+        logger.info("App is starting...");
         Model model = new Model(chooseStorage());
         Controller controller = new Controller(model);
         View view = controller.getView();
