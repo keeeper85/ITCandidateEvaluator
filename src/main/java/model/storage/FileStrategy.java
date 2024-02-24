@@ -11,6 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+/**
+ * FileStrategy uses serialization and deserialization to files for storage purposes.
+ * Serialization is simple, however deserialization can be risky, so use this strategy with caution and make backups.
+ * If you modify any of the serializable classes, deserialization of already existing objects may be impossible.
+ * There's no need to close connection here so the closeConnection() method is left empty.
+ */
+
 public class FileStrategy extends AbstractStrategy{
     private static final String RECRUITMENT_STORAGE_DIRECTORY = "src/main/resources/storage/";
 
@@ -67,34 +74,32 @@ public class FileStrategy extends AbstractStrategy{
     @Override
     protected boolean replaceRecords() {
         List<String> fileNamesForRemoval = getRecruitmentNames(toReplace);
-        boolean allReplaced = true;
-
-        for (String recruitmentName : fileNamesForRemoval) {
-            String filePath = RECRUITMENT_STORAGE_DIRECTORY + File.separator + recruitmentName + ".ser";
-            File file = new File(filePath);
-
-            boolean deleted = file.delete();
-            if (!deleted) allReplaced = false; //todo Logger
-        }
+        boolean allDeleted = deleteFiles(fileNamesForRemoval);
         toAdd.clear();
         toAdd.addAll(toReplace);
 
-        return allReplaced && addRecords();
+        return allDeleted && addRecords();
     }
 
     @Override
     protected boolean deleteRecords() {
         List<String> fileNamesForRemoval = getRecruitmentNames(toDelete);
+        return deleteFiles(fileNamesForRemoval);
+    }
+
+    private boolean deleteFiles(List<String> fileNames){
         boolean allDeleted = true;
 
-        for (String recruitmentName : fileNamesForRemoval) {
+        for (String recruitmentName : fileNames) {
             String filePath = RECRUITMENT_STORAGE_DIRECTORY + File.separator + recruitmentName + ".ser";
             File file = new File(filePath);
 
             boolean deleted = file.delete();
-            if (!deleted) allDeleted = false; //todo Logger
+            if (!deleted) {
+                allDeleted = false;
+                Model.logger.error("Error at deleting file: " + file.getName());
+            }
         }
-
         return allDeleted;
     }
 

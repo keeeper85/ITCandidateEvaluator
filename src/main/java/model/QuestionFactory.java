@@ -95,6 +95,6 @@ public class QuestionFactory implements Runnable {
         prepareQuestionList();
         long endTime = new Date().getTime();
         long timeElapsed = endTime - startTime;
-        Model.logger.info("Questions loaded from files. Thread closed. Time elapsed: " + timeElapsed + " seconds.");
+        Model.logger.info("Questions loaded from files. Thread closed. Time elapsed: " + timeElapsed + " milliseconds.");
     }
 }

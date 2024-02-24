@@ -3,6 +3,13 @@ package model;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+/**
+ * FeedbackHelper class purpose is to generate feedback for evaluated candidate.
+ * As the feedback is rich with information, the main method: generateFeedback(Candidate candidate) got quite long.
+ * All the other methods help at feedback generation - see their names, they are self-explanatory.
+ * This class is package-private and final, no need to be otherwise - it has static methods and serves only Candidate objects.
+ */
+
 final class FeedbackHelper {
 
     public static String generateFeedback(Candidate candidate){

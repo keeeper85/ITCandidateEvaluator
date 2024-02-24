@@ -11,6 +11,13 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+/**
+ * CandidateFactory is an immutable final class containing only static methods.
+ * This class sole purpose is to find pdf files in the given directory and extract them to pair: "firstName lastName"
+ * File extension, non-letter characters and resume-related tags are removed.
+ * If a file name consist only of removable characters, the output will be like: "???"
+ */
+
 public final class CandidateFactory {
     private final static Pattern REMOVE_PDF_EXTENSION = Pattern.compile("pdf");;
     private final static Pattern REMOVE_NON_LETTER_CHARACTERS = Pattern.compile("[^a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ]");
@@ -87,19 +94,18 @@ public final class CandidateFactory {
 
     private static List<Candidate> createCandidates(Recruitment recruitment, Map<String,String> fileNames) {
         List<Candidate> candidates = new ArrayList<>();
-        String firstName;
+        String firstName = "";
         String lastName;
 
         for (Map.Entry<String, String> entry : fileNames.entrySet()) {
             String[] firstAndLastName = entry.getValue().split(" ");
 
-            if (firstAndLastName[0] != null && firstAndLastName[0].length() > 0) firstName = firstAndLastName[0];
-            else firstName = "???";
-
             try{
+                if (firstAndLastName[0] != null && firstAndLastName[0].length() > 0) firstName = firstAndLastName[0];
+                else firstName = "???";
                 lastName = firstAndLastName[1];
             } catch (ArrayIndexOutOfBoundsException oneName){
-                Model.logger.warn("Candidate has only one name element: " + oneName.getMessage());
+                Model.logger.warn("Candidate has only one name element or none: " + oneName.getMessage());
                 lastName = "???";
             }
 

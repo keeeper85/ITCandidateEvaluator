@@ -3,7 +3,7 @@ package view.swing;
 import java.awt.*;
 
 public class ViewConstants {
-    public static final String APP_NAME = "model.ITCandidateEvaluator";
+    public static final String APP_NAME = "ITCandidateEvaluator";
     public static final int WINDOW_WIDTH_PIXELS = 1280;
     public static final int WINDOW_HEIGHT_PIXELS = 720;
     public static final Font FONT_LARGE = new Font(Font.DIALOG, Font.PLAIN, 26);

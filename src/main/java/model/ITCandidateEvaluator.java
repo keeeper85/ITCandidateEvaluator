@@ -19,6 +19,13 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Stream;
 
+/**
+ * ITCandidateEvaluator is the main class with method which starts the app.
+ * At first this class belonged to the upper package (java/) but it brought issues with Logger and Docker.
+ * The app starts with choosing StorageStrategy throughout JOptionPane window - if nothing is chosen, the app will exit.
+ * Different strategies use different databases so the created recruitment processes and candidates will differ too.
+ */
+
 public class ITCandidateEvaluator {
 
     public static void main(String[] args) {

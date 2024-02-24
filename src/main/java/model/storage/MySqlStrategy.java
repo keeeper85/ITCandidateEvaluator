@@ -9,6 +9,14 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * MySqlStrategy uses simple object serialization for storing recruitments as BLOB objects in MySQL database.
+ * Database has three columns: (auto generated) id (int), recruitment_name (VARCHAR 255) and recruitment_object (BLOB)
+ * Connection with the database is established in the constructor.
+ * Connection gets closed when the 'Exit' button is clicked.
+ * Add and Delete methods are very basic, but Replace (replaceRecords()) works as a transaction with rollback option.
+ */
+
 public class MySqlStrategy extends AbstractStrategy{
 
     public MySqlStrategy() {

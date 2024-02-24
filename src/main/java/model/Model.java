@@ -6,11 +6,21 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
+/**
+ * Model is the second class created (after initial ITCandidateEvaluator) and works as a hub for getters needed in view package.
+ * Model also sets the chosen StorageStrategy and is responsible for getting recruitment list and updating it.
+ * Connection between Model and View is based upon the Observer pattern.
+ * Inner class "RecruitmentMonitor" (thread) every 0.1 second checks the recruitment list for modification - if any are found, View gets an update.
+ * Model variable in Recruitment class is set to 'transient' and is not being serialized - each time recruitment objects get deserialized, current model is being assigned to them.
+ * Logger and StorageStrategy is set to transient too - there's no need for them to be saved.
+ */
+
 public class Model extends Observable {
+
     public static final Logger logger = LogManager.getLogger(Model.class);
-    private StorageStrategy storageStrategy;
-    private List<Recruitment> openRecruitmentProcesses; //todo SQL
-    private QuestionFactory questionFactory;
+    private transient StorageStrategy storageStrategy;
+    private List<Recruitment> openRecruitmentProcesses;
+    private transient QuestionFactory questionFactory;
 
     public Model(StorageStrategy storageStrategy) {
         logger.info("Model created. App is starting...");

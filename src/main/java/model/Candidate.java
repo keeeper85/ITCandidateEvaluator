@@ -2,6 +2,11 @@ package model;
 
 import java.time.format.DateTimeFormatter;
 
+/**
+ * (Real) Candidate object has only two methods which couldn't have been implemented in the super abstract class.
+ * generateFeedback() and toString() both use 'this' object therefore must be placed in the concrete implementation.
+ */
+
 public class Candidate extends AbstractCandidate{
 
     public Candidate(Recruitment recruitment, String firstName, String lastName) {

@@ -7,8 +7,15 @@ import view.swing.View;
 
 import javax.swing.*;
 
-public class Controller {
+/**
+ * Controller class is nearly unnecessary however I wanted to keep it here for future development.
+ * At first, I thought about moving there Action Listeners of the buttons in View package, but these classes would
+ * be very small and this wouldn't bring any visible benefits.
+ * The communication from View to Model classes goes through the Data Transfer Object Candidate DTO
+ * which instance is factored in here (createTemporaryCandidate method).
+ */
 
+public class Controller {
     private Model model;
     private View view;
 

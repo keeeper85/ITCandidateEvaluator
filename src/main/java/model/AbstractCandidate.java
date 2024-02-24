@@ -7,6 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * AbstractCandidate holds all the values every candidate should possess.
+ * Id is set in the Recruitment class. Candidates belonging to different recruitments can have same id numbers.
+ * Method translateAndAddRawScores(Map<String, Integer> rawScores) takes raw Strings with stages names and changes them to appropriate Stages objects.
+ * Salary variables are set do default values - if you change them, modify CandidateDTO as well.
+ */
+
 public class AbstractCandidate implements Serializable {
 
     protected final Recruitment recruitment;

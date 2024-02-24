@@ -51,3 +51,4 @@ build/
 /src/main/resources/presets/test_invalid_presets.json
 /logs/app.log
 /logs/
+/out/

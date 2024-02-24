@@ -8,6 +8,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The sole purpose of the instance of this class is to store all data during the evaluation process.
+ * Once the user decides to save the progress ("Save & Exit" button or "Finish" button) all data kept here is copied to the real candidate object.
+ * To create CandidateDTO object necessary is (real) Candidate object - if there's none, a "null" value can be passed to the constructor.
+ * During the creation of the CandidateDTO instance all the data from the real Candidate is copied (copyDataFromRealCandidate(Candidate candidate) method)
+ * so the user will see all sliders and values at the state their left them last time before they saved progress.
+ * If the candidate equals null, a new Candidate object will be created (createNewCandidate(boolean isFinished) method).
+ * Once the transferDataToRealCandidate(Candidate candidate) method is called, all the variables stored here are copied to the real candidate and the database is updated.
+ */
+
 public class CandidateDTO {
     private Map<String, Integer> rawScores = new HashMap<>();
     private Map<Question, Integer> evaluatedQuestions = new HashMap<>();

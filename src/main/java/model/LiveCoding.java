@@ -8,6 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+/**
+ * LiveCoding is a simple helper class with the purpose to find files with 'task' in their names.
+ * Found txt file is scanned and turned into a String value.
+ * Html tags are taken into consideration later while presenting this String in a JLabel object.
+ */
+
 final class LiveCoding {
     private static final Path TASK_FILES_DIRECTORY = Paths.get("src/main/resources/liveCoding");
 

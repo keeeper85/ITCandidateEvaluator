@@ -8,7 +8,14 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractStrategy implements StorageStrategy, Serializable {
+/**
+ * AbstractStrategy implements StorageStrategy interface which enlists methods necessary for AS descendants.
+ * Methods implemented here have the purpose to prepare lists (List<Recruitment>): toAdd, toDelete and toReplace.
+ * Descendants of this class will use these lists to modify the database they use.
+ * Some class which is often used by the descendants is getRecruitmentNames(List<Recruitment> recruitmentList) List<Recruitment> to List<String> with names only.
+ */
+
+public abstract class AbstractStrategy implements StorageStrategy {
     protected List<Recruitment> toAdd = new ArrayList<>();
     protected List<Recruitment> toDelete = new ArrayList<>();
     protected List<Recruitment> toReplace = new ArrayList<>();
