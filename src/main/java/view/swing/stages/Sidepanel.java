@@ -1,6 +1,7 @@
 package view.swing.stages;
 
 import controller.CandidateDTO;
+import model.Model;
 import view.swing.RecruitmentsListView;
 import view.swing.View;
 import view.swing.ViewConstants;
@@ -54,6 +55,7 @@ public class Sidepanel extends JPanel {
         add(createFinishButton());
         placeButtons();
         addTimer();
+        Model.logger.info("Sidepanel initialized.");
     }
 
     private void placeButtons(){
@@ -75,10 +77,12 @@ public class Sidepanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 currentStage = stageView.getCurrentStagePanel();
                 if (currentStage.collectData()){
+                    Model.logger.info("Candidate's data collected from " + currentStage.getClass().getSimpleName());
                     Collectable nextStage = getNextStage();
                     if (nextStage != null) {
                         currentStage = nextStage;
                         stageView.setCurrentStagePanel(nextStage);
+                        Model.logger.info("Moved to " + currentStage.getClass().getSimpleName());
                     }
                     updateButtons();
                 }
@@ -157,6 +161,7 @@ public class Sidepanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 currentStage = stageView.getCurrentStagePanel();
                 if (currentStage.collectData()){
+                    Model.logger.info("Candidate's data collected from " + currentStage.getClass().getSimpleName());
                     temporaryCandidate.setEvaluationTimeSeconds(timerPanel.getSecondsElapsed());
                     temporaryCandidate.saveData();
 
@@ -177,8 +182,9 @@ public class Sidepanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String warning = "Do you want to cancel this evaluation?\nThis operation can not be undone!\nType 'discard' to undo all the changes you've made.";
-                String userInput = (String) JOptionPane.showInputDialog(null, warning, "Confirm:", JOptionPane.WARNING_MESSAGE);
+                String userInput = JOptionPane.showInputDialog(null, warning, "Confirm:", JOptionPane.WARNING_MESSAGE);
                 if (userInput.equals("discard")) {
+                    Model.logger.info("Candidate's evaluation discarded.");
                     view.setCurrentPanel(new RecruitmentsListView(view));
                     view.resetPreviousPanels();
                 } else {
@@ -202,7 +208,10 @@ public class Sidepanel extends JPanel {
                     QuestionsStagePanel questionStage = ((QuestionsStagePanel) currentStage);
                     String title = "You've asked " + questionStage.getNumberOfQuestionsEvaluated() + " questions so far.";
                     int choice = JOptionPane.showConfirmDialog(null, "Do you want to save this score? (this operation can not be undone)", title, JOptionPane.YES_NO_OPTION);
-                    if (choice == 0) questionStage.updateQuestionsEvaluated();
+                    if (choice == 0) {
+                        questionStage.updateQuestionsEvaluated();
+                        Model.logger.info("Question score saved.");
+                    }
                 }
             }
         });
@@ -219,6 +228,7 @@ public class Sidepanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 int choice = JOptionPane.showConfirmDialog(null, "Do you want to finish the evaluation for the current candidate? (you won't be able to edit the scores later)", "Is everything ready?", JOptionPane.YES_NO_OPTION);
                 if (choice == 0){
+                    Model.logger.info("Finish evaluation button has been clicked and approved.");
                     temporaryCandidate.setEvaluationTimeSeconds(timerPanel.getSecondsElapsed());
                     temporaryCandidate.setFinished(true);
                     temporaryCandidate.saveDataAndCompleteEvaluation();

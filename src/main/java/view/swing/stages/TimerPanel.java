@@ -1,5 +1,7 @@
 package view.swing.stages;
 
+import model.Model;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -28,9 +30,11 @@ public class TimerPanel extends JPanel {
                 if (timer.isRunning()) {
                     timer.stop();
                     pauseButton.setText("Resume");
+                    Model.logger.info("Timer resumed");
                 } else {
                     timer.start();
                     pauseButton.setText("Pause");
+                    Model.logger.info("Timer paused");
                 }
             }
         });
@@ -55,11 +59,6 @@ public class TimerPanel extends JPanel {
         timerLabel.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
     }
 
-    public int getSecondsElapsed() {
-        return secondsElapsed;
-    }
+    public int getSecondsElapsed() { return secondsElapsed; }
 
-    public void setSecondsElapsed(int secondsElapsed) {
-        this.secondsElapsed = secondsElapsed;
-    }
 }

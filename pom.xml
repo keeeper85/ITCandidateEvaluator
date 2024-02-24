@@ -5,7 +5,7 @@
   <artifactId>ITCandidateEvaluator</artifactId>
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>ITCandidateEvaluator Maven Webapp</name>
+  <name>model.ITCandidateEvaluator Maven Webapp</name>
   <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>
@@ -31,6 +31,6 @@
     </dependency>
   </dependencies>
   <build>
-    <finalName>ITCandidateEvaluator</finalName>
+    <finalName>model.ITCandidateEvaluator</finalName>
   </build>
 </project>

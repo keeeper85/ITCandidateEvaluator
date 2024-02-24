@@ -1,6 +1,7 @@
 package view.swing.stages;
 
 import controller.CandidateDTO;
+import model.Model;
 import view.swing.ViewConstants;
 
 import javax.swing.*;
@@ -62,7 +63,6 @@ public class CandidateView extends JPanel implements Collectable {
     }
 
     private void copyCandidateData(){
-        System.out.println("copied");
         firstName.setText(temporaryCandidate.getFirstName());
         lastName.setText(temporaryCandidate.getLastName());
         yearOfBirth.setText(String.valueOf(temporaryCandidate.getYearOfBirth()));
@@ -171,6 +171,7 @@ public class CandidateView extends JPanel implements Collectable {
 
                 int result = fileChooser.showOpenDialog(null);
                 if (result == JFileChooser.APPROVE_OPTION) {
+                    Model.logger.info("Copied path of the resume file.");
                     resumePath.setText(fileChooser.getSelectedFile().toString());
                 }
             }
@@ -186,6 +187,7 @@ public class CandidateView extends JPanel implements Collectable {
         String year = this.yearOfBirth.getText();
 
         if (firstName.isEmpty() || lastName.isEmpty()){
+            Model.logger.warn("Either first or last name fields are empty. Cannot proceed.");
             JOptionPane.showMessageDialog(null, ViewConstants.INPUT_ERROR_MESSAGE, "Text input error", JOptionPane.WARNING_MESSAGE);
             return false;
         }
@@ -203,6 +205,7 @@ public class CandidateView extends JPanel implements Collectable {
                 if (yearOfBirth > tooOld && yearOfBirth < currentYear) temporaryCandidate.setYearOfBirth(yearOfBirth);
                 else throw new NumberFormatException();
             } catch (NumberFormatException ignored){
+                Model.logger.warn("Given year of birth is invalid. Cannot proceed.");
                 JOptionPane.showMessageDialog(null, ViewConstants.INPUT_ERROR_MESSAGE, "Text input error", JOptionPane.WARNING_MESSAGE);
                 return false;
             }

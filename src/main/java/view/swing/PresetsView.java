@@ -107,7 +107,7 @@ public class PresetsView extends JPanel {
                 }
             }
         } catch (NullPointerException nullPreset){
-            //todo logger
+            Model.logger.error("Presets are null: " + nullPreset.getMessage());
             throw new RuntimeException();
         }
 

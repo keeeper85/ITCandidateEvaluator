@@ -51,6 +51,7 @@ public class StageView extends JPanel {
         sidepanel.setBounds(SIDEPANEL_POSITION_X, SIDEPANEL_POSITION_Y, SIDEPANEL_WIDTH, SIDEPANEL_HEIGHT);
         add(sidepanel);
         setStagesToBeEvaluated();
+        Model.logger.info("StageView object created. Evaluation has started.");
 
         revalidate();
         repaint();

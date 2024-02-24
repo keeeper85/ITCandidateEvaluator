@@ -64,6 +64,7 @@ public class InitialView extends JPanel {
         JButton exit = new JButton("Exit");
         exit.addActionListener((e -> {
             view.getModel().closeDatabaseConnection();
+            Model.logger.info("Exit button clicked. App is closing");
             System.exit(0);}));
         buttons.add(exit);
         return exit;

@@ -32,6 +32,7 @@ public class View extends JFrame implements Observer {
 
         currentPanel = new InitialView(this);
         setCurrentPanel(currentPanel);
+        Model.logger.info("View has been established.");
     }
 
     public void setCurrentPanel(JPanel newPanel) {
@@ -64,6 +65,7 @@ public class View extends JFrame implements Observer {
         add(currentPanel);
         revalidate();
         repaint();
+        Model.logger.info("App went back to the initial view. Previous panels reset.");
     }
     public Model getModel() {
         return model;

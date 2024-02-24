@@ -1,5 +1,6 @@
 package view.swing.stages;
 
+import model.Model;
 import model.Stages;
 import view.swing.ViewConstants;
 
@@ -93,10 +94,14 @@ public class LiveCodingStagePanel extends AbstractStage {
         String htmlTagsRemoved = currentTaskBody.replace("<br>","").replace("<html>","").replace("</html>","");
         StringSelection selection = new StringSelection(htmlTagsRemoved);
         clipboard.setContents(selection, null);
+        Model.logger.info("Selected live coding task copied to system clipboard.");
     }
 
     private void updateCopyButton(){
         if (selectedSnippet.contains("Choose")) copyToClipboardButton.setEnabled(false);
-        else copyToClipboardButton.setEnabled(true);
+        else {
+            Model.logger.info("Selected live coding task: " + selectedSnippet);
+            copyToClipboardButton.setEnabled(true);
+        }
     }
 }

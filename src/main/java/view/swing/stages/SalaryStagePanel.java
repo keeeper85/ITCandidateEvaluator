@@ -1,6 +1,7 @@
 package view.swing.stages;
 
 import controller.CandidateDTO;
+import model.Model;
 import model.Stages;
 import view.swing.ViewConstants;
 
@@ -73,10 +74,14 @@ public class SalaryStagePanel extends AbstractStage { ;
             from = Integer.parseInt(fromField.getText());
             to = Integer.parseInt(toField.getText());
         } catch (NumberFormatException e){
+            Model.logger.warn("Given salary values (all or one) are not valid numbers.");
             JOptionPane.showMessageDialog(null, ViewConstants.SALARY_INPUT_ERROR_MESSAGE, "Salary input error", JOptionPane.WARNING_MESSAGE);
         }
 
-        if (from >= to) JOptionPane.showMessageDialog(null, ViewConstants.SALARY_INPUT_ERROR_MESSAGE, "Salary input error", JOptionPane.WARNING_MESSAGE);
+        if (from >= to) {
+            Model.logger.warn("Max offered salary cannot be smaller than the min offered salary..");
+            JOptionPane.showMessageDialog(null, ViewConstants.SALARY_INPUT_ERROR_MESSAGE, "Salary input error", JOptionPane.WARNING_MESSAGE);
+        }
         else{
             scoreSlider.setMinimum(from);
             scoreSlider.setMaximum(to);

@@ -4,6 +4,7 @@ import controller.CandidateDTO;
 import controller.Controller;
 import model.Candidate;
 import model.CandidateFactory;
+import model.Model;
 import model.Recruitment;
 import view.swing.stages.StageView;
 
@@ -242,6 +243,7 @@ public class CandidateListView extends JPanel {
             try {
                 if (selectedCandidate != null){
                     if (selectedCandidate.getPathToResumeFile() != null)
+                        Model.logger.info("Viewed resume of : " + selectedCandidate.getFirstName() + " " + selectedCandidate.getLastName());
                         Desktop.getDesktop().open(new File(selectedCandidate.getPathToResumeFile()));
                 }
             } catch (IOException ex) {

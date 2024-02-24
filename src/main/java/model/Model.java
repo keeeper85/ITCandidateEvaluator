@@ -4,11 +4,10 @@ import model.storage.StorageStrategy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.Serializable;
 import java.util.*;
 
 public class Model extends Observable {
-    public static final Logger logger = LogManager.getLogger();
+    public static final Logger logger = LogManager.getLogger(Model.class);
     private StorageStrategy storageStrategy;
     private List<Recruitment> openRecruitmentProcesses; //todo SQL
     private QuestionFactory questionFactory;

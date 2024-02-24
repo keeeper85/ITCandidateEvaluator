@@ -1,3 +1,5 @@
+package model;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import controller.Controller;
 import model.*;
@@ -44,10 +46,13 @@ public class ITCandidateEvaluator {
 
         switch (result) {
             case 0:
+                Model.logger.info("FileStrategy has been selected.");
                 return new FileStrategy();
             case 1:
+                Model.logger.info("FileStrategy has been selected.");
                 return new MySqlStrategy();
             default:
+                Model.logger.info("No storage selected. Closing the app.");
                 JOptionPane.showMessageDialog(
                         null,
                         "No storage option selected. Exiting the application.",

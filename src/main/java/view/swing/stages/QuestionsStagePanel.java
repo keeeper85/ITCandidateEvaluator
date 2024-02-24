@@ -1,6 +1,7 @@
 package view.swing.stages;
 
 import controller.CandidateDTO;
+import model.Model;
 import model.Question;
 import model.Stages;
 import view.swing.ViewConstants;
@@ -185,6 +186,7 @@ public class QuestionsStagePanel extends AbstractStage {
         String errorMessage = "The question must have a name! Pick one from the list or type in your question.";
         if (currentQuestion.isEmpty()) JOptionPane.showMessageDialog(null, errorMessage, "Saving score: failure.", JOptionPane.ERROR_MESSAGE);
         else if (!questionsEvaluatedForCollection.containsKey(currentQuestion)){
+            Model.logger.info("Question has just been evaluated: " + currentQuestion);
             questionsEvaluatedForCollection.put(new Question("", currentQuestion), scoreSlider.getValue());
             questionsEvaluatedForDisplay.add(currentQuestion);
             scoreSlider.setValue(SLIDER_DEFAULT_VALUE);
