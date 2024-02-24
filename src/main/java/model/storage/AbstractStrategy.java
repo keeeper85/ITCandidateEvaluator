@@ -91,6 +91,7 @@ public abstract class AbstractStrategy implements StorageStrategy, Serializable 
         if (toReplace.size() > 0) isReplaced = replaceRecords();
         if (toDelete.size() > 0) isDeleted = deleteRecords();
 
+        Model.logger.info("Recruitment list has been updated.");
         cleanLists();
 
         return (isAdded && isReplaced && isDeleted);

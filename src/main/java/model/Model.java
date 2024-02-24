@@ -1,16 +1,20 @@
 package model;
 
 import model.storage.StorageStrategy;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.Serializable;
 import java.util.*;
 
 public class Model extends Observable {
+    public static final Logger logger = LogManager.getLogger();
     private StorageStrategy storageStrategy;
     private List<Recruitment> openRecruitmentProcesses; //todo SQL
     private QuestionFactory questionFactory;
 
     public Model(StorageStrategy storageStrategy) {
+        logger.info("Model created. App is starting...");
         this.storageStrategy = storageStrategy;
         questionFactory = new QuestionFactory();
         loadQuestionsFromFiles(questionFactory);
@@ -24,6 +28,7 @@ public class Model extends Observable {
             openRecruitmentProcess.setModified(false);
             openRecruitmentProcess.setModel(this);
         }
+        Model.logger.info("Recruitment list loaded successfully.");
     }
 
     public synchronized boolean updateRecruitmentList(){
@@ -45,7 +50,10 @@ public class Model extends Observable {
         if (canThisNameBeUsed(recruitmentName)){
             Recruitment recruitment = new Recruitment(this, recruitmentName, presets);
             openRecruitmentProcesses.add(recruitment);
-            if (!updateRecruitmentList()) return null;
+            if (!updateRecruitmentList()) {
+                Model.logger.warn("Returned null recruitment. Problem with updating the list.");
+                return null;
+            }
 
             return recruitment;
         }
@@ -55,7 +63,10 @@ public class Model extends Observable {
     private boolean canThisNameBeUsed(String name) {
         for (Recruitment openRecruitmentProcess : openRecruitmentProcesses) {
             String takenName = openRecruitmentProcess.getName();
-            if (name.equals(takenName)) return false;
+            if (name.equals(takenName)) {
+                Model.logger.warn("The selected name: " + takenName + " is already taken.");
+                return false;
+            }
         }
         return true;
     }
@@ -113,9 +124,11 @@ public class Model extends Observable {
         }
         @Override
         public void run() {
+            Model.logger.info("RecruitmentMonitor thread started work.");
             while (true){
                 int currentNumberOfRecruitments = openRecruitmentProcesses.size();
                 if (currentNumberOfRecruitments != numberOfRecruitments){
+                    Model.logger.info("RecruitmentMonitor detected change in recruitments number.");
                     model.updateRecruitmentList();
                     model.setChanged();
                     model.notifyObservers();

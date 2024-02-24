@@ -26,6 +26,7 @@ public class CandidateDTO {
     private int expectedSalary = 7500;
     private boolean isFinished;
     CandidateDTO(Candidate candidate, Recruitment recruitment) {
+        Model.logger.info("Created a temporary candidate.");
         this.candidate = candidate;
         this.recruitment = recruitment;
         sliderNames = getSliderNames();
@@ -56,6 +57,7 @@ public class CandidateDTO {
             maxOfferedSalary = candidate.getMaxOfferedSalary();
             expectedSalary = candidate.getExpectedSalary();
             questionsEvaluatedForDisplay = candidate.getQuestionsEvaluatedForDisplay();
+            Model.logger.info("Copied data from existing candidate to temporary.");
         }
     }
 
@@ -111,6 +113,7 @@ public class CandidateDTO {
 
         candidate.getRecruitment().setModified(true);
         candidate.getRecruitment().getModel().updateRecruitmentList();
+        Model.logger.info("Copied data from temporary candidate to real.");
     }
 
     public int calculateQuestionsAverageScore(){

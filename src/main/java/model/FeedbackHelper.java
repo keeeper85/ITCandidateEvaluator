@@ -97,6 +97,7 @@ final class FeedbackHelper {
 
     private static String changeSecondsToFullTime(int seconds) {
         if (seconds < 0) {
+            Model.logger.error("Evaluation time is negative (at feedback generation)");
             throw new IllegalArgumentException("Seconds should be a non-negative integer.");
         }
 

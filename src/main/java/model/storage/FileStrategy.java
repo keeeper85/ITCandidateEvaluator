@@ -28,6 +28,7 @@ public class FileStrategy extends AbstractStrategy{
                 recruitmentList.add(recruitment);
 
             } catch (Exception e) {
+                Model.logger.error("Problem with deserializing recruitment list from file: " + e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -45,6 +46,7 @@ public class FileStrategy extends AbstractStrategy{
                         files.add(file);
                     });
         } catch (IOException e) {
+            Model.logger.error("Problem with reading recruitment file: " + e.getMessage());
             throw new RuntimeException(e);
         }
 
@@ -104,6 +106,7 @@ public class FileStrategy extends AbstractStrategy{
             objectOut.writeObject(recruitment);
 
         } catch (Exception e) {
+            Model.logger.error("Problem with recruitment serialization: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
@@ -111,7 +114,5 @@ public class FileStrategy extends AbstractStrategy{
     }
 
     @Override
-    public void closeConnection() {
-
-    }
+    public void closeConnection() {}
 }

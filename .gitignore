@@ -49,3 +49,5 @@ build/
 /src/main/resources/resumeTest/Rogers.pdf
 /src/main/resources/resumeTest/RogersCV.pdf
 /src/main/resources/presets/test_invalid_presets.json
+/logs/app.log
+/logs/

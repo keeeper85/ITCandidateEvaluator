@@ -180,6 +180,7 @@ public class Sidepanel extends JPanel {
                 String userInput = (String) JOptionPane.showInputDialog(null, warning, "Confirm:", JOptionPane.WARNING_MESSAGE);
                 if (userInput.equals("discard")) {
                     view.setCurrentPanel(new RecruitmentsListView(view));
+                    view.resetPreviousPanels();
                 } else {
                     JOptionPane.showMessageDialog(null, "Deletion canceled or invalid input.");
                 }

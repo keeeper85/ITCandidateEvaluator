@@ -17,6 +17,7 @@ public class MySqlStrategy extends AbstractStrategy{
                     "jdbc:mysql://localhost:3306/recruitments",
                     "root", "root");
         } catch (SQLException e) {
+            Model.logger.error("Problem with establishing database connection: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -40,6 +41,7 @@ public class MySqlStrategy extends AbstractStrategy{
             results.close();
             statement.close();
         } catch (SQLException e) {
+            Model.logger.error("Problem with loading recruitment list from database: " + e.getMessage());
             throw new RuntimeException(e);
         }
 
@@ -50,6 +52,7 @@ public class MySqlStrategy extends AbstractStrategy{
         try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(serializedObject))) {
             return (Recruitment) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
+            Model.logger.error("Problem with recruitment deserialization: " + e.getMessage());
             throw new RuntimeException("Error deserializing recruitment object", e);
         }
     }
@@ -68,6 +71,7 @@ public class MySqlStrategy extends AbstractStrategy{
             preparedStatement.executeBatch();
             return true;
         } catch (SQLException e) {
+            Model.logger.error("Error adding records to the database." + e.getMessage());
             throw new RuntimeException("Error adding records to the database", e);
         }
     }
@@ -78,6 +82,7 @@ public class MySqlStrategy extends AbstractStrategy{
             oos.writeObject(recruitment);
             return baos.toByteArray();
         } catch (IOException e) {
+            Model.logger.error("Error serializing recruitment object." + e.getMessage());
             throw new RuntimeException("Error serializing recruitment object", e);
         }
     }
@@ -94,7 +99,7 @@ public class MySqlStrategy extends AbstractStrategy{
             statement.setString(1, name);
             int rowsAffected = statement.executeUpdate();
             if (rowsAffected == 0) {
-                System.out.println("No record found with name: " + name);
+                Model.logger.warn("No record found with name: " + name);
             }
         }
         statement.close();
@@ -125,10 +130,12 @@ public class MySqlStrategy extends AbstractStrategy{
             connection.commit();
             return true;
         } catch (SQLException e) {
+            Model.logger.error("Error replacing recruitment objects in the database." + e.getMessage());
             e.printStackTrace();
             try {
                 connection.rollback();
             } catch (SQLException rollbackException) {
+                Model.logger.error("Error at rollback." + e.getMessage());
                 rollbackException.printStackTrace();
             }
             return false;
@@ -136,6 +143,7 @@ public class MySqlStrategy extends AbstractStrategy{
             try {
                 connection.setAutoCommit(true);
             } catch (SQLException e) {
+                Model.logger.error("Error at committing changes to the database." + e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -175,6 +183,7 @@ public class MySqlStrategy extends AbstractStrategy{
                 connection.close();
             }
         } catch (SQLException e) {
+            Model.logger.error("SQL connection hasn't been closed properly" + e.getMessage());
             e.printStackTrace();
         }
     }

@@ -36,6 +36,7 @@ public class AbstractCandidate implements Serializable {
         this.lastName = lastName;
         isFinished = false;
         dateOfJoiningEvaluation = LocalDateTime.now();
+        Model.logger.info("A new Candidate object has just been created.");
     }
 
     public String calculateAge(){
@@ -120,6 +121,7 @@ public class AbstractCandidate implements Serializable {
     public boolean isFinished() { return isFinished; }
     public void setFinished(boolean finished) {
         isFinished = finished;
+        Model.logger.info("Candidate has finished the evaluation.");
         dateOfFinishingEvaluation = LocalDateTime.now();
     }
     public LocalDateTime getDateOfJoiningEvaluation() {

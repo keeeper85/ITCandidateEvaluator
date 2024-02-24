@@ -28,6 +28,7 @@ public class QuestionFactory implements Runnable {
                         files.add(file);
                     });
         } catch (IOException e) {
+            Model.logger.error("Error reading question file: " + e.getMessage());
             throw new RuntimeException(e);
         }
 
@@ -51,6 +52,7 @@ public class QuestionFactory implements Runnable {
         try {
             questions = formatQuestions(Files.readAllLines(path));
         } catch (IOException e) {
+            Model.logger.error("Error copying questions from file: " + e.getMessage());
             throw new RuntimeException(e);
         }
         return questions;
@@ -89,7 +91,10 @@ public class QuestionFactory implements Runnable {
 
     @Override
     public void run() {
-        //todo logger
+        long startTime = new Date().getTime();
         prepareQuestionList();
+        long endTime = new Date().getTime();
+        long timeElapsed = endTime - startTime;
+        Model.logger.info("Questions loaded from files. Thread closed. Time elapsed: " + timeElapsed + " seconds.");
     }
 }

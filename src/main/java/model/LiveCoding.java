@@ -24,6 +24,7 @@ final class LiveCoding {
                 String task = changeListToString(lines);
                 tasksList.add(task);
             } catch (IOException e) {
+                Model.logger.error("Error reading task file: " + e.getMessage());
                 throw new RuntimeException(e);
             }
         }
@@ -40,6 +41,7 @@ final class LiveCoding {
                         files.add(file);
                     });
         } catch (IOException e) {
+            Model.logger.error("Error getting task files: " + e.getMessage());
             throw new RuntimeException(e);
         }
 

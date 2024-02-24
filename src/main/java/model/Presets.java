@@ -23,6 +23,7 @@ public class Presets implements Serializable {
         this.name = name;
         presetsValues = new HashMap<>();
         setPresetsValues(modifiersValues);
+        Model.logger.info("A new Presets object has just been created.");
     }
 
     public static Set<Presets> loadPresetsFromDirectory() {
@@ -37,14 +38,16 @@ public class Presets implements Serializable {
                             fileName[0] = file.getFileName().toString().replaceAll(".json", "");
                             HashMap<String, Integer> map = mapper.readValue(file.toFile(), HashMap.class);
                             if (isMapValid(map)) defaultPresets.add(new Presets(fileName[0], map));
-                            else System.out.println("invalid file"); //todo LOGGER
+                            else Model.logger.error("The file " + fileName[0] + " is invalid and cannot be read.");
                         } catch (JsonParseException e) {
-                            System.out.println("invalid file"); //todo LOGGER
+                            Model.logger.error("Error parsing JSON file: " + e.getMessage());
                         } catch (IOException e) {
+                            Model.logger.error("Error reading JSON file: " + e.getMessage());
                             e.printStackTrace();
                         }
                     });
         } catch (IOException e) {
+            Model.logger.error("Error reading JSON file: " + e.getMessage());
             throw new RuntimeException(e);
         }
 
@@ -72,6 +75,7 @@ public class Presets implements Serializable {
         try {
             mapper.writeValue(new File(filePath), newDefaultPresets);
         } catch (IOException e) {
+            Model.logger.error("Error creating JSON file: " + e.getMessage());
             return false;
         }
         return true;

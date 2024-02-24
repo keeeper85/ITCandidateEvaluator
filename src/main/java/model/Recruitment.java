@@ -31,6 +31,7 @@ public class Recruitment implements Serializable {
         nextCandidateID = candidateList.size() + 1;
         dateOfCreation = LocalDateTime.now();
         maxPossibleScore = calculateMaxPossibleScore();
+        Model.logger.info("A new recruitment object has just been created.");
     }
 
     private int calculateMaxPossibleScore(){
@@ -48,6 +49,7 @@ public class Recruitment implements Serializable {
             double multiplier = SOFT_SKILLS_FACTOR + getStageModifier(Stages.SOFT_SKILLS);
             maxPossibleScore = (int) (maxPossibleScore * multiplier);
         }
+        Model.logger.info("Max possible score for this recruitment: " + maxPossibleScore + " points.");
         return maxPossibleScore;
     }
 
@@ -80,6 +82,7 @@ public class Recruitment implements Serializable {
             double multiplier = SOFT_SKILLS_FACTOR + getSoftSkillsModifier(candidate);
             finalScore = (int) (finalScore * multiplier);
         }
+        Model.logger.info(candidate.getFirstName() + " " + candidate.getLastName() + "'s score for this recruitment: " + finalScore + " points.");
 
         return finalScore;
     }
@@ -127,6 +130,7 @@ public class Recruitment implements Serializable {
     public int calculateFinalCandidateScorePercent(Candidate candidate){
         int percentScore = (int) (calculateCandidateScore(candidate) / (double) maxPossibleScore * PERCENTAGE);
         candidate.setEvaluationScore(percentScore);
+        Model.logger.info(candidate.getFirstName() + " " + candidate.getLastName() + "'s score for this recruitment: " + percentScore + " percent.");
 
         return percentScore;
     }
@@ -142,7 +146,7 @@ public class Recruitment implements Serializable {
         double salaryModifier = salarySliderValue / PERCENTAGE;
 
         int costValueRatio = (int) (scorePercent / salaryModifier);
-
+        Model.logger.info(candidate.getFirstName() + " " + candidate.getLastName() + "'s cost/value ratio for this recruitment: " + costValueRatio + " percent.");
 
         return costValueRatio;
     }
@@ -172,20 +176,12 @@ public class Recruitment implements Serializable {
         return stagesForEvaluation;
     }
 
-    public String getName() {
-        return name;
-    }
-    public Presets getPresets() {
-        return presets;
-    }
+    public String getName() { return name; }
+    public Presets getPresets() { return presets; }
     public Model getModel() { return model; }
-    public boolean isFinished() {
-        return isFinished;
-    }
+    public boolean isFinished() { return isFinished; }
     public void setFinished(boolean finished) { isFinished = finished; }
-    public List<Candidate> getCandidateList() {
-        return candidateList;
-    }
+    public List<Candidate> getCandidateList() { return candidateList; }
     public LocalDateTime getDateOfCreation() { return dateOfCreation; }
     public boolean isModified() { return isModified; }
     public void setModified(boolean modified) { isModified = modified; }

@@ -36,6 +36,7 @@ public final class CandidateFactory {
                         filesAndTheirNames.put(file.toString(), file.getFileName().toString());
                     });
         } catch (IOException e) {
+            Model.logger.error("Error reading candidate's resume: " + e.getMessage());
             throw new RuntimeException(e);
         }
         return filesAndTheirNames;
@@ -98,6 +99,7 @@ public final class CandidateFactory {
             try{
                 lastName = firstAndLastName[1];
             } catch (ArrayIndexOutOfBoundsException oneName){
+                Model.logger.warn("Candidate has only one name element: " + oneName.getMessage());
                 lastName = "???";
             }
 
@@ -105,6 +107,8 @@ public final class CandidateFactory {
             candidate.setPathToResumeFile(entry.getKey());
             candidates.add(candidate);
         }
+        Model.logger.info("Candidate object(s) created from their resume files.");
+
         return candidates;
     }
 }

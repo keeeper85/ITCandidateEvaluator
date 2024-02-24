@@ -18,9 +18,8 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class ITCandidateEvaluator {
-    private static final Logger logger = LogManager.getLogger();
+
     public static void main(String[] args) {
-        logger.info("App is starting...");
         Model model = new Model(chooseStorage());
         Controller controller = new Controller(model);
         View view = controller.getView();
