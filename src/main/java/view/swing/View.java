@@ -9,6 +9,10 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Stack;
 
+/**
+ *
+ */
+
 public class View extends JFrame implements Observer {
 
     private Model model;

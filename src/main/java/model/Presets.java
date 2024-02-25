@@ -13,7 +13,12 @@ import java.util.*;
 import java.util.stream.Stream;
 
 /**
- *
+ * Presets object store slider values for each stage.
+ * Slider value describes the importance of the particular stage.
+ * If a candidate gets 100 points at that stage, but slider is set to 5 it means only 50% of that score is added to the total result.
+ * Sliders can be set to values 0-10, 0 value means the stage will not occur during the interview.
+ * Presets can be kept as JSON files and parsed by loadPresetsFromDirectory() method call
+ * Filed presets are checked before parsing - if the contents don't match file is omitted
  */
 
 public class Presets implements Serializable {

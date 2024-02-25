@@ -128,8 +128,10 @@ public class AbstractCandidate implements Serializable {
     public boolean isFinished() { return isFinished; }
     public void setFinished(boolean finished) {
         isFinished = finished;
-        Model.logger.info("Candidate has finished the evaluation.");
-        dateOfFinishingEvaluation = LocalDateTime.now();
+        if (isFinished) {
+            Model.logger.info("Candidate has finished the evaluation.");
+            dateOfFinishingEvaluation = LocalDateTime.now();
+        }
     }
     public LocalDateTime getDateOfJoiningEvaluation() {
         return dateOfJoiningEvaluation;

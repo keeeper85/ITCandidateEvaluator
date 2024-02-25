@@ -8,11 +8,30 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Recruitment is the main class just after Model. A Recruitment object MUST be created to start the evaluation.
+ * Recruitment class holds the methods needed for calculating candidates' scores.
+ * SOFT_SKILLS_FACTOR is set to 3.0; The higher value = less impact soft skills have on the other scores. At 3.0 it's up to 25% (100% / (3.0 + 1.0))
+ * At SOFT_SKILLS_FACTOR = 0.0 the total score is multiplied by soft skills score (from 0% to 100%)
+ * In general calculating score looks like this:
+ * - we take score slider value from that stage, e.g. is set to 80 points
+ * - we multiply it by the stage importance set in presets, e.g. 5 = 50% so 80 points * 50% equals 40 points
+ * - we calculate the soft skills modifier as above: score slider (e.g. 50) * presets modifier (e.g. 7) -> 50 * 70 / 100% = 35% (getSoftSkillsModifier(Candidate candidate) method)
+ * - we take modified score (40 points) and add soft skills bonus (40 * 35%,  rounded by integer primitive = 14), 40 + 14 = 54
+ * - we calculate the max score for this recruitment (if all score sliders were set to 100) with method calculateMaxPossibleScore()
+ * - max score for the above example would be (100 * 50%) = 50 points + 70% bonus from soft skills -> 85 points
+ * - we divide candidate score by max score: 54 / 85 * 100% = 63% (calculateFinalCandidateScorePercent(Candidate candidate) method)
+ * The above calculations are correct for SOFT_SKILLS_FACTOR = 0.0
+ *
+ * Candidates should be added to the List<Candidate> candidateList only through the methids in this class: addCandidates(List<Candidate> newCandidates) or addSingleCandidate(Candidate candidate)
+ * Only then each Candidate will have a proper id number!
+ */
+
 public class Recruitment implements Serializable {
     private final int SINGLE_STAGE_MAX_SCORE = 100;
     private final double PERCENTAGE = 100.0;
     private final double DECIMAL = 10.0;
-    private final double SOFT_SKILLS_FACTOR = 3.0; //higher value = less impact soft skills have on the other scores
+    private final double SOFT_SKILLS_FACTOR = 3.0;
     private transient Model model;
     private String name;
     private Presets presets;
@@ -31,7 +50,7 @@ public class Recruitment implements Serializable {
         nextCandidateID = candidateList.size() + 1;
         dateOfCreation = LocalDateTime.now();
         maxPossibleScore = calculateMaxPossibleScore();
-        Model.logger.info("A new recruitment object has just been created.");
+        Model.logger.info("A new recruitment object has just been created. Max possible score is " + maxPossibleScore);
     }
 
     private int calculateMaxPossibleScore(){

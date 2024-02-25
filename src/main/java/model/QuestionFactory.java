@@ -8,6 +8,14 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Stream;
 
+/**
+ * QuestionFactory serves as another thread which runs at the app launch and prepares list of questions reading them from the given files.
+ * Parsing files on my machine takes up to 20 milliseconds, but it can be slower if the storage is HDD or some outer server.
+ * That's why I made it Runnable to avoid slowing down the app launch. Run() method logs the duration of question parsing.
+ * The class first check the hardcoded directory for .txt files with 'questions' tag in their names.
+ * If the file matches that condition, its contents are read, formatted and manufactured into Question objects.
+ */
+
 public class QuestionFactory implements Runnable {
 
     private List<Question> preparedList = new ArrayList<>();

@@ -4,16 +4,16 @@
 
 Years 2023 and 2024 brought a massive popularity for IT-related jobs. Suddenly everyone wanted to become a programmer.<br>
 At the same time covid-related bubble has popped which resulted in cutting employment among many companies, especially these working in IT branches.<br>
-The outcome was predictable - every new job offer is getting hundreds or thousands resumes.<br>
+The outcome was predictable - every new job offer is getting hundreds or thousands applications.<br>
 Even using automatic filters such as various ATS-es, HR recruiters are left with dozens of valid candidates, where each seems to be perfect for the position.<br>
-To find the best amongst them hours and hours have to be spent on interviews, mostly with the assistance of a qualified technical expert.<br>
+To find the best among them hours and hours have to be spent on interviews, mostly with the assistance of a qualified technical expert.<br>
 (Whose hourly rate is high, and they'd rather be doing something more productive that time)<br>
 <b>The evaluation process of candidates should be more automatic and standardized to be quick, effective and fair.</b><br>
 
 <h2>The solution</h2>
 
 Having the last sentence in mind I have developed ITCandidateEvaluator - a tool which can be used before, during and after the interviews.<br>
-This app will help you organize all your recruitment processes and their applicants. It will also guide you through the interview process, so it's the same for each candidate.<br>
+This app will help you organize all your recruitment processes and their applicants. It will also guide you through the interview process, so it's the same for each candidate. 
 You can modify the steps of the recruitment as you wish to adjust them to your needs.<br>
 
 <h2>Features</h2>
@@ -27,7 +27,7 @@ You can modify the steps of the recruitment as you wish to adjust them to your n
 - evaluating a candidate is simple: go through the previously selected stages, ask questions and set a score slider accordingly to the candidate's responses
 - live coding tasks and technical questions are stored in local files and can be easily edited to match the type of the recruitment (e.g. programming language)
 - salary score is a global multiplier which will affect only cost/value ratio of the candidate
-- soft skills score is a global modifier which can give up to bonus 50% (positive or negative) points to the candidate's score
+- soft skills score is a global modifier which can give up to bonus 25% points to the candidate's score
 - candidates can be sorted by their name, date of joining the recruitment, total score and cost/value ratio
 - once a candidate gets evaluated, the interviewer can generate a quick feedback with the results to email this back to the candidate. Feedback may look like below:
 
@@ -69,8 +69,8 @@ All important actions are being logged with log4j - to the console and app.log f
 All public methods have unit tests (JUnit and Mockito).<br>
 You can follow the development process on Trello: https://trello.com/b/qXfFUV59/itcandidateevaluator<br>
 Each steps of development process: idea, frontend, backend, database and testing are briefly described on my blog (Polish language):<br><br>
-- https://wwsj.xyu.pl/wwsj/uncategorized/itcandidateevaluator-idea/
-- https://wwsj.xyu.pl/wwsj/uncategorized/itcandidateevaluator-frontend/
-- https://wwsj.xyu.pl/wwsj/uncategorized/itcandidateevaluator-backend/
+- https://wwsj.xyu.pl/wwsj/uncategorized/itcandidateevaluator-idea/ <br>
+- https://wwsj.xyu.pl/wwsj/uncategorized/itcandidateevaluator-frontend/ <br>
+- https://wwsj.xyu.pl/wwsj/uncategorized/itcandidateevaluator-backend/ <br>
 
 

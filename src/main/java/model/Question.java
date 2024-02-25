@@ -2,6 +2,12 @@ package model;
 
 import java.io.Serializable;
 
+/**
+ * Question class is very basic and only used to keep question String values.
+ * Each Question is described by the file it comes from (String sourceFileName) and its body (String questionBody)
+ * String snippet variable is used only in feedback generation to present only up to first 5 words of the question body.
+ */
+
 public class Question implements Serializable {
 
     private String sourceFileName;

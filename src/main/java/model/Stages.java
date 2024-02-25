@@ -1,5 +1,12 @@
 package model;
 
+/**
+ * Stages contain all present steps of the evaluation
+ * Before adding new stage look for stageName @param usages in the view package
+ * StageTitle @param is used for JLabel objects
+ * Ordinal numbers are hardcoded as the sequence of the steps is well-thought and must be kept
+ */
+
 public enum Stages {
 
     RESUME ("resume","Resume and social media evaluation", 1),
