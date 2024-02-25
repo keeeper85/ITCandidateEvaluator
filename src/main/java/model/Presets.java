@@ -12,6 +12,10 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Stream;
 
+/**
+ *
+ */
+
 public class Presets implements Serializable {
     private String name;
     private Map<Stages, Integer> presetsValues;
