@@ -11,6 +11,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 
+/**
+ * Sidepanel class is responsible for going through the evaluation stages and saving data.
+ * Sidepanel belongs to StageView panel - it takes right side of the JFrame (while Stage content: AbstractStage takes the left side)
+ * There are up to 6 buttons here (with visibility depending on the current stage): Continue, Save & Exit, Discard, Back, Save Score and Finish
+ * Sidepanel is responsible for calculating Next and Previous stages
+ * Sidepanel Back button works only within SageView class - it's deactivated at the initial stage. In this case to return you must click 'Discard' button.
+ */
+
 public class Sidepanel extends JPanel {
     private View view;
     private StageView stageView;

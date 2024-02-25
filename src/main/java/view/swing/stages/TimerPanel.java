@@ -7,6 +7,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * It's a simple class responsible for presenting elapsed time of the current evaluation in the top right corner.
+ * TimerPanel belongs to SidePanel which belongs to StageView panel
+ * Constructor takes int secondsElapsed @param in case it's a resumed evaluation started some time before - then counting will start from the previously finished value.
+ */
+
 public class TimerPanel extends JPanel {
     private Timer timer;
     private JLabel timerLabel;

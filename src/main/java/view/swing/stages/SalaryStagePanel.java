@@ -9,6 +9,13 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+/**
+ * SalaryStage is pretty similar to previous stages but its score only affects applicant's cost/value ratio.
+ * Higher value set by the score slider equals less cost/value points.
+ * Also, min and max offered salary must be included (default it's 5000 and 10000 monthly)
+ * Using these values collectData() method calculates whether slider is set higher or lower than the average amount and returns ratio value
+ */
+
 public class SalaryStagePanel extends AbstractStage { ;
     private final int TEXT_FIELDS_Y = 640;
     private final int FROM_FIELD_X = 110;

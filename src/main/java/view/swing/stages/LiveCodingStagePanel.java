@@ -13,6 +13,14 @@ import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
 
+/**
+ * In this stage, recruiter is evaluating applicant's ability to write code, especially under pressure
+ * User can select one of the prepared tasks which are stored in txt files in /resources/liveCoding directory
+ * If the task body is decorated with proper html tags it should be shown correctly
+ * 'Copy to clipboard' button allows to copy the task, so it can be quickly pasted to the communicator window in online recruitment
+ * Selected task subjects are not visible at feedback.
+ */
+
 public class LiveCodingStagePanel extends AbstractStage {
     private TreeMap<String,String> pair;
     private String currentTaskBody = "";

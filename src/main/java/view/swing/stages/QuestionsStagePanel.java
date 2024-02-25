@@ -12,6 +12,15 @@ import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * QuestionStage helps the recruiter to choose the proper question category (questions are stored in txt files)
+ * First a file name must be set, then user can choose question - either manually or randomly
+ * Once the applicant gave their answer, recruiter must set score slider and click 'Save Score'. At least one question must be evaluated to proceed.
+ * Evaluated questions will be visible in form of the list in the main JPanel.
+ * User can input own question and save its score, but it will not be added to the file. This must be edited manually (check Readme in questions directory)
+ * There's no limit in evaluated questions.
+ */
+
 public class QuestionsStagePanel extends AbstractStage {
     private final int FILE_CHOOSER_X = 50;
     private final int QUESTION_CHOOSER_X = 350;

@@ -12,6 +12,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+/**
+ * CandidateView is part of the Collectable group but doesn't inherit AbstractStage as it's too different from the rest stages.
+ * There are no score sliders here, just applicant's data: first name, last name, year of birth, resume path and extra notes.
+ * The Swap button quickly swaps values of first and last names which can be useful after reading these values from resume files
+ * If candidate is being set up manually, recruiter can use JFileChooser window ('Pick' button) to find and attach their resume file (.pdf only).
+ * First name and last name values must be set (at least with a single character, can use numbers and foreign characters)
+ * Default year of birth is set to '0' but this value (intentionally) can be accepted. Remove it or write anything between 1900* and current year.
+ * (*app not suitable for recruiting vampires)
+ */
+
 public class CandidateView extends JPanel implements Collectable {
 
     public final int ordinal = 0;

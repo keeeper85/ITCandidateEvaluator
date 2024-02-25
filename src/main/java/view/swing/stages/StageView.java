@@ -11,6 +11,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * StageView is a panel which consists of Stage and Sidepanel
+ * Stageview draws these panels according to its settings
+ * Also, this class keeps the CandidateDTO object and list of all the stages to pass in order to finish the evaluation.
+ */
+
 public class StageView extends JPanel {
     private View view;
     private Model model;

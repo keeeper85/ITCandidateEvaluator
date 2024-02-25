@@ -10,6 +10,13 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.util.Map;
 
+/**
+ * AbstractStage class includes all methods which repeat themselves across the evaluation stages.
+ * It follows Template Method design pattern -> initTemplate() method with two Hooks: starting and finishing
+ * Thanks to the implementations here, the following stages are very short in code: Resume, Language, Experience, Projects and Soft Skills
+ * The other stages use need to override some of the methods here to work as intended
+ */
+
 public abstract class AbstractStage extends JPanel implements Collectable {
     protected StageView stageView;
     protected Stages stage;
@@ -108,8 +115,10 @@ public abstract class AbstractStage extends JPanel implements Collectable {
 
     private void updateScoreLabel(int sliderValue){
         String description = "";
-        //The 'magic numbers' below are self-explanatory considering scoreSlider minimum value = 0 and maximum = 100
-        //These values are only for descriptive purposes and won't matter in calculating final result
+        /**
+         * The 'magic numbers' below are self-explanatory considering scoreSlider minimum value = 0 and maximum = 100
+         * These values are only for descriptive purposes and won't matter in calculating final result
+         */
 
         if (sliderValue < 15) description = ViewConstants.SLIDER_VALUE_DESCRIPTION[0];
         else if (sliderValue >= 15 && sliderValue < 30) description = ViewConstants.SLIDER_VALUE_DESCRIPTION[1];
