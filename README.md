@@ -69,8 +69,8 @@ All important actions are being logged with log4j - to the console and app.log f
 All public methods have unit tests (JUnit and Mockito).
 You can follow the development process on Trello: https://trello.com/b/qXfFUV59/itcandidateevaluator
 Each steps of development process: idea, frontend, backend, database and testing are briefly described on my blog (Polish language):
-https://wwsj.xyu.pl/wwsj/uncategorized/itcandidateevaluator-idea/
-https://wwsj.xyu.pl/wwsj/uncategorized/itcandidateevaluator-frontend/
-https://wwsj.xyu.pl/wwsj/uncategorized/itcandidateevaluator-backend/
+- https://wwsj.xyu.pl/wwsj/uncategorized/itcandidateevaluator-idea/
+- https://wwsj.xyu.pl/wwsj/uncategorized/itcandidateevaluator-frontend/
+- https://wwsj.xyu.pl/wwsj/uncategorized/itcandidateevaluator-backend/
 
 
