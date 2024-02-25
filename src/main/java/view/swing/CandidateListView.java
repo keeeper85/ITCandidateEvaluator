@@ -20,6 +20,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * CandidateListView panel presents all applicants in the opened recruitment process.
+ * The user can sort that list in 4 different categories (each: ascending and descending directions)
+ * Selected candidate can be opened and edited unless their evaluation has finished.
+ * New candidates can be added manually - with 'Add one' button or in bulk ('Add many' button)
+ * If a candidate has set path to their resume, user can view it in default system browser ('Open CV' button)
+ * If a candidate has finished their evaluation, user can see feedback and copy it to the system clipboard.
+ */
+
 public class CandidateListView extends JPanel {
 
     private View view;

@@ -10,7 +10,10 @@ import java.util.Observer;
 import java.util.Stack;
 
 /**
- *
+ * View class is the window which presents all content of the app.
+ * All the other classes in view package call setCurrentPanel(JPanel newPanel) method when the user want's to proceed
+ * Back buttons call returnToPreviousPanel() method which takes a previous panel from the Stack<JPanel> previousPanels
+ * When a new recruitment is created or when the evaluation is finished startOver() method is called which brings back the InitialView
  */
 
 public class View extends JFrame implements Observer {

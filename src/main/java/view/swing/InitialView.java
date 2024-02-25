@@ -6,6 +6,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * It's the first thing the user sees (just after selecting storage).
+ * From here the user can move onto the Presets view to create a new Recruitment process or to the Recruitment list view to see open processes.
+ * Exit button shuts down the app and close the database connection (if previously established).
+ */
+
 public class InitialView extends JPanel {
 
     private View view;

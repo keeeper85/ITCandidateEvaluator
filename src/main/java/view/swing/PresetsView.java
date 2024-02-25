@@ -13,6 +13,14 @@ import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
 
+/**
+ * In this view the user can set up a new recruitment process by adjusting presets sliders.
+ * Sliders can be set manually or by using the ComboBox with presets loaded from JSON files
+ * New preset files can be created quickly by clicking "Save Presets" button - it will overwrite the existing file without confirmation!
+ * If the existing file is read-only an exception will be thrown and Error prompt window will open
+ * Once Start button is clicked, a name for Recruitment must be typed - it can't be the same as any of the existent recruitments.
+ */
+
 public class PresetsView extends JPanel {
 
     private View view;

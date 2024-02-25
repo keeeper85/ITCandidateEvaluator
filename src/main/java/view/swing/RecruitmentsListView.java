@@ -10,6 +10,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * RecruitmentsListView and CandidateListView are similar enough to duplicate some code but not similar enough to mess with an Abstract super class for both of them.
+ * The purpose of this JPanel is to present open recruitment processes and manipulate them: open, delete, finish and sort.
+ * Some idea for the future is to add Export button which will print in a txt file all the information about the process including participating candidates and their scores
+ * Finish button doesn't do much besides marking recruitment as 'finished' so it won't be able to open.
+ * Another idea is to make Finishing password protected - so other users won't be able to tinker with this secured process.
+ */
+
 public class RecruitmentsListView extends JPanel {
 
     private View view;
