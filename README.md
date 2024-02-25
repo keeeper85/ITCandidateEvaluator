@@ -2,19 +2,19 @@
 
 <h2>The problem</h2>
 
-Years 2023 and 2024 brought a massive popularity for IT-related jobs. Suddenly everyone wanted to become a programmer.
-At the same time covid-related bubble has popped which resulted in cutting employment among many companies, especially these working in IT branches.
-The outcome was predictable - every new job offer is getting hundreds or thousands resumes.
-Even using automatic filters such as various ATS-es, HR recruiters are left with dozens of valid candidates, where each seems to be perfect for the position.
-To find the best amongst them hours and hours have to be spent on interviews, mostly with the assistance of a qualified technical expert.
-(Whose hourly rate is high, and they'd rather be doing something more productive that time)
-<b>The evaluation process of candidates should be more automatic and standardized to be quick, effective and fair.</b>
+Years 2023 and 2024 brought a massive popularity for IT-related jobs. Suddenly everyone wanted to become a programmer.<br>
+At the same time covid-related bubble has popped which resulted in cutting employment among many companies, especially these working in IT branches.<br>
+The outcome was predictable - every new job offer is getting hundreds or thousands resumes.<br>
+Even using automatic filters such as various ATS-es, HR recruiters are left with dozens of valid candidates, where each seems to be perfect for the position.<br>
+To find the best amongst them hours and hours have to be spent on interviews, mostly with the assistance of a qualified technical expert.<br>
+(Whose hourly rate is high, and they'd rather be doing something more productive that time)<br>
+<b>The evaluation process of candidates should be more automatic and standardized to be quick, effective and fair.</b><br>
 
 <h2>The solution</h2>
 
-Having the last sentence in mind I have developed ITCandidateEvaluator - a tool which can be used before, during and after the interviews.
-This app will help you organize all your recruitment processes and their applicants. It will also guide you through the interview process, so it's the same for each candidate.
-You can modify the steps of the recruitment as you wish to adjust them to your needs.
+Having the last sentence in mind I have developed ITCandidateEvaluator - a tool which can be used before, during and after the interviews.<br>
+This app will help you organize all your recruitment processes and their applicants. It will also guide you through the interview process, so it's the same for each candidate.<br>
+You can modify the steps of the recruitment as you wish to adjust them to your needs.<br>
 
 <h2>Features</h2>
 
@@ -63,12 +63,12 @@ Additional notes: former restaurant manager
 
 
 <h2>Development</h2>
-The app consists of 38 classes (including interfaces and enums) grouped in MVC scheme. Each class has a basic yet descriptive JavaDoc documentation.
-I used old but good Swing libraries for GUI - wanted to make something more than just an API, to create a fully functional solution. But I am not a frontend guy (yet?).
-All important actions are being logged with log4j - to the console and app.log file.
-All public methods have unit tests (JUnit and Mockito).
-You can follow the development process on Trello: https://trello.com/b/qXfFUV59/itcandidateevaluator
-Each steps of development process: idea, frontend, backend, database and testing are briefly described on my blog (Polish language):
+The app consists of 38 classes (including interfaces and enums) grouped in MVC scheme. Each class has a basic yet descriptive JavaDoc documentation.<br>
+I used old but good Swing libraries for GUI - wanted to make something more than just an API, to create a fully functional solution. But I am not a frontend guy (yet?).<br>
+All important actions are being logged with log4j - to the console and app.log file.<br>
+All public methods have unit tests (JUnit and Mockito).<br>
+You can follow the development process on Trello: https://trello.com/b/qXfFUV59/itcandidateevaluator<br>
+Each steps of development process: idea, frontend, backend, database and testing are briefly described on my blog (Polish language):<br><br>
 - https://wwsj.xyu.pl/wwsj/uncategorized/itcandidateevaluator-idea/
 - https://wwsj.xyu.pl/wwsj/uncategorized/itcandidateevaluator-frontend/
 - https://wwsj.xyu.pl/wwsj/uncategorized/itcandidateevaluator-backend/
