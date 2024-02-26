@@ -1,9 +1,13 @@
 package view.swing;
 
 import model.Model;
+import model.storage.FileStrategy;
+import model.storage.MySqlStrategy;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.util.ArrayList;
 
 /**
@@ -16,6 +20,7 @@ public class InitialView extends JPanel {
 
     private View view;
     private final Dimension BUTTON_SIZE = new Dimension(500, 100);
+    private final Dimension ABOUT_BUTTON_SIZE = new Dimension(100, 50);
     private ArrayList<JButton> buttons = new ArrayList<>();
 
     public InitialView(View view) {
@@ -34,10 +39,12 @@ public class InitialView extends JPanel {
         JPanel buttonPanel1 = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JPanel buttonPanel2 = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JPanel buttonPanel3 = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel buttonPanel4 = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
         buttonPanel1.add(createStartNewButton());
         buttonPanel2.add(createOpenButton());
         buttonPanel3.add(createExitButton());
+        buttonPanel4.add(createAboutButton());
 
         for (JButton button : buttons) {
             button.setPreferredSize(BUTTON_SIZE);
@@ -49,6 +56,7 @@ public class InitialView extends JPanel {
         add(buttonPanel1);
         add(buttonPanel2);
         add(buttonPanel3);
+        add(buttonPanel4);
         add(Box.createVerticalGlue());
     }
 
@@ -76,5 +84,46 @@ public class InitialView extends JPanel {
         return exit;
     }
 
+    private JButton createAboutButton(){
+        JButton about = new JButton("About");
+        about.setPreferredSize(ABOUT_BUTTON_SIZE);
+        about.setFont(ViewConstants.FONT_STAGE_INFO);
+        about.setAlignmentX(Component.CENTER_ALIGNMENT);
+        about.addActionListener((e -> {showInfo();}));
+        return about;
+    }
+
+    private void showInfo(){
+        String[] options = {"Copy email", "Copy LinkedIn", "Copy GitHub"};
+        int result = JOptionPane.showOptionDialog(
+                null,
+                ViewConstants.ABOUT,
+                "App information",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                options,
+                options[0]);
+
+        switch (result) {
+            case 0:
+                copyToClipboard("raczkowski.j@hotmail.com");
+                break;
+            case 1:
+                copyToClipboard("https://www.linkedin.com/in/jakub-raczkowski-81401b231");
+                break;
+            case 2:
+                copyToClipboard("https://github.com/keeeper85/ITCandidateEvaluator");
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void copyToClipboard(String text) {
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        StringSelection selection = new StringSelection(text);
+        clipboard.setContents(selection, null);
+    }
 
 }

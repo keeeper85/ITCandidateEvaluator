@@ -1,5 +1,7 @@
 package view.swing;
 
+import model.ITCandidateEvaluator;
+
 import java.awt.*;
 
 public class ViewConstants {
@@ -10,6 +12,12 @@ public class ViewConstants {
     public static final Font FONT_SMALL = new Font(Font.DIALOG, Font.PLAIN, 10);
     public static final Font FONT_STAGE_INFO = new Font(Font.DIALOG, Font.PLAIN, 16);
     public static final String[] SLIDER_VALUE_DESCRIPTION = {"Unacceptable", "Poor", "Not too good", "Average", "Quite good", "Impressive", "Amazing!"};
+    public static final String ABOUT = APP_NAME + " " + ITCandidateEvaluator.VERSION + "\n\n" +
+            "Idea and development: Jakub Raczkowski (raczkowski.j@hotmail.com)\n" +
+            "LinkedIn: https://www.linkedin.com/in/jakub-raczkowski-81401b231/\n" +
+            "GitHub: https://github.com/keeeper85/ITCandidateEvaluator\n\n" +
+            "OpenSource application - feel free to use and modify for any purpose.\n" +
+            "If you found any bugs or have ideas for further development - contact me.";
     public static final String PRESETS_HOWTO = "Adjust sliders accordingly to their importance.\n" +
             "Higher slider value represents higher multiplier for its item score.\n" +
             "If a slider is set to '0' - its item will not occur during the process.\n" +

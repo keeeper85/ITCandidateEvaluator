@@ -28,6 +28,8 @@ import java.util.stream.Stream;
 
 public class ITCandidateEvaluator {
 
+    public static double VERSION = 1.0;
+
     public static void main(String[] args) {
         Model model = new Model(chooseStorage());
         Controller controller = new Controller(model);
