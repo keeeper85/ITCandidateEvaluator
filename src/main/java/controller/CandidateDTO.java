@@ -166,4 +166,7 @@ public class CandidateDTO {
     }
     public void setFinished(boolean finished) { isFinished = finished; }
 
+    public void setEvaluatedQuestions(Map<Question, Integer> evaluatedQuestions) {
+        this.evaluatedQuestions = evaluatedQuestions;
+    }
 }
