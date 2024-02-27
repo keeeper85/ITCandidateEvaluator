@@ -16,6 +16,3 @@ Result:<br>
 
 If the input data is invalid, throw a StringTooShortException <br>
 (create an exception).</html>
-
-
-

@@ -43,7 +43,7 @@ public class FileStrategy extends AbstractStrategy{
         return recruitmentList;
     }
 
-    private List<Path> getFiles(){
+    public List<Path> getFiles(){
         List<Path> files = new ArrayList<>();
         Path path = Paths.get(RECRUITMENT_STORAGE_DIRECTORY);
 

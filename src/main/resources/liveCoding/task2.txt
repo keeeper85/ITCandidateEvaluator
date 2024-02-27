@@ -7,7 +7,7 @@ Refactor the writeZipEntriesToFile method to use the Java 7 try-with-resources c
             zip = new ZipFile(zipFileName);<br>
             writer = Files.newBufferedWriter(outputFilePath, charset);<br>
             String newLine = System.getProperty("line.separator");<br>
-            for (Enumeration entries = zip.entries();<br> entries.hasMoreElements(); ) {    <br>    
+            for (Enumeration entries = zip.entries();<br> entries.hasMoreElements(); ) {    <br>
                 String zipEntryName = ((ZipEntry)<br> entries.nextElement()).getName() + newLine;<br>
                 writer.write(zipEntryName, 0, zipEntryName.length());<br>
             }<br>
@@ -30,5 +30,3 @@ Refactor the writeZipEntriesToFile method to use the Java 7 try-with-resources c
             }<br>
         }<br>
 		</pre></html>
-		
-

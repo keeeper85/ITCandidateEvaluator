@@ -109,6 +109,18 @@ public abstract class AbstractStrategy implements StorageStrategy {
         toDelete.clear();
     }
 
+    public List<Recruitment> getToAdd() {
+        return toAdd;
+    }
+
+    public List<Recruitment> getToDelete() {
+        return toDelete;
+    }
+
+    public List<Recruitment> getToReplace() {
+        return toReplace;
+    }
+
     protected abstract boolean addRecords();
 
     protected abstract boolean replaceRecords();
