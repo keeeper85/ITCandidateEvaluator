@@ -78,6 +78,10 @@ public class View extends JFrame implements Observer {
         return model;
     }
     public Controller getController() { return controller; }
+    public JPanel getCurrentPanel() {
+        return currentPanel;
+    }
+
     @Override
     public void update(Observable o, Object arg) {
         if (currentPanel instanceof RecruitmentsListView){
