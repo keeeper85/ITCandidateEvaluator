@@ -1,5 +1,6 @@
 package model.storage;
 
+import model.ITCandidateEvaluator;
 import model.Model;
 import model.Recruitment;
 
@@ -19,11 +20,13 @@ import java.util.List;
 
 public class MySqlStrategy extends AbstractStrategy{
 
+    private Connection connection;
+
     public MySqlStrategy() {
         try {
             connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/recruitments",
-                    "root", "root");
+                    ITCandidateEvaluator.DATABASE_URL,
+                    ITCandidateEvaluator.DATABASE_USER, ITCandidateEvaluator.DATABASE_PASSWORD);
         } catch (SQLException e) {
             Model.logger.error("Problem with establishing database connection: " + e.getMessage());
             throw new RuntimeException(e);
@@ -194,5 +197,9 @@ public class MySqlStrategy extends AbstractStrategy{
             Model.logger.error("SQL connection hasn't been closed properly" + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 }

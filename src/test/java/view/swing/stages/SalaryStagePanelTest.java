@@ -2,6 +2,7 @@ package view.swing.stages;
 
 import controller.CandidateDTO;
 import controller.Controller;
+import model.Candidate;
 import model.Model;
 import model.Presets;
 import model.Recruitment;
@@ -10,18 +11,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import view.swing.View;
 
-import javax.swing.*;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class QuestionsStagePanelTest {
+class SalaryStagePanelTest {
 
     private Model model = new Model(new FileStrategy());
     private Controller controller = new Controller(model);
     private View view = new View(model, controller);
     private HashMap<String, Integer> modifiersValues;
+    private Map<String, Integer> rawScores;
     private StageView stageView;
     private Recruitment recruitment;
     private CandidateDTO temporaryCandidate;
@@ -44,17 +45,29 @@ class QuestionsStagePanelTest {
     }
 
     @Test
-    void updateQuestionsEvaluated() {
-        QuestionsStagePanel questionsStagePanel = new QuestionsStagePanel(stageView);
-        questionsStagePanel.updateQuestionsEvaluated();
-        int noQuestionsEvaluated = questionsStagePanel.getNumberOfQuestionsEvaluated();
+    void updateScoreSlider() {
+        SalaryStagePanel salaryStagePanel = new SalaryStagePanel(stageView);
+        assertTrue(salaryStagePanel.updateScoreSlider());
 
-        assertEquals(0, noQuestionsEvaluated);
+        Candidate invalidSalaryCandidate = new Candidate(recruitment,"MaxSalaryLower", "ThanMinSalary");
+        invalidSalaryCandidate.setMaxOfferedSalary(5000);
+        invalidSalaryCandidate.setMinOfferedSalary(10000);
+        temporaryCandidate = controller.createTemporaryCandidate(invalidSalaryCandidate, recruitment);
+        stageView = new StageView(view, temporaryCandidate, recruitment);
+        salaryStagePanel = new SalaryStagePanel(stageView);
+
+        assertFalse(salaryStagePanel.updateScoreSlider());
     }
 
     @Test
     void collectData() {
-        QuestionsStagePanel questionsStagePanel = new QuestionsStagePanel(stageView);
-        assertFalse(questionsStagePanel.collectData());
+        SalaryStagePanel salaryStagePanel = new SalaryStagePanel(stageView);
+        salaryStagePanel.collectData();
+        rawScores = temporaryCandidate.getRawScores();
+
+        int defaultSalarySliderValue = 100;
+        int actualSalarySliderValue = rawScores.get("salary");
+
+        assertEquals(defaultSalarySliderValue, actualSalarySliderValue);
     }
 }

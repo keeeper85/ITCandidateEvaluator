@@ -19,7 +19,6 @@ public abstract class AbstractStrategy implements StorageStrategy {
     protected List<Recruitment> toAdd = new ArrayList<>();
     protected List<Recruitment> toDelete = new ArrayList<>();
     protected List<Recruitment> toReplace = new ArrayList<>();
-    protected Connection connection;
 
 
     @Override

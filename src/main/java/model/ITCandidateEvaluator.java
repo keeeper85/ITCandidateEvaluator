@@ -28,7 +28,10 @@ import java.util.stream.Stream;
 
 public class ITCandidateEvaluator {
 
-    public static double VERSION = 1.0;
+    public static final double VERSION = 1.0;
+    public static final String DATABASE_URL = "jdbc:mysql://localhost:3306/recruitments";
+    public static final String DATABASE_USER = "root";
+    public static final String DATABASE_PASSWORD = "root";
 
     public static void main(String[] args) {
         Model model = new Model(chooseStorage());
@@ -58,7 +61,11 @@ public class ITCandidateEvaluator {
                 Model.logger.info("FileStrategy has been selected.");
                 return new FileStrategy();
             case 1:
-                Model.logger.info("FileStrategy has been selected.");
+                Model.logger.info("MySqlStrategy has been selected.");
+                String message = "Database url: " + DATABASE_URL + "\n" +
+                        "Database user: " + DATABASE_USER + "\n" +
+                        "Database password: " + DATABASE_PASSWORD + "\n";
+                JOptionPane.showMessageDialog(null, message, "MySQL Configuration", JOptionPane.INFORMATION_MESSAGE);
                 return new MySqlStrategy();
             default:
                 Model.logger.info("No storage selected. Closing the app.");
