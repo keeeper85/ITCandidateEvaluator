@@ -4,6 +4,7 @@ import model.ITCandidateEvaluator;
 import model.Model;
 import model.Recruitment;
 
+import javax.swing.*;
 import java.io.*;
 import java.sql.*;
 
@@ -29,6 +30,8 @@ public class MySqlStrategy extends AbstractStrategy{
                     ITCandidateEvaluator.DATABASE_USER, ITCandidateEvaluator.DATABASE_PASSWORD);
         } catch (SQLException e) {
             Model.logger.error("Problem with establishing database connection: " + e.getMessage());
+            String message = "Check your database settings or try using local files for storage.\nThe app will quit now.";
+            JOptionPane.showMessageDialog(null, message, "Database Connection Error", JOptionPane.ERROR_MESSAGE);
             throw new RuntimeException(e);
         }
     }
