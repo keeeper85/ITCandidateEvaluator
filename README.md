@@ -73,5 +73,6 @@ Each steps of development process: idea, frontend, backend, database and testing
 - https://wwsj.xyu.pl/wwsj/uncategorized/itcandidateevaluator-frontend/ <br>
 - https://wwsj.xyu.pl/wwsj/uncategorized/itcandidateevaluator-backend/ <br>
 - https://wwsj.xyu.pl/wwsj/uncategorized/itcandidateevaluator-database/ <br>
+- https://wwsj.xyu.pl/wwsj/uncategorized/itcandidateevaluator-podsumowanie/
 
 
